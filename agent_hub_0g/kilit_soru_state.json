@@ -1,5 +1,11 @@
 {
   "active": true,
-  "step": 1,
-  "history": []
+  "step": 2,
+  "history": [
+    {
+      "step": 1,
+      "header": "H1 — ÇOĞALTMA (Protokol Tur 1/9)",
+      "summary": "- Prof. Leonhard Euler: Değişmez: Koszul Rank Defect (KRD). Tanım: Bir C devresinin değişken bağımlılık matrisi D_C’yi GF(2) üzerinde kurun; KRD(C) = |V(C)| − rank_{GF(2)}(D_C) olarak tanımlanır. Hesaplama: D_C’nin satır/sütunları devre kapıları arasındaki değişke\n- Prof. David Hilbert: Değişmez: Hilbert-Gröbner Derinliği (HGD). Tanım: Bir C devresinin Boolean idealinin x₁>⋯>xₙ leksikografik sırasıyla Gröbner tabanındaki ilk sıfırdan farklı elemanın derecesidir. Hesaplama (Y4): Derece sınırı d=⌈log₂n⌉ ile kısıtlanmış Buchb\n- Prof. Volker Strassen: Değişmez: Sınır Rank Yakınsama İndeksi (BRCI). Tanım: Bir L dilinin doğruluk tablosu tensörüne karşılık gelen T_L tensörünün, ε=2^{-|x|} hata ile k basit tensör toplamına yaklaştırılabilmesinin minimum k değeridir. Hesaplama (Y4): T_L’nin ü\n- Prof. Emmy Noether: Simetri-Kırılma Karakter İndeksi (SKKİ): Bir C devresinin değişkenler üzerindeki S_n eyleminin, r = ⌊log₂n⌋ boyutlu H ≅ (ℤ/2ℤ)^r alt grubu üzerindeki karakter ayrışımında, işaret temsiline karşılık gelen katsayının mutlak değeridir. Hesapla\n- Prof. Eugene Wigner: Değişmez: F₂-Orbital Spectral Gap (F₂-OSG). Tanım: n değişkenli C devresi için değişken bağımlılık matrisi D_C ∈ GF(2)^{n×n}’yi kurun; r = rank(D_C) olsun. Grassmannian orbit üzerinde m = n^2 rastgele rank-1 matris R_i ekleyip r_i = rank(D_\n- Prof. Leslie Valiant: Değişmez: Cebirsel Türev Derecesi (CTD). Tanım: Bir C Boolean devresini GF(2) üzerinde aritmetik devre olarak yorumlayıp, her değişkene göre sembolik kısmi türev ∂f/∂x_i’yi türetin; CTD(C) = max_i alg_deg(∂f/∂x_i) olarak tanımlanır. Hesapla\n\nHARİTACI:\nAyakta kalan: 2 (Wigner, Valiant)\nWigner: Tüm bariyerleri aştı, ilerliyor.\nValiant: Cebirleştirme bariyerinde durdu.\nElendiler: 4 aday (Euler, Hilbert, Noether, Strassen) Doğal Kanıtlar/Cebirsel bariyerlerde elendi.\nDURUM: Tur 1/9 protokolü güncellendi, 2 aday ilerliyor, 4 aday elendi."
+    }
+  ]
 }
