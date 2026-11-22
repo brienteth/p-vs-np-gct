@@ -135,7 +135,7 @@ class AutonomousAgentOrchestrator:
             except Exception as e:
                 print(f"[Orchestrator] Error loading saved logs: {e}")
 
-    def call_0g_api(self, model: str, system_prompt: str, user_prompt: str, max_tokens: int = 1500) -> Dict[str, Any]:
+    def call_0g_api(self, model: str, system_prompt: str, user_prompt: str, max_tokens: int = 8000) -> Dict[str, Any]:
         payload = {
             "model": model,
             "messages": [
@@ -145,10 +145,14 @@ class AutonomousAgentOrchestrator:
             "temperature": 0.35,
             "max_tokens": max_tokens
         }
+        # For thinking models, explicitly request reasoning to be included
+        if "0gm" in model:
+            payload["chat_template_kwargs"] = {"enable_thinking": True}
+
         cmd = [
             "/usr/bin/curl",
             "-sS",
-            "--max-time", "50",
+            "--max-time", "120",
             ROUTER_URL,
             "-H", f"Authorization: Bearer {self.api_key}",
             "-H", "Content-Type: application/json",
@@ -174,8 +178,29 @@ class AutonomousAgentOrchestrator:
         choice = data["choices"][0]
         msg = choice.get("message", {})
         content = msg.get("content", "").strip()
-        if not content:
-            content = msg.get("reasoning_content", "").strip()
+        reasoning = msg.get("reasoning_content", "").strip()
+        
+        # 0gm thinking model: content may be empty while reasoning_content has the full response
+        # Extract only the final answer from reasoning if content is empty
+        if not content and reasoning:
+            # The reasoning text often has the actual mathematical answer after the thinking steps
+            # Try to extract the Turkish mathematical analysis (the last substantive block)
+            lines = reasoning.split('\n')
+            # Find where the actual output begins (after "Draft" or the Turkish text)
+            answer_lines = []
+            in_answer = False
+            for line in reversed(lines):
+                stripped = line.strip()
+                if not stripped:
+                    if in_answer and answer_lines:
+                        break
+                    continue
+                if any(kw in stripped for kw in ['**Check', '**Structure', '**Deconstruct', '**Analyze User', '**Mental Draft', '**Formulate', '**Draft (']):
+                    break
+                answer_lines.insert(0, line)
+                in_answer = True
+            
+            content = '\n'.join(answer_lines).strip() if answer_lines else reasoning[-2000:]
         
         usage = data.get("usage", {})
         trace = data.get("x_0g_trace", {}).get("billing", {})
