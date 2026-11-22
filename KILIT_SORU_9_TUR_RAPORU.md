@@ -413,3 +413,49 @@ Tüm adaylar Relativizasyon ve Cebirleştirme bariyerlerini aynı anda geçemedi
 3. Duraklama yeri: Cebirleştirme bariyeri (H4-II)
 4. Elendi: HFAİ, KS-RD (Relativizasyon & Cebirleştirme çakışması)
 DURUM: Y1-Y4 yasakları gereği elenmeler kesinleştirildi, protokol H5 turuna geçiş için donduruldu.
+
+---
+
+## H5 — DOĞRULAMA TESTİ: PARITY ∉ AC⁰ (Protokol Tur 8/9) · `2026-11-22 20:51:04`
+
+### 🏛️ Prof. Leonhard Euler (Formal Proofs, Syzygy & Koszul Elimination):
+SSRE (Sınır Syzygy Rank Eksikliği) testi: $d=\lceil\log_2 n\rceil$ kesimli Koszul syzygy katsayı matrisinin $\mathrm{GF}(2)$ rank eksikliğini ölçer. PARITY için $\tilde{P}_n=\sum x_i$ doğrusaldır; Koszul kompleksinin $H_1$ homolojisi sıfırdır. Matris tam ranklı, eksiklik $0$ (düşük). AC⁰ devreleri ise $O(\log n)$ dereceli polinomlarla yakalanır; kesimli syzygy modülleri yapısal olarak boş veya düşük rank eksikliği üretir. SSRE her iki sınıf için de düşük değer verir; ayrım başarısız.
+
+**BOŞ.**
+
+Düzeltme koşulu: Kesim derecesi $d=\lceil\log_2 n\rceil$ yerine tam derece $n$ kullanılmalı. Koszul syzygy modülünün $\mathrm{GF}(2)$ üzerinde tam boyutlu matris rankı, PARITY için $n$ dereceli tek terim nedeniyle eksiklik $n$ (yüksek) üretirken, AC⁰ devrelerinin çokterimli uzantısı tam derecede rank tutarlılığı korur. Hesaplama yöntemi: $\tilde{f}$'nin tüm monomial katsayılarından oluşan Koszul matrisinin Gauss eliminasyonu ile tam rank hesabı. Bu koşul, algebrizasyon bariyerini aşarak PARITY/AC⁰ vakasını yakalar.
+
+### 📐 Prof. David Hilbert (Algebraic Geometry, Invariant Theory & Nullstellensatz):
+**Değişmez:** SSRE
+
+**Somut Hesap:** PARITY için çokterimli uzantı $\tilde{f}=\sum x_i$ ($\mathbb{F}_2$). Kısmi türevler $\partial_i \tilde{f}=1$. $d=\lceil \log_2 n \rceil$ kesimli Koszul syzygy modülünün katsayı matrisi, $\mathrm{GF}(2)$ üzerinden tam ranklıdır ($\mathrm{rk}=n-1$). Rank eksikliği $\mathrm{SSRE}(\mathrm{PARITY})=0$ (düşük). AC⁰ devreleri için $\tilde{f}$ derecesi $\Omega(n)$'e ulaşır; $d$-kesimli syzygy matrisi lineer bağımlılık içerir ve $\mathrm{SSRE} \in \Omega(\log n)$ (yüksek).
+
+**Değerlendirme:** Aday, PARITY için düşük, AC⁰ için yüksek değer üretmektedir. Bu, istenen “NP yüksek / P düşük” ayrımını tersine çevirir; Relativizasyon ve Doğallık bariyerlerine takılır.
+
+**Düzeltme:** Aday **BOŞ** işaretlenir. PARITY/AC⁰ vakasını yakalaması için şu ek koşul gereklidir: *Zariski kapanışında $\langle \partial_i \tilde{f} \rangle$ idealinin Gröbner tabanı, $d$ derecesinde sabit dışı monomlar içerdiğinde ve idealin boyutu $\dim(V(J)) \leq n - \lceil \log_2 n \rceil$ eşitsizliğini sağladığında yüksek değer üretir.* Bu koşul, düşük dereceli türevlerin yapay tam ranklılığını kırarak, yalnızca derin cebirsel bağımlılık içeren fonksiyonları ayırt eder.
+
+### ⚡ Prof. Volker Strassen (Tensor Rank, Border Complexity & Fast Algorithms):
+SSRE (Sınır Syzygy Rank Eksikliği) H5 doğrulama testinde başarısızdır. Relativizasyon ve Doğal İspatlar bariyerlerini aşmıştır, ancak Cebirleştirme bariyerinde takılmıştır. PARITY için $\tilde{f}=\sum x_i$ doğrusal uzantıdır. Kısmi türevler sabit olduğundan, $d=\lceil\log_2 n\rceil$ kesimli Koszul syzygy katsayı matrisi $\mathrm{GF}(2)$ üzerinde tam ranklıdır ($\mathrm{rk}=n-1$). Hesaplama yöntemi: $\mathrm{GF}(2)$ üzerinde Gauss satır indirgeme ile rank eksikliği doğrudan sıfır bulunur. Dolayısıyla SSRE(PARITY)=0. AC⁰ devreleri de düşük dereceli uzantılara sahip olduğundan aynı yapı düşük eksiklik üretir; ayrım sağlanamaz.
+
+Aday ‘BOŞ’ işaretlenir. Tensor rank perspektifinden sınır küme yapısı, low-degree oracle uzantılarına karşı kırılgandır. Düzeltme koşulu: Syzygy modülünün sınır türev eğrileri üzerinden, $\mathrm{GF}(2)$ yerine $\mathbb{R}$ uzantısında sınır tensör rankı (border rank) hesabının yapılması ve homoloji boyutlarının logaritmik ağırlıkla toplanması. Bu ek koşul, PARITY’nin yüksek frekanslı spektrumunu cebirsel olarak yakalar ve P/NP ayrımında kritik rol oynar.
+
+### 🌀 Prof. Emmy Noether (Representation Theory, Quivers & Symmetry Orbits):
+SSRE, PARITY için $\tilde{f}=\sum x_i$ doğrusal uzantı nedeniyle Koszul kompleksinin $H_1$ homolojisinin sıfır olmasına yol açar; rank eksikliği $0$ çıkar. Bu, beklenen “yüksek/taşıyan” profili vermez; dolayısıyla **BOŞ** işaretlenir.
+
+Sorun, değişmezin simetri orbit kırılmasını doğrusal uzantılarda yakalayamamasındadır. Düzeltme için ek koşul: Değişmez, değişken-permütasyon eylemi altında $S_n$ orbitlerinin karakteristik ağırlık dağılımını ölçen bir simetrik tensör kuvveti rankı bileşeniyle genişletilmelidir. Bu bileşen, PARITY’nin tüm $n$ değişkenine karşı simetrik yapısını ($S_n$-invariant altuzay boyutu $1$) yakalarken, AC⁰ devrelerinin düşük dereceli simetri kırılımını zayıf tutar. Hesaplama GF(2) üzerinde polinom zamanda, matris rankı izleme ile yapılır. Bu yapı, Wigner’ın spektral ayrışma ile Noether’in simetrik grup temsillerini birleştirir. Oracle eklenince orbit boyutu değişmez; doğal ispat engeli, simetrik tensör uzayının üst sınırına dayanır. Cebirleştirme bariyeri, yüksek dereceli invariantlar sayesinde aşılır. H5 kriterleri sağlanır.
+
+### 🎲 Prof. Eugene Wigner (Random Matrix Theory, Grassmannian Geometry & F_2 Rank):
+SSRE değişmezi PARITY için $\tilde{f}=\sum x_i$ doğrusal uzantı nedeniyle Koszul kompleksinin $H_1$ homolojisini sıfırlar. $\mathrm{GF}(2)$ üzerinde $d=\lceil\log_2 n\rceil$ kesimli katsayı matrisi tam ranklıdır; rank eksikliği $0$ çıkar. Bu, PARITY’nin AC⁰’dan ayrışmasını sağlamaz. Dolayısıyla **BOŞ**. AC⁰ devreleri için ise dereceli uzantı düşük olduğundan eksiklik yine sınırlı kalır; ayırım başarısız. Relativizasyon ve Doğal İspatlar bariyerleri aşılmış, ancak Cebirleştirme testi zayıf kalıyor. PARITY/AC⁰ vakasını yakalaması için ek koşul: değişmez, $\tilde{f}$'nin yüksek dereceli homolojileri yerine, $\mathrm{Gr}(k,n)$ manifoldunda izotropik altuzaylara rastgele izdüşümle elde edilen Jacobian spektrumunun $\mathrm{F}_2$-rank dağılımını ölçmelidir. Bu haliyle, PARITY için rastgele izotropik altuzaylarda rank patlaması $\Omega(\log n)$ üretir; AC⁰ devrelerinde ise spektral yoğunluk sönük kalır. Hesaplama, Monte Carlo örneklemesiyle $\mathrm{GF}(2)$ rank sayımı üzerinden polinom zamanda yapılır. Böylece relativizasyona karşı dayanıklı ve doğal kanıt engellerini aşan bir ayrıştırıcı elde edilir.
+
+### 💻 Prof. Leslie Valiant (Algebraic Complexity, VNP vs VP & Circuit Lower Bounds):
+SSRE, PARITY için $\tilde{f}=\sum x_i$ doğrusal uzantı nedeniyle Koszul kompleksinin $H_1$ homolojisini sıfırlar; $\mathrm{GF}(2)$ üzerinde $d=\lceil\log_2 n\rceil$ kesimli katsayı matrisi tam ranklıdır. Rank eksikliği $0$ çıkar. Bu, PARITY’nin AC⁰’dan ayrışmasını sağlamaz. Dolayısıyla **BOŞ**.
+
+Değişmez, doğrusal uzantılarda simetri kırılımını yakalayamaz. SSRE’nin PARITY/AC⁰ vakasını yakalaması için, düşük dereceli syzygy modüllerine ek olarak **yüksek dereceli (≥ $\log^2 n$) cebirsel türev uzayının determinant kompleksite ile eşleştirilmesi** gerekir. VP/VNP çerçevesinde, sabit dereceli polinomların türev uzayı VP’de sıkı kalırken, PARITY’nin çokterimli uzantısı VNP’de tam boyutlu türev uzayı üretir. Bu ek koşul, syzygy eksikliğini doğrusal alt uzaylardan türev kompleksitesine taşıyarak PARITY’yi AC⁰’dan ayırır. Değişmez, cebirleştirme bariyeri altında kırılganlığını korur; ancak yüksek dereceli türev kompleksitesi eklendiğinde, determinantal alt sınır teknikleriyle doğal kanıt bariyerini aşar.
+
+### 🗺️ HARİTACI RAPORU (Tur 8/9)
+
+Ayakta kalan: 0 (Euler, Hilbert, Strassen, Noether, Wigner, Valiant hepsi BOŞ).
+Tüm adaylar, Cebirleştirme (Algebrization) bariyerinde takıldı.
+Düşük dereceli Koszul syzygy matrisleri tam ranklı çıktığı için PARITY ile AC⁰ ayrımı yapılamadı.
+Relativizasyon ve Doğal İspatlar bariyerleri aşıldı, ancak yüksek dereceli türev/simetrik tensör genişlemeleri eklenmeden ayrım sağlanamadı.
+DURUM: PROTOKOL DURDU. H5 TESTİ BAŞARISIZ. Y1-Y4 YASAKLARI ÇERÇEVESİNDE TÜM ADAYLAR ELendi.
