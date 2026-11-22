@@ -333,11 +333,17 @@ class AutonomousAgentOrchestrator:
             if self.custom_prompt_queue:
                 custom_topic = f"[Kullanıcı Talebi] {self.custom_prompt_queue.popleft()}"
 
-            self.run_council_round(round_idx, custom_topic)
-            round_idx += 1
+            try:
+                self.run_council_round(round_idx, custom_topic)
+                round_idx += 1
+            except Exception as e:
+                print(f"[Orchestrator Loop Error in Round {round_idx}]: {e}")
+                self.emit_log({"type": "error", "round": round_idx, "text": f"⚠️ Tur {round_idx} döngü hatası (otomatik kurtarılıyor): {e}"})
+                round_idx += 1
+                time.sleep(5)
 
-            # Autonomous interval between rounds (e.g., 8 seconds)
-            for _ in range(8):
+            # Autonomous interval between rounds (e.g., 6 seconds)
+            for _ in range(6):
                 if self._stop_event.is_set():
                     break
                 time.sleep(1)

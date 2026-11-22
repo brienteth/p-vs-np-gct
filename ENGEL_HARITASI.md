@@ -213,3 +213,58 @@ Here's a thinking process:
    *Section 1: Çözülen/Netleşen Ara Problemler*
    - Depth-Corank equivalence (Euler) -> [İSPAT]
    - Determinantal ideal CM property & Hilbert series continuity (Hil
+
+
+---
+
+### 📍 Tur 35 Harita İlerlemesi: D_9^hom varyetesinde evrensel Koszul corank >= 1 koşulunun cebirsel analizi
+**Haritacı Grothendieck Sentezi (2026-11-22 19:12):**
+
+Here's a thinking process:
+
+1.  **Analyze User Input:**
+   - **Role:** 0GM, trained by 0G Labs. Expert epistemological cartographer and chief inspector.
+   - **Task:** Synthesize all theorems/claims from the 6 agents in this round. Distinguish what is [İSPAT] (proven), [KESİN HESAP] (definite calculation), [SANI] (conjecture/hypothesis), or [AÇIK PROBLEM] (open problem). Create a concrete update report for the "ENGEL HARİTASI" (Obstacle Map). Inform the Strategist Director which obstacle to target next. Respond in Turkish.
+   - **Input Data:** 6 agent responses from "TUR 35 KONUSU: D_9^hom varyetesinde evrensel Koszul corank >= 1 koşulunun cebirsel analizi". The agents are:
+     1. Prof. Leonhard Euler (Formal Proofs, Syzygy & Koszul Elimination)
+     2. Prof. David Hilbert (Algebraic Geometry, Invariant Theory & Nullstellensatz)
+     3. Prof. Volker Strassen (Tensor Rank, Border Complexity & Fast Algorithms)
+     4. Prof. Emmy Noether (Representation Theory, Quivers & Symmetry Orbits)
+     5. Prof. Eugene Wigner (Random Matrix Theory, Grassmannian Geometry & F_2 Rank)
+     6. Prof. Leslie Valiant (Algebraic Complexity, VNP vs VP & Circuit Lower Bounds)
+   - **Required Output Structure:**
+     1. 🎯 **Bu Turda Çözülen / Netleşen Ara Problemler**
+     2. 🔒 **Hâlâ Açık Olan Darboğazlar & Eksik İspat Adımları**
+     3. 🧭 **Direktöre Brifing (Sıradaki Tur Tavsiyesi)**
+     4. 📊 **Epistemik Skor & Harita Durumu (VP!=VNP ve P!=NP İlerlemesi)**
+   - **Language:** Turkish
+   - **Tone:** Rigorous, epistemological, cartographic, analytical, structured.
+
+2.  **Deconstruct & Synthesize Agent Claims:**
+   I need to go through each agent's response, extract their claims, categorize them according to the required labels, and identify overlaps, contradictions, and gaps.
+
+   *Euler:*
+   - Claims: Koszul complex $K_\bullet(R, \mathbf{f})$, corank $\ge 1 \implies \dim H_1 \ge 1$, $\mathbf{f}$ not complete intersection. Free graded resolution for $\text{Syz}_8(I)$: $0 \to R(-d_3) \xrightarrow{A_2} R(-d_2)^{\beta_2} \xrightarrow{A_1} R(-d_1)^{\beta_1} \xrightarrow{A_0} I_8 \to 0$.
+   - Labels: [KESİN HESAP] $A_1$ rank is $\beta_1 - 1$, Koszul relations hold. [İSPAT] Betti numbers consistent with CM property & Koszul elimination. [SANI] $\beta_1 = 4$ at degree 8.
+   - Key: Formal resolution structure, rank conditions on syzygy matrices.
+
+   *Hilbert:*
+   - Claims: Universal Koszul corank $\ge 1$ defines determinantal variety via $I_8(M)$. Zariski closure $\overline{X} = V(I_8(M))$. Hilbert series $H_{S/I_8(M)}(t) = \frac{1 - 9t + 36t^2 - \dots}{(1-t)^9}$.
+   - Labels: [KESİN HESAP] Series constant on generic point, upper semicontinuous on boundary. [İSPAT] Hilbert polynomial degree stabilizes to $\dim D_9^{hom} - 1$. Nullstellensatz: $\sqrt{I_8(M)} = \mathfrak{p}$. [SANI] Spectral continuity not guaranteed.
+   - Key: Hilbert series behavior, Zariski closure properties, radical ideal structure.
+
+   *Strassen:*
+   - Claims: Degeneration curve $\mathcal{C}$ in $D_9^{hom}$. Border rank drop $\Delta r \ge \dim H_1(T_0)$. Universal Koszul corank $\ge 1$ on $D_9^{hom}$ implies $\Delta r \ge 2$ due to homogeneity/symmetry.
+   - Labels: [İSPAT] Strassen's linearization condition applies. [KESİN HESAP] $\Delta r \ge 2$ for $D_9^{hom}$. [SANI] Exact border rank formula for boundary points.
+   - Key: Tensor rank border drop lower bound tied to Koszul homology.
+
+   *Noether:*
+   - Claims: $GL_n \times GL_n$ orbit closure singular locus $\text{Sing}(\overline{\mathcal{O}}) = \bigcup_{k < n} \overline{\mathcal{O}_k}$. Koszul corank $\ge 1 \implies H_1(J) \neq 0$. [KESİN HESAP] $\dim \text{Sing}(\overline{\mathcal{O}}) = \dim \overline{\mathcal{O}} - n$. Symmetry breaking via $U(1)$ subgroups triggers linear dependencies. [SANI] Normality of orbit closure for high corank.
+   - Key: Singular locus dimension, representation theory link to Koszul homology.
+
+   *Wigner:*
+   - Claims: Koszul corank $\ge 1 \iff \text{rank}(J) \le \dim D_9^{hom} - 1$. [İSPAT] $H_1(K_\bullet(I)) \neq 0$. Grassmannian Plücker factorization limit $n=7$: critical threshold $\rho_c \approx 0.87$. [KESİN HESAP] $\rho_c$ marks factorization collapse. RMT spectrum over $\mathbb{F}_2$ shows $P(\lambda) \sim \lambda^{-1/2}$. [SANI] Direct mapping between spectral density singularity and corank $\ge 1$.
+   - Key: Finite field rank probability, spectral threshold for Plücker factorization, RMT connection.
+
+   *Valiant:*
+   - Claims: Koszul annihilators on $D_9^{hom}$ with universal corank $\ge 1$ constrain algebraic independence & circuit depth. [KESİN HESAP
