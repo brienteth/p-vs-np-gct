@@ -117,8 +117,10 @@ class AutonomousAgentOrchestrator:
 
         # Meta-Agents Initialization
         from agent_hub_0g.meta_agents import MetaAgentDirector, MetaAgentCartographer
+        from agent_hub_0g.kilit_soru_protocol import KilitSoruProtocol
         self.director = MetaAgentDirector(self)
         self.cartographer = MetaAgentCartographer(self)
+        self.kilit_soru = KilitSoruProtocol()
 
         self._load_saved_logs()
 
@@ -291,6 +293,12 @@ class AutonomousAgentOrchestrator:
 
     def run_council_round(self, round_num: int, custom_topic: Optional[str] = None):
         self.current_round = round_num
+
+        # SPECIAL MISSION: If the 9-round KİLİT SORU protocol is active, execute its next step (H1->H6).
+        # Once Tur 9 completes, it sets active=False and hands control automatically back to Prof. Henri Poincaré.
+        if not custom_topic and self.kilit_soru.is_active():
+            self.kilit_soru.execute_step(self, round_num)
+            return
 
         # STEP 1: CARTOGRAPHER READS MAP
         current_map = self.cartographer.read_current_map()

@@ -20,7 +20,7 @@ def commit_and_push(round_num):
     try:
         subprocess.run(["git", "config", "--global", "user.name", "0G Council Bot"], check=False)
         subprocess.run(["git", "config", "--global", "user.email", "bot@0g.ai"], check=False)
-        subprocess.run(["git", "add", "ENGEL_HARITASI.md", "TARTISMA_LOGU.md", "agent_hub_0g/dossiers/", "agent_hub_0g/logs/", "docs/"], check=False)
+        subprocess.run(["git", "add", "ENGEL_HARITASI.md", "TARTISMA_LOGU.md", "KILIT_SORU_9_TUR_RAPORU.md", "agent_hub_0g/kilit_soru_state.json", "agent_hub_0g/dossiers/", "agent_hub_0g/logs/", "docs/"], check=False)
         res = subprocess.run(["git", "diff", "--staged", "--quiet"])
         if res.returncode != 0:
             subprocess.run(["git", "commit", "-m", f"Auto: Round {round_num} 0G Council Proofs [skip ci]"], check=False)
