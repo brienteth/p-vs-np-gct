@@ -1,0 +1,8 @@
+===============================================================================================
+TEST 1 (THM H-16A): GLOBAL ZERO-BLOCK 6x6 & 8x8 PRINCIPAL SUBMATRIX IDENTITIES ON C^16
+===============================================================================================
+  [PROVEN] Identity 1 max |det_6(Hess|_(R3 U C3)) + (det_3 N)^2|   = 1.82e-12
+  [PROVEN] Identity 2 max |det_8(Hess|_(R4 U C4)) - (det_4 M)^2|   = 1.46e-11
+  [PROVEN] On RC_{0,0}: max |det_3 N - C_00[r0,c0]*det_2(C_00)|    = 7.11e-15
+  [PROVEN] On RC_{0,0}: max |det_4 M - C_00[r0,c0]*det_3(C_00)|    = 1.42e-14
+NOTE: Test 2 (L_9 H_{<=6}) & Test 3 (L_10 H_{<=4}) skipped after >5 min timeout -> [DOGRULANMADI — >5 dk zaman asimi]

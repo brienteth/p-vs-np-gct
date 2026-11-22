@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.pyc
+*.so
+.DS_Store
+agent_hub_0g/logs/*.log

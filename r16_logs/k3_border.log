@@ -1,0 +1,19 @@
+==========================================================================================
+PART A (KOL 3 / E4.6): FULL-16-VARIABLE GENUINE B_9^{(4)} LAURENT BORDER TESTS
+==========================================================================================
+  [VERIFIED GENUINE B_9^{(4)} CURVE: Curve L1 (16-var coupled 4+4+1 Laurent pole, corank_eps=0)] 15/15 pts: eps^{<0}==0, deg(F_0)==4, F_{eps=1} non-homog at 15/15 pts!
+  [Curve L1 exact symbolic F_0] = c12_12*lc*lr*n01 - c21_12*lc*lr*n01 - lc*lr1*n01*n12 + lc*lr2*n01*n12 - lc1*lr*n01*n1_13 - lc2*lr*n01*n2_13
+  [Curve L1 (16-var B_9^{(4)} coupled Laurent) | p=32749] L_8 IMSC coranks D=6..9: [1050, 1839, '>1839(div)', 'skipped'] | L_12 Sing_2 rank: 787/1365 (corank=578)
+  [VERIFIED GENUINE B_9^{(4)} CURVE: Curve L2 (16-var commuting-minor f1*g1-g1*f1 Laurent pole, corank_eps=0)] 15/15 pts: eps^{<0}==0, deg(F_0)==4, F_{eps=1} non-homog at 15/15 pts!
+  [Curve L2 exact symbolic F_0] = c12_12*f1*lc*lr - c21_12*g1*lc*lr - f1*g1*lc*lr1 + f1*g1*lc*lr2 + f1*lc*lr*n1_01_b - f1*lc1*lr*n1_13 - g1*lc*lr*n1_23 - g1*lc2*lr*n2_13
+  [Curve L2 (16-var f1*g1==g1*f1 B_9^{(4)}) | p=32749] L_8 IMSC coranks D=6..9: [857, 1372, '>1372(div)', 'skipped'] | L_12 Sing_2 rank: 914/1365 (corank=451)
+
+==========================================================================================
+PART B (KOL 3): REAL CONSTRUCTED m=10 SLICE F_{m10} IN D_{10}^{hom} (VS SYNTHETIC H_sym)
+==========================================================================================
+  [REAL m=10 SLICE VERIFIED] 10/10 pts X0 in W^perp: grad(F_{m10})(X0)==0 AND max EXACT F_32749 rank(Hess(F_{m10})(X0)) = 2/16 (<= 2)!
+  [REAL m=10 slice F_{m10} in D_{10}^{hom} | p=32749] L_8 IMSC coranks D=6..9: [129, 160, '>160(div)', 'skipped'] | L_12 Sing_2 rank: 1365/1365 (corank=0)
+  [REAL m=10 SLICE ON L_9 H_{<=4}] D=6 corank=275, D=7 corank=1, D=8 corank=1/12870 (> 0 => T^(4)(F_{m10}) == 0 EXACT!)
+  [DIRECT M_8^{H_{<=4}}(perm_4; L_9) FEASIBILITY] raw rows = 16*binom(13,5) + 112*binom(10,2) = 25,632, cols = binom(16,8) = 12,870; exact_mod_rref U buffer = 1.23 GB
+
+ALL ROUND 16 KOL 3 BORDER & REAL m=10 CHECKS PASSED (EXIT CODE 0) IN 43.84s

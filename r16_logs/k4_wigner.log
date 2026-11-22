@@ -1,0 +1,21 @@
+===============================================================================================
+PART A (THM W-16A): EXACT P_{0,1}(F_3^4) ISOMORPHISM ('40 == 40') & GRASSMANNIAN BOUNDS
+===============================================================================================
+  [PROVEN] Projective quotient isomorphism: |P_{0,1}(F_3^4)| == |({0,1}^5\{0,1})/complement| = 15!
+
+  Exact {0,1}-Reachable Grassmannian Subspace Enumeration |Gr_{0,1}(k=2, n, F_3)| vs GF(2) Determinant Rank:
+  n   | Full [n,2]_3 | |Gr_{0,1}(2,n,F_3)|  | Exact rk_F2([det!=0 mod 3]) | Ratio vs [n,2]_3
+  ----------------------------------------------------------------------------------------
+    3 |           13 |                    9 | 6                           |           0.692x
+    4 |          130 |                   55 | 40                          |           0.423x
+    5 |         1210 |                  285 | 264                         |           0.236x
+    6 |        11011 |                 1351 | <= 1351 (UB)                |           0.123x
+
+===============================================================================================
+PART B: UNRESTRICTED n=5 (2-vs-3 ROW-CUT) & n=6 (row5=1_6) rk_F2 EXPLOSION
+===============================================================================================
+  [n=5 Unrestricted 2-vs-3] Unique F_3 3-row permanent signature cols: 1482 / 32,768!
+  [PROVEN EXACT n=5 UNRESTRICTED] rk_F2([perm_5 != 0 mod 3], rows {0,1} vs {2,3,4}) = 336 / 1024! [0.28s]
+  [n=6 (row5=1_6, 4096 x 6000 slice)] rk_F2([det_6 != 0 mod 3]) = 264 vs rk_F2([perm_6 != 0 mod 3]) = 1456 (5.52x LARGER!)
+
+ALL ROUND 16 WIGNER E5.6 TESTS PASSED (EXIT CODE 0) IN 7.36s

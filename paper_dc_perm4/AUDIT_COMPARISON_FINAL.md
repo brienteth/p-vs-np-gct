@@ -1,0 +1,53 @@
+# İki-Gruplu Bağımsız Hakem ve Doğrulama Denetimi Karşılaştırma Raporu (`dc_perm4_ge_10.tex`)
+
+**Tarih:** 22 Kasım 2026  
+**Denetlenen Çekirdek Dosyalar:** `paper_dc_perm4/dc_perm4_ge_10.tex`, `paper_dc_perm4/verify_codim_sing_perm4.py`, `paper_dc_perm4/README.md`  
+**Tam Dosyalar:** `AUDIT_GROUP_A.md` (12 ajan, 4 tur — Cebirsel Odak), `AUDIT_GROUP_B.md` (12 ajan, 4 tur — Hesap ve Yayın Hazırlığı)  
+**Üretilen Bağımsız CAS Betikleri (`[KESİN HESAP — HENÜZ ÇALIŞTIRILMADI]`):** `verify_perm_codim.m2`, `verify_perm_codim.sing`
+
+---
+
+## 1. İki Grubun Çıktılarının Karşılaştırılması
+
+| Soru | Grup A (`Kanıt Denetimi` — `mod-A`, `crit-A`) | Grup B (`Doğrulama ve Yayın` — `mod-B`, `crit-B`) | Uyum? |
+| :--- | :--- | :--- | :--- |
+| **Q1: `r = 3` düzeltmesi** | `r = 3` vakası şu an **eksik** (`2x2` sıfır bloğu atlanmış, devrik/sütun adımı açık değil); ancak `2x2` sıfır blokta $\adj(B)=pq^T \implies \str(\perm_4)\le 2<4$ eklendiğinde ve Tur 3'teki $\max\rank\in\{1,2\}$ ayrımına dayalı **öz-yeterli tamlık kanıtı** konduğunda makale cebirsel olarak tamamen kapanıyor (`Thm 3.1`'e koşullu). `[İSPAT]` | `r = 3` vakası şu an **eksik**; $\mathrm{GL}_3\times\mathrm{GL}_3$ ve devrik altında 3. tip olarak $2\times 2$ sıfır bloğu ($\adj(B)=\tilde{b}\tilde{c}^T \implies \str\le 2 < 4$) eklendiğinde cebirsel zincir tamamen kapanıyor. Grup B içi $\str\le 1$ hatası çoğunluk + `mod-B` tarafından $\str\le 2$ olarak düzeltildi. `[İSPAT]` | **Tam Uyum** *(Grup A ek olarak Atkinson/EH'ye ihtiyaç bırakmayan öz-yeterli tamlık kanıtını da üretti)* |
+| **Q2: bağımsız `codim` kontrolü** | Tek Python IMSC betiği yetmez. Açık $S_3$/$S_4$ permütasyon toplamlı (yerleşik `permanent` yok) M2/Singular betikleri çalıştırılmalı; Python tarafında $n$-parametreli `perm_3` ($\codim=6$), $\det_4$ ($\codim=4$), `rank(M_L8)==8` ve `step_imsc` taşma `assert`'leri + küçük-blok `int64`/seyrek RREF çapraz kontrolü eklenmeli. Kabul ölçütü: `perm_3=6`, `det_4=4`, `L_8` için `codim=8` & `D=9` `corank=0`, `L_9` için `dim>=1`. `[İSPAT]` | Yerleşik `permanent` çağrısı olmadan açık toplamlı M2/Singular/Sage çalıştırılmalı; sabit `M_L8`/`M_L9` matrisleri dışa aktarılıp tüm CAS motorları aynı uzaylarda `perm_3=6`, `L_8` `dim=0` + `D=9` `corank=0` ($p_1, p_2$), `L_9` `dim>=1` vermeli. Rastgele $\mathbb{F}_p$ kesitleri yanlış-negatif riski nedeniyle kabul kapısı yapılmamalı (`B-deneysel-doğrulama`). `[İSPAT]` | **Tam Uyum** *(Grup A $\det_4=4$ pozitif kontrolü ve seyrek/int64 RREF ekledi; Grup B ise rastgele altuzayların kabul kapısı olmaması gerektiğini yakaladı)* |
+| **Q3: makale değişiklikleri** | Öz-yeterli `r=3` metni, açık $M_{L_8}$ matrisi + koni $0\in Y_i\cap L_8$ gerekçesi, `Prop 2.3` (`2-edge matching`, `36` kuadrik ters yön), `Prop 4.1` ($r=0$ sırası, $r=2$ çapraz terim/sütun işlemi), Bölüm 5 ($d_v\ge 1, d_z=0$, $I_W$ ön-tanımı, $\underline{\dc}$ kapsamı) düzeltilmeli; `README`'den M2 `permanent X` kaldırılmalı; literatür kontrol edilmeli. Boolean/SAT notu ayrı teorem değil yalnız Bölüm 5 sonuna `H1/H4 [AÇIK]` vurgulu kısa `Motivation / Open Limitations` olarak girmeli. `[İSPAT]`/`[SANI]` | `\author` doldurulmalı; özette tanımsız $X_0\to A_{11}^{(\xi)}(\xi)$; Step 2'de $A_{13},A_{31},A_{33}\to A_{12},A_{21},A_{22}$; `Remark 3.2`'de `generic L_9` $\to$ `explicit L_9`; giriş sonuna *"What This Paper Does and Does Not Claim"* paragrafı; `r=3` 3-tipli düzeltme; birincil literatür + **olası öncelik (Sheshadri 2026)** taraması zorunlu; `README` `permanent X` değiştirilmeli; Boolean/SAT yalnız *Motivation and Discussion* alt-bölümünde `H1/H4 [OPEN]` olarak yer almalı. `[KESİN HESAP]`/`[SANI]` | **Tam Uyum** *(Birbirini tamamlayan nokta-atışı tespitler: Grup B $X_0$ ve $A_{13}$ notasyon hatalarını + öncelik riskini, Grup A ise $r=0$ sırası, $r=2$ çapraz terimler ve $d_v\ge 1$ sınırını yakaladı)* |
+| **Bulunan hatalar** | **(1)** `Prop 4.1` `r=3`'te $2\times 2$ sıfır blok eksik + devrik/sütun belirsiz (`[İSPAT]`); **(2)** `Thm 3.1` tek koda bağımlı, `0 in Y_i \cap L_8` eksik (`[İSPAT]`); **(3)** `step_imsc` taşma `assert` yok, `perm_3`/`det_4` yok (`[KESİN HESAP]`); **(4)** `Prop 2.3` `induced 2-edge matching` hatalı terimi (`[İSPAT]`); **(5)** `Prop 4.1` $r=0$ ölçekleme sırası & $r=2$ $\det(I_w+tA)$ çapraz terimleri (`[İSPAT]`); **(6)** `Sec 5` $d_v\ge 1, d_z=0$, $I_W$ ön-tanım eksikliği (`[İSPAT]`); **(7)** `README` M2 `permanent X` doğrulanmamış (`[LİTERATÜR-DOĞRULANMADI]`); **(8)** Kaynakça birincil doğrulamasız (`[LİTERATÜR-DOĞRULANMADI]`). | **(1)** `Prop 4.1` `r=3`'te $2\times 2$ sıfır blok + devrik eksik (`[İSPAT]`, Tur 2-3'te 4 üyenin `str<=1` sanısı `mod-B` ile `str<=2` olarak düzeltildi); **(2)** Özette tanımsız $X_0$ (`[İSPAT]`); **(3)** Step 2 blok indisleri $A_{13},A_{31},A_{33}$ (`[İSPAT]`); **(4)** `Remark 3.2` `generic L_9` vs `explicit integer L_9` ve `rank(M_L9)==9` `assert` eksik (`[KESİN HESAP]`); **(5)** `step_imsc` `R_canon @ C_s` `assert` yok, `perm_3` pozitif kontrol yok (`[KESİN HESAP]`); **(6)** `\author` yer tutucusu ve kapsam sınır paragrafı eksik (`[KESİN HESAP]`); **(7)** `README` `permanent X` doğrulanmamış (`[LİTERATÜR-DOĞRULANMADI]`); **(8)** Öncelik & birincil literatür kontrolsüz — özellikle **Sheshadri (2026)** olasılığı (`[LİTERATÜR-DOĞRULANMADI]`). | **Yüksek Uyum** |
+
+---
+
+## 2. Moderatör Son Hükümleri ve Güven Değerlendirmesi
+
+### Grup A (`mod-A`, `AUDIT_GROUP_A.md`)
+- **Oy Sayımı Özeti:** `Prop 2.3` ($\codim\,\Sing_2=12$), `Lem 2.2`, `Prop 4.1` ($r=0,2,4,\ge 5$), Tur 3'te düzeltilen `r=3` ve `Sec 5` (`Skew-Square`, $I_W^3$) **kabul** (çoğu `Thm 3.1`'e koşullu). `dc_perm4_ge_10.tex`'teki mevcut `r=3` **10/10 red**. `Thm 3.1`, `README` M2 komutu ve literatür **belirsiz** (CAS çalıştırılamadığı ve birincil PDF okunmadığı için).
+- **Güven Düzeyi:** Cebirsel ispat iskeletinde **Yüksek** (`Thm 3.1` ve literatür koşullu); yayına/uzmana gönderime hazırlıkta **Orta**.
+- **En Güçlü İtiraz:** `r=3` $2\times 2$ sıfır bloğunun eksikliği + Atkinson/EH atfına tamlık bağımlılığı; Tur 3'te $12$ satırlık öz-yeterli $\max\rank\in\{1,2\}$ kanıtıyla tamamen kapatıldı.
+- **Azınlık Görüşü:** `A-cebirsel-geometri`, yalnızca `perm_3` değil `det_4` ($\codim=4$) + `n`-parametreli alt-permanent kurucusunun da sınanmasını zorunlu gördü.
+
+### Grup B (`mod-B`, `AUDIT_GROUP_B.md`)
+- **"Bugün Neyi Kapatabildik?":** `Prop 2.2`, `Lem 2.1`, `Prop 4.1` (düzeltilmiş 3-tipli `r=3` dahil) ve `Sec 5` **tamamen kapatıldı** `[İSPAT]`; `rref` taşma marjı (`4.12e11 < 2^53`) ve IMSC $\to M_9(I)$ çıkarımı doğrulandı `[KESİN HESAP]`.
+- **Güven Düzeyi:** Cebirsel argümanda **Yüksek**; Teorem 3.1 ve yayın hazırlığında **Orta–Düşük** (bağımsız CAS çalışmadığı ve öncelik taraması tamamlanmadığı için).
+- **En Güçlü İtiraz (`crit-B`):** (i) `r=3` açığı, (ii) tek tohumlu Python sertifikası + `perm_3`/`rank(M_L9)` eksikliği, (iii) birincil literatür & **öncelik (Sheshadri 2026)** kontrolünün yapılmamış olması — mevcut haliyle hakemden doğrudan ret riski.
+- **Grup İçi Çatışma Çözümü:** 4 üyenin `2x2` sıfır blokta iddia ettiği `str <= 1`, `B-lineer-cebir` + 4 üye + `mod-B` tarafından $\str \le 2$ olarak reddedildi; 5 rastgele $\mathbb{F}_p$ kesitinin zorunlu kabul kapısı yapılması ise yanlış-negatif riski nedeniyle reddedildi.
+
+---
+
+## 3. Koordinatör Birleşik Kaynak & Doğrulama Notu (`[LİTERATÜR-DOĞRULANMADI — BİRİNCİL PDF OKUNMADI]`)
+
+Denetim boyunca web arama özetlerinde koordinatör tarafından görülen, **ancak tam birincil PDF/doküman okuması henüz yapılmadığı için** `[LİTERATÜR-DOĞRULANMADI]` etiketiyle korunması gereken kritik bulgular:
+1. **Öncelik Uyarısı (`Sheshadri 2026`):** Web arama özetlerinde `Karthik Sheshadri (2026)` imzalı ve $\dc(\perm_4) = 15$ sonucunu iddia eden bir ResearchGate kaydı görünmüştür (`crit-B` ile birebir örtüşen uyarı!). Makale herhangi bir uzmana veya dergiye gönderilmeden önce **bu çalışmanın birincil metni mutlaka okunmalı** ve sonucun yeni mi, alternatif kısa/öz-yeterli bir kanıt mı olduğu netleştirilmelidir.
+2. **Macaulay2 `permanent` Sözdizimi:** Macaulay2 belgelerinde matris için yerleşik işlevin `permanent` değil, alt-permanent ideali için `permanents(n, M)` veya ayrı `Permanents` paketi olduğu görülmüştür. Bu nedenle ürettiğimiz `verify_perm_codim.m2` ve `verify_perm_codim.sing` dosyaları yerleşik hiçbir `permanent` işlevi çağırmadan **açık permütasyon toplamı** kullanmaktadır.
+3. **Literatür Koşulları:** ABV (2017, `arXiv:1505.02205`) Teorem 1.2'nin $\codim(\Sing(f)) > 4$, $d > 2$ koşulları; Yabe (2015, `arXiv:1504.00151`) $(n-1)^2+1$ sınırının yalnızca $\mathbb{R}$ üzerinde olması; ve Atkinson (1983) / Eisenbud–Harris (1988) referanslarının tüm detayları (her ne kadar Grup A'nın öz-yeterli $r=3$ kanıtı dış atıf zorunluluğunu kaldırsa da) birincil PDF'lerden doğrulanmalıdır.
+
+---
+
+## 4. Üretilen Somut Çıktılar (Tur 3 Özeti)
+
+1. **`(a)` Düzeltilmiş `r = 3` LaTeX Paragrafı:** Her iki grup da $2\times 2$ sıfır blokta $\adj(B) = p q^T$ (`str <= 2 < 4`) ile sıfır sütun devrik eşleniğinde hemfikirdir; Grup A'nın (`AUDIT_GROUP_A.md` satır 188–227, `A-lineer-cebir` satır 235–253) yazdığı **dış kaynağa dayanmayan 12 satırlık öz-yeterli $3\times 3$ sınıflandırma kanıtı** en güçlü birleşik metindir `[İSPAT]`.
+2. **`(b)` Bağımsız CAS Doğrulama Betikleri:** Yerel makinede `M2` ve `Singular` bulunmadığından `[KESİN HESAP — HENÜZ ÇALIŞTIRILMADI]` etiketiyle şu iki bağımsız dosya oluşturuldu (Python `verify_codim_sing_perm4.py` içindeki birebir `M8`/`M9` matrisleriyle, `perm_3=6` & `det_4=4` pozitif kontrolleri ve `L_9` negatif kontrolü dahil):
+   - `paper_dc_perm4/verify_perm_codim.m2`
+   - `paper_dc_perm4/verify_perm_codim.sing`
+3. **`(c)` Makale Değişiklik Listesi & Boolean/SAT Konumu (`Q3`):** Özetteki tanımsız $X_0$ kaldırılacak, Step 2 blok indisleri (`A_{12}, A_{21}, A_{22}`), `Remark 3.2` (`explicit L_9`), `Theorem 3.1` koni kesişimi (`0 in Y_i \cap L_8`), `Prop 2.3` (`2-edge matching`, ters içerme), `Prop 4.1` (`r=0` ölçekleme sırası, `r=2` çapraz terimler, öz-yeterli `r=3`), Bölüm 5 (`d_v >= 1, d_z = 0`, `I_W`, `\underline{\dc}` dışı), `\author`, *"What This Paper Does and Does Not Claim"* ve Boolean/SAT aktarım notu yalnızca *"Motivation and Discussion"* içinde **`H1` ve `H4` açık problemleri** vurgulanarak eklenecek (`AUDIT_GROUP_A.md` satır 405–423; `AUDIT_GROUP_B.md` satır 489–530).
+4. **`(d)` Tek Somut Sonraki Adım:** İlk olarak `Sheshadri (2026)` ve birincil PDF'ler (`ABV17`, `Yabe15`, `MR04`, `LR17`) üzerinde öncelik/literatür taramasını tamamlamak; ardından `Macaulay2` / `Singular` kurulu bir ortamda `verify_perm_codim.m2` ve `verify_perm_codim.sing` betiklerini çalıştırıp (`perm_3=6, det_4=4, L_8: corank=[132,32,8,0], L_9: dim>=1`) sonuçlar onaylandıktan sonra `dc_perm4_ge_10.tex` ve `README.md` güncellemelerini uygulamak.

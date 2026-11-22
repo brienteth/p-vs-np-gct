@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>0G Agent Hub — 7/24 Otonom Hiyerarşik Araştırma Konseyi</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- KaTeX for LaTeX rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            dark: {
+              800: '#1e293b',
+              850: '#172033',
+              900: '#0f172a',
+              950: '#090d16',
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Menlo', 'monospace'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #080c14;
+      color: #e2e8f0;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 3px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    .pulse-glow {
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+    }
+    .agent-card-active {
+      border-color: #22c55e;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.25);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col custom-scroll">
+
+  <!-- TOP HEADER & CONTROLS -->
+  <header class="bg-dark-900 border-b border-slate-800 sticky top-0 z-50 backdrop-blur-md bg-opacity-90">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Logo & Title -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
+          0G
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-lg font-bold tracking-tight text-white">0G Autonomous Agent Hub</h1>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-900/60 text-indigo-300 border border-indigo-700/50">Hiyerarşik 7/24</span>
+            <span id="daemon-badge" class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">Yükleniyor...</span>
+          </div>
+          <p class="text-xs text-slate-400">Hedef Odaklı Direktör & Engel Haritacısı Destekli Otonom Konsey</p>
+        </div>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="flex items-center space-x-5 text-xs">
+        <div class="bg-dark-950/80 px-3 py-1.5 rounded-lg border border-slate-800">
+          <span class="text-slate-400">Uptime:</span>
+          <span id="stat-uptime" class="font-mono font-semibold text-emerald-400 ml-1">00:00:00</span>
+        </div>
+        <div class="bg-dark-950/80 px-3 py-1.5 rounded-lg border border-slate-800">
+          <span class="text-slate-400">Tur:</span>
+          <span id="stat-round" class="font-mono font-semibold text-cyan-400 ml-1">#20</span>
+        </div>
+        <div class="bg-dark-950/80 px-3 py-1.5 rounded-lg border border-slate-800">
+          <span class="text-slate-400">0G Çağrıları:</span>
+          <span id="stat-calls" class="font-mono font-semibold text-amber-400 ml-1">0</span>
+        </div>
+        <div class="bg-dark-950/80 px-3 py-1.5 rounded-lg border border-slate-800">
+          <span class="text-slate-400">0G Maliyet:</span>
+          <span id="stat-cost" class="font-mono font-semibold text-emerald-400 ml-1">$0.0000</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center space-x-2">
+        <button id="btn-start" onclick="startOrchestrator()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-md">
+          <i class="fa-solid fa-play"></i> <span>7/24 Başlat</span>
+        </button>
+        <button id="btn-pause" onclick="pauseOrchestrator()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all">
+          <i class="fa-solid fa-pause"></i> <span>Duraklat</span>
+        </button>
+        <button id="btn-stop" onclick="stopOrchestrator()" class="px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all">
+          <i class="fa-solid fa-stop"></i> <span>Durdur</span>
+        </button>
+        <button id="btn-trigger" onclick="triggerRound()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-md">
+          <i class="fa-solid fa-bolt"></i> <span>Tek Tur</span>
+        </button>
+        <button onclick="clearLogs()" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs" title="Logları Temizle">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN DASHBOARD CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full flex flex-col gap-6">
+
+    <!-- TIER 1 & TIER 3: META-AGENTS ROW (DIRECTOR & CARTOGRAPHER) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      
+      <!-- DIRECTOR CARD -->
+      <div class="bg-gradient-to-r from-dark-900 to-indigo-950/40 border border-indigo-900/60 rounded-xl p-4 shadow-lg flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2.5">
+            <span class="text-2xl">🧭</span>
+            <div>
+              <h3 class="text-sm font-bold text-white">Araştırma Direktörü & Stratejist</h3>
+              <p class="text-[11px] text-indigo-400 font-mono">Prof. Henri Poincaré &bull; 0G Otonom Görev Atayıcı</p>
+            </div>
+          </div>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-700/60">Tier 1: Strateji</span>
+        </div>
+        <div class="bg-dark-950/80 rounded-lg p-3 border border-indigo-900/30 text-xs">
+          <span class="text-slate-400 font-semibold block mb-1">🎯 Son Direktif & Görev Dağılımı:</span>
+          <p id="director-briefing" class="text-slate-300 font-mono text-[11px] line-clamp-2">Harita analiz ediliyor, sıradaki tur görevleri hazırlanıyor...</p>
+        </div>
+      </div>
+
+      <!-- CARTOGRAPHER CARD -->
+      <div class="bg-gradient-to-r from-dark-900 to-emerald-950/40 border border-emerald-900/60 rounded-xl p-4 shadow-lg flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2.5">
+            <span class="text-2xl">🗺️</span>
+            <div>
+              <h3 class="text-sm font-bold text-white">Engel Haritacısı & Denetçi</h3>
+              <p class="text-[11px] text-emerald-400 font-mono">Prof. Alexander Grothendieck &bull; Canlı Harita Güncelleyici</p>
+            </div>
+          </div>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700/60">Tier 3: Sentez</span>
+        </div>
+        <div class="bg-dark-950/80 rounded-lg p-3 border border-emerald-900/30 text-xs">
+          <span class="text-slate-400 font-semibold block mb-1">📍 Engel Haritası Güncelleme Durumu:</span>
+          <p id="cartographer-update" class="text-slate-300 font-mono text-[11px] line-clamp-2">ENGEL_HARITASI.md canlı olarak takip ediliyor...</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TIER 2: 6 SPECIALIST AGENTS GRID -->
+    <div>
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-semibold text-slate-300 flex items-center space-x-2">
+          <i class="fa-solid fa-users-viewfinder text-emerald-400"></i>
+          <span>Tier 2: 6 Uzman Araştırmacı Ajan</span>
+        </h2>
+        <span class="text-xs text-slate-500 font-mono">Direktör tarafından her tur hedefe yönelik görevlendirilir</span>
+      </div>
+
+      <div id="agents-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3">
+        <!-- Dynamically rendered by JS -->
+      </div>
+    </div>
+
+    <!-- MAIN TWO-COLUMN WORKSPACE: LEFT TERMINAL, RIGHT CERTIFICATES & PROMPT -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1">
+      
+      <!-- LEFT: LIVE DEBATE TERMINAL (8 COLS) -->
+      <div class="lg:col-span-8 flex flex-col bg-dark-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl h-[650px]">
+        <!-- Terminal Header -->
+        <div class="bg-dark-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+            <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+            <span class="text-xs font-mono text-slate-400 ml-2 font-semibold">Live Council Stream (0G API Realtime)</span>
+          </div>
+          <div class="flex items-center space-x-3 text-xs">
+            <label class="flex items-center space-x-1.5 cursor-pointer text-slate-400 hover:text-slate-200">
+              <input type="checkbox" id="autoscroll-toggle" checked class="rounded bg-slate-800 border-slate-700 text-emerald-500 focus:ring-0">
+              <span>Oto-Kaydır</span>
+            </label>
+            <span id="log-count" class="font-mono text-slate-500">0 ileti</span>
+          </div>
+        </div>
+
+        <!-- Terminal Output Area -->
+        <div id="terminal-body" class="flex-1 p-4 overflow-y-auto space-y-3 font-mono text-xs custom-scroll">
+          <div class="text-slate-500 italic">Sistem başlatılıyor, 0G ağına bağlanılıyor...</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: PROMPT INJECTION & VERIFIED CERTIFICATES (4 COLS) -->
+      <div class="lg:col-span-4 flex flex-col gap-4">
+
+        <!-- PROMPT / HYPOTHESIS INJECTOR BOX -->
+        <div class="bg-dark-900 border border-slate-800 rounded-xl p-4 shadow-lg">
+          <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center space-x-2">
+            <i class="fa-solid fa-terminal text-indigo-400"></i>
+            <span>Direktöre Özel Hipotez / Talimat Ver</span>
+          </h3>
+          <p class="text-xs text-slate-400 mb-3">Girdiğiniz hipotez Direktör Masası'na iletilir; Direktör bu hipotezi 6 uzmana dağıtır ve Haritacı sonucu haritaya işler.</p>
+          <textarea id="custom-prompt-input" rows="3" class="w-full bg-dark-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-mono" placeholder="Örn: Cauchy-Binet Plücker açılımı ile n=7 için Grassmannian rank tavanını formüle edin..."></textarea>
+          <div class="mt-2 flex justify-between items-center">
+            <span id="queue-status" class="text-xs text-slate-500 font-mono">Kuyruk: 0 hipotez</span>
+            <button onclick="submitCustomPrompt()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-md">
+              <i class="fa-solid fa-paper-plane"></i> <span>Kuyruğa Ekle</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- VERIFIED MATHEMATICAL CERTIFICATES PANEL -->
+        <div class="bg-dark-900 border border-slate-800 rounded-xl p-4 shadow-lg flex-1 flex flex-col">
+          <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center space-x-2">
+            <i class="fa-solid fa-award text-amber-400"></i>
+            <span>Sertifikalı Matematiksel Sonuçlar</span>
+          </h3>
+
+          <div class="space-y-3 flex-1 text-xs">
+            <!-- Cert 1 -->
+            <div class="p-2.5 rounded-lg bg-dark-950 border border-emerald-900/40">
+              <div class="flex items-center justify-between font-semibold text-emerald-400 mb-1">
+                <span>Koszul M_8 Tam Rank (Örtenlik)</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700/60">[KESİN HESAP]</span>
+              </div>
+              <p class="text-slate-400 text-[11px]">perm_4 için L_9 kesitinde derece-8 hedef monom uzayı tamamen kaplandı:</p>
+              <div class="font-mono text-slate-200 mt-1 font-bold">12,870 / 12,870 (Korank = 0)</div>
+            </div>
+
+            <!-- Cert 2 -->
+            <div class="p-2.5 rounded-lg bg-dark-950 border border-cyan-900/40">
+              <div class="flex items-center justify-between font-semibold text-cyan-400 mb-1">
+                <span>Grassmannian F_2 Rank Patlaması</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/60">[KESİN HESAP]</span>
+              </div>
+              <p class="text-slate-400 text-[11px]">n=6 ikili değerlendirme matrisinde Plücker kısıtlaması:</p>
+              <div class="font-mono text-slate-200 mt-1">perm_6: <span class="text-emerald-400 font-bold">1456</span> vs det_6: <span class="text-slate-400 font-bold">264</span> (5.52x)</div>
+            </div>
+
+            <!-- Cert 3 -->
+            <div class="p-2.5 rounded-lg bg-dark-950 border border-purple-900/40">
+              <div class="flex items-center justify-between font-semibold text-purple-400 mb-1">
+                <span>C Rank Motoru Sözleşmesi</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-700/60">[8/8 TEST ONAYLI]</span>
+              </div>
+              <p class="text-slate-400 text-[11px]">exact_csr_rank_mod_p: nnz doğrulama, asal modül ve taşma koruması devrede.</p>
+            </div>
+
+            <!-- Cert 4 -->
+            <div class="p-2.5 rounded-lg bg-dark-950 border border-amber-900/40">
+              <div class="flex items-center justify-between font-semibold text-amber-400 mb-1">
+                <span>Evrensel D_9^hom Yok Oluşu</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-700/60">[AÇIK PROBLEM]</span>
+              </div>
+              <p class="text-slate-400 text-[11px]">Tüm D_9^hom için M_8 korank >= 1 kalıcılığı araştırılıyor.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark-950 border-t border-slate-800/80 py-3 px-4 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <span>0G Network Decentralized AI Agent Hub &bull; 7/24 Kesintisiz Otonom Araştırma</span>
+      <span class="font-mono">Model: 0gm-1.0-35b-a3b / qwen-flash</span>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    let lastRenderedCount = 0;
+    const autoscrollToggle = document.getElementById('autoscroll-toggle');
+
+    function formatTime(sec) {
+      const h = String(Math.floor(sec / 3600)).padStart(2, '0');
+      const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      return `${h}:${m}:${s}`;
+    }
+
+    async function fetchStatus() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        updateUI(data);
+      } catch (e) {
+        console.error("Fetch status error:", e);
+      }
+    }
+
+    function updateUI(data) {
+      // Uptime & metrics
+      document.getElementById('stat-uptime').innerText = formatTime(data.stats.uptime_seconds);
+      document.getElementById('stat-round').innerText = '#' + data.current_round;
+      document.getElementById('stat-calls').innerText = data.stats.total_calls;
+      document.getElementById('stat-cost').innerText = '$' + data.stats.cost_usd_est.toFixed(4);
+      document.getElementById('queue-status').innerText = `Kuyruk: ${data.queue_len} hipotez`;
+
+      // Meta-Agents Briefing & Update
+      if (data.meta_agents) {
+        if (data.meta_agents.director) {
+          document.getElementById('director-briefing').innerText = data.meta_agents.director.last_briefing;
+        }
+        if (data.meta_agents.cartographer) {
+          document.getElementById('cartographer-update').innerText = data.meta_agents.cartographer.last_update;
+        }
+      }
+
+      // Badge status
+      const badge = document.getElementById('daemon-badge');
+      if (data.state === 'running') {
+        badge.className = 'text-xs px-2 py-0.5 rounded-full bg-emerald-900/60 text-emerald-300 border border-emerald-700/60 pulse-glow';
+        badge.innerHTML = '<i class="fa-solid fa-circle text-[8px] mr-1 text-emerald-400 animate-pulse"></i> 7/24 ÇALIŞIYOR';
+      } else if (data.state === 'paused') {
+        badge.className = 'text-xs px-2 py-0.5 rounded-full bg-amber-900/60 text-amber-300 border border-amber-700/60';
+        badge.innerHTML = '<i class="fa-solid fa-pause text-[8px] mr-1 text-amber-400"></i> DURAKLATILDI';
+      } else {
+        badge.className = 'text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
+        badge.innerHTML = '<i class="fa-solid fa-stop text-[8px] mr-1 text-red-400"></i> DURDURULDU';
+      }
+
+      // Render Agent Cards
+      renderAgents(data.agents, data.active_agent_id);
+
+      // Render Logs
+      renderLogs(data.recent_logs);
+    }
+
+    function renderAgents(agents, activeId) {
+      const grid = document.getElementById('agents-grid');
+      grid.innerHTML = agents.map(a => {
+        const isActive = (a.id === activeId);
+        const isThinking = (a.status === 'thinking');
+        let statusBadge = '<span class="text-[10px] text-slate-500">Bekliyor</span>';
+        if (isThinking) {
+          statusBadge = '<span class="text-[10px] text-amber-400 font-semibold animate-pulse"><i class="fa-solid fa-brain"></i> Düşünüyor...</span>';
+        } else if (a.status === 'active') {
+          statusBadge = '<span class="text-[10px] text-emerald-400 font-semibold"><i class="fa-solid fa-check"></i> Yanıtladı</span>';
+        }
+
+        return `
+          <div class="bg-dark-900 border ${isActive ? 'agent-card-active' : 'border-slate-800'} rounded-xl p-3 flex flex-col justify-between transition-all duration-300 shadow-md">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xl">${a.avatar}</span>
+                ${statusBadge}
+              </div>
+              <h4 class="text-xs font-bold text-slate-200 truncate" title="${a.name}">${a.name}</h4>
+              <p class="text-[10px] text-slate-400 line-clamp-2 mt-1 leading-tight" title="${a.role}">${a.role}</p>
+            </div>
+            <div class="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px]">
+              <span class="font-mono text-slate-500">${a.model || '0G'}</span>
+              <span class="text-slate-500">${a.last_time || '--:--'}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderLogs(logs) {
+      if (!logs || logs.length === 0) return;
+      const body = document.getElementById('terminal-body');
+      document.getElementById('log-count').innerText = `${logs.length} ileti`;
+
+      if (logs.length === lastRenderedCount) return;
+      lastRenderedCount = logs.length;
+
+      body.innerHTML = logs.map(l => {
+        if (l.type === 'director_briefing') {
+          return `
+            <div class="p-3 rounded-lg bg-indigo-950/60 border border-indigo-700/60 shadow-md my-2">
+              <div class="flex items-center justify-between border-b border-indigo-800/60 pb-1 mb-2">
+                <div class="flex items-center space-x-2">
+                  <span class="text-base">${l.avatar || '🧭'}</span>
+                  <span class="font-bold text-indigo-200 text-xs">${l.director_name}</span>
+                  <span class="text-[9px] px-1.5 py-0.2 rounded bg-indigo-900 text-indigo-300">Stratejik Direktif</span>
+                </div>
+                <span class="text-[10px] text-indigo-400 font-mono">Tur #${l.round}</span>
+              </div>
+              <div class="text-slate-200 text-xs font-mono whitespace-pre-wrap">${escapeHtml(l.text)}</div>
+            </div>
+          `;
+        } else if (l.type === 'cartographer_update') {
+          return `
+            <div class="p-3 rounded-lg bg-emerald-950/60 border border-emerald-700/60 shadow-md my-2">
+              <div class="flex items-center justify-between border-b border-emerald-800/60 pb-1 mb-2">
+                <div class="flex items-center space-x-2">
+                  <span class="text-base">${l.avatar || '🗺️'}</span>
+                  <span class="font-bold text-emerald-200 text-xs">${l.cartographer_name}</span>
+                  <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-900 text-emerald-300">Harita Güncellemesi</span>
+                </div>
+                <span class="text-[10px] text-emerald-400 font-mono">Tur #${l.round} Sentezi</span>
+              </div>
+              <div class="text-slate-200 text-xs font-mono whitespace-pre-wrap">${escapeHtml(l.text)}</div>
+            </div>
+          `;
+        } else if (l.type === 'agent_message') {
+          return `
+            <div class="p-3 rounded-lg bg-dark-950 border border-slate-800/90 shadow-sm hover:border-slate-700 transition-all">
+              <div class="flex items-center justify-between border-b border-slate-800/60 pb-1.5 mb-2">
+                <div class="flex items-center space-x-2">
+                  <span class="text-sm">${l.avatar}</span>
+                  <span class="font-bold text-slate-200">${l.agent_name}</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/50">${l.role}</span>
+                </div>
+                <div class="flex items-center space-x-2 text-[10px] text-slate-500">
+                  <span class="font-mono text-emerald-400 font-semibold">${l.model}</span>
+                  <span>&bull;</span>
+                  <span>${l.tokens} tok</span>
+                  <span>&bull;</span>
+                  <span>${l.duration_sec}s</span>
+                  <span>&bull;</span>
+                  <span>${l.timestamp.split(' ')[1]}</span>
+                </div>
+              </div>
+              <div class="text-slate-300 leading-relaxed whitespace-pre-wrap math-content">${escapeHtml(l.text)}</div>
+            </div>
+          `;
+        } else if (l.type === 'round_start') {
+          return `
+            <div class="py-2 px-3 rounded-lg bg-indigo-950/40 border border-indigo-800/50 text-indigo-300 font-semibold flex items-center space-x-2 my-2">
+              <i class="fa-solid fa-flag-checkered text-indigo-400"></i>
+              <span>${escapeHtml(l.text)}</span>
+            </div>
+          `;
+        } else if (l.type === 'round_end') {
+          return `
+            <div class="py-2 px-3 rounded-lg bg-emerald-950/40 border border-emerald-800/50 text-emerald-300 font-semibold flex items-center space-x-2 my-2">
+              <i class="fa-solid fa-circle-check text-emerald-400"></i>
+              <span>${escapeHtml(l.text)}</span>
+            </div>
+          `;
+        } else if (l.type === 'error') {
+          return `
+            <div class="py-2 px-3 rounded-lg bg-red-950/50 border border-red-800/60 text-red-300 flex items-center space-x-2 my-1">
+              <i class="fa-solid fa-triangle-exclamation text-red-400"></i>
+              <span>${escapeHtml(l.text)}</span>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="py-1 px-2 text-slate-400 italic flex items-center space-x-1.5">
+              <i class="fa-solid fa-circle-info text-slate-500 text-[10px]"></i>
+              <span>${escapeHtml(l.text)}</span>
+            </div>
+          `;
+        }
+      }).join('');
+
+      // Auto-render LaTeX formulas if KaTeX is loaded
+      if (window.renderMathInElement) {
+        renderMathInElement(body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+      }
+
+      if (autoscrollToggle.checked) {
+        body.scrollTop = body.scrollHeight;
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // ACTIONS
+    async function startOrchestrator() {
+      await fetch('/api/start', {method: 'POST'});
+      fetchStatus();
+    }
+
+    async function pauseOrchestrator() {
+      await fetch('/api/pause', {method: 'POST'});
+      fetchStatus();
+    }
+
+    async function stopOrchestrator() {
+      await fetch('/api/stop', {method: 'POST'});
+      fetchStatus();
+    }
+
+    async function triggerRound() {
+      await fetch('/api/trigger_round', {method: 'POST'});
+      fetchStatus();
+    }
+
+    async function clearLogs() {
+      await fetch('/api/clear_logs', {method: 'POST'});
+      lastRenderedCount = 0;
+      document.getElementById('terminal-body').innerHTML = '<div class="text-slate-500 italic">Loglar temizlendi.</div>';
+      fetchStatus();
+    }
+
+    async function submitCustomPrompt() {
+      const input = document.getElementById('custom-prompt-input');
+      const val = input.value.trim();
+      if (!val) return;
+      await fetch('/api/prompt', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({prompt: val})
+      });
+      input.value = '';
+      fetchStatus();
+    }
+
+    // Polling interval
+    fetchStatus();
+    setInterval(fetchStatus, 1500);
+  </script>
+</body>
+</html>

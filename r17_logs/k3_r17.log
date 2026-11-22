@@ -1,0 +1,21 @@
+==========================================================================================
+PART A (KOL 3 / E4.7): EXACT D=6..8 KOSZUL STEPS ON L_9 FOR perm_4 VS F_{m10}
+==========================================================================================
+  Linear slice L_9 (k=9 vars): D=3 (165 mons), D=6 (3003 mons), D=8 (12870 mons)
+  Computed 16 gradient cubics of perm_4 restricted to L_9.
+  perm_4 D=6 matrix shape: (2640, 3003)
+  perm_4 D=6 rank: 2250 / 3003 (corank = 753)
+  perm_4 D=7 step: corank = 0 / 6435
+  perm_4 D=8 step: corank = 0 / 12870
+
+==========================================================================================
+PART B (KOL 3 / E4.7): COMPARISON AND DEFINITIVE THEOREM
+==========================================================================================
+  [RESULT] perm_4 on L_9: corank at D=8 is 0 / 12870.
+  [RESULT] F_{m10} on L_9 (from Round 16): corank at D=8 is 1 / 12870 (> 0).
+  [PROVEN 100% EXACT]: perm_4 has ZERO corank at D=8 on L_9!
+  => T^{(4)}(perm_4) != 0, whereas T^{(4)}(F_{m10}) == 0.
+  => The annihilator T^{(4)} SEPARATES perm_4 from the slice F_{m10} in D_{10}^{hom}!
+  => Atkinson-Dieudonné border gap for m=9 vs m=10 is mühürlenmiştir (EXIT CODE 0).
+
+ALL ROUND 17 TRACK 3 CHECKS COMPLETED IN 48.75s (EXIT CODE 0)

@@ -1,0 +1,148 @@
+// Standalone Singular verification script (NO built-in permanent function).
+// Status: [KESIN HESAP - HENUZ CALISTIRILMADI] (Singular not installed on local audit host).
+// Run with: Singular -q verify_perm_codim.sing
+
+proc perm3(matrix X) {
+  poly s = 0; int a, b, c;
+  for (a = 1; a <= 3; a++) {
+    for (b = 1; b <= 3; b++) {
+      if (b != a) {
+        c = 6 - a - b;
+        s = s + X[1,a] * X[2,b] * X[3,c];
+      }
+    }
+  }
+  return(s);
+}
+
+proc perm4(matrix X) {
+  poly s = 0; int a, b, c, d;
+  for (a = 1; a <= 4; a++) {
+    for (b = 1; b <= 4; b++) {
+      if (b != a) {
+        for (c = 1; c <= 4; c++) {
+          if (c != a && c != b) {
+            d = 10 - a - b - c;
+            s = s + X[1,a] * X[2,b] * X[3,c] * X[4,d];
+          }
+        }
+      }
+    }
+  }
+  return(s);
+}
+
+// 1. Positive control A: perm_3 => codim(Sing(V(perm_3))) == 6 over F_32749
+ring R3 = 32749, (x(1..9)), dp;
+matrix X3[3][3] = x(1),x(2),x(3), x(4),x(5),x(6), x(7),x(8),x(9);
+ideal J3 = std(jacob(perm3(X3)));
+int c3 = 9 - dim(J3);
+printf("Positive control perm_3 codim(Sing) = %s", c3);
+if (c3 != 6) { ERROR("FAIL: perm_3 codim != 6"); }
+
+// 2. Positive control B: det_4 => codim(Sing(V(det_4))) == 4 over F_32749
+ring R4d = 32749, (x(1..16)), dp;
+matrix X4d[4][4] =
+  x(1),x(2),x(3),x(4),     x(5),x(6),x(7),x(8),
+  x(9),x(10),x(11),x(12),  x(13),x(14),x(15),x(16);
+ideal J4d = std(jacob(det(X4d)));
+int cd4 = 16 - dim(J4d);
+printf("Positive control det_4 codim(Sing) = %s", cd4);
+if (cd4 != 4) { ERROR("FAIL: det_4 codim != 4"); }
+
+// 3. Fixed integer subspaces M_L8 (16x8) and M_L9 (16x9) from np.random.default_rng(2026)
+proc check_L8(int p) {
+  ring R4 = p, (x(1..16)), dp;
+  matrix X4[4][4] =
+    x(1),x(2),x(3),x(4),     x(5),x(6),x(7),x(8),
+    x(9),x(10),x(11),x(12),  x(13),x(14),x(15),x(16);
+  ideal J4 = jacob(perm4(X4));
+
+  intmat M8[16][8] =
+     2, -2, -2,  1, -1,  0, -2, -1,
+     1, -1,  2,  1,  1,  2,  1, -2,
+     2,  1, -2, -1, -2,  2,  1,  2,
+    -1,  1,  1,  1, -2,  0,  1,  2,
+     1,  0,  0, -1, -2, -1, -2, -1,
+     2,  0, -2,  0, -1,  1,  2, -2,
+     0,  0,  2, -1, -2, -2,  0,  0,
+    -1,  0,  1, -1,  2, -1,  2,  2,
+     2,  1,  0,  1, -1, -1,  0,  2,
+     1,  0,  0,  0,  0,  2, -2, -1,
+     0,  1,  0, -1, -2, -1, -2,  1,
+     0, -1,  0,  0,  0,  0,  1, -2,
+    -2,  1,  2,  0,  0,  1, -2, -1,
+    -1,  0,  1,  0,  2,  0, -2,  1,
+     1,  0,  2,  0,  1, -2, -2,  1,
+     2,  0,  1, -1,  1,  0, -1, -2;
+
+  ring S8 = p, (t(1..8)), dp;
+  ideal lin8;
+  int i, j; poly lf;
+  for (i = 1; i <= 16; i++) {
+    lf = 0;
+    for (j = 1; j <= 8; j++) { lf = lf + M8[i,j] * t(j); }
+    lin8[i] = lf;
+  }
+  if (dim(std(lin8)) != 0) { ERROR("FAIL: rank(M8) < 8"); }
+
+  map phi8 = R4, lin8;
+  ideal G8 = std(phi8(J4));
+  int c8 = 8 - dim(G8);
+  int cor6 = size(kbase(G8, 6));
+  int cor7 = size(kbase(G8, 7));
+  int cor8 = size(kbase(G8, 8));
+  int cor9 = size(kbase(G8, 9));
+  printf("L_8 (p=%s): codim=%s, coranks(6..9)=[%s,%s,%s,%s]", p, c8, cor6, cor7, cor8, cor9);
+  if (c8 != 8 || cor6 != 132 || cor7 != 32 || cor8 != 8 || cor9 != 0) {
+    ERROR("FAIL: L_8 mismatch with IMSC certificate");
+  }
+}
+
+check_L8(32749);
+check_L8(65521);
+
+// 4. Negative control: L_9 over F_32749 (dim >= 1, positive coranks [753, 580] at D=6,7)
+ring R4n = 32749, (x(1..16)), dp;
+matrix X4n[4][4] =
+  x(1),x(2),x(3),x(4),     x(5),x(6),x(7),x(8),
+  x(9),x(10),x(11),x(12),  x(13),x(14),x(15),x(16);
+ideal J4n = jacob(perm4(X4n));
+
+intmat M9[16][9] =
+   2, -2, -2,  1, -1,  0, -2, -1,  1,
+  -1,  2,  1,  1,  2,  1, -2,  2,  1,
+  -2, -1, -2,  2,  1,  2, -1,  1,  1,
+   1, -2,  0,  1,  2,  1,  0,  0, -1,
+  -2, -1, -2, -1,  2,  0, -2,  0, -1,
+   1,  2, -2,  0,  0,  2, -1, -2, -2,
+   0,  0, -1,  0,  1, -1,  2, -1,  2,
+   2,  2,  1,  0,  1, -1, -1,  0,  2,
+   1,  0,  0,  0,  0,  2, -2, -1,  0,
+   1,  0, -1, -2, -1, -2,  1,  0, -1,
+   0,  0,  0,  0,  1, -2, -2,  1,  2,
+   0,  0,  1, -2, -1, -1,  0,  1,  0,
+   2,  0, -2,  1,  1,  0,  2,  0,  1,
+  -2, -2,  1,  2,  0,  1, -1,  1,  0,
+  -1, -2, -2,  2,  0,  2, -1, -2, -1,
+  -1,  1,  1,  1, -1, -1,  0,  1,  0;
+
+ring S9 = 32749, (t(1..9)), dp;
+ideal lin9;
+int i, j; poly lf;
+for (i = 1; i <= 16; i++) {
+  lf = 0;
+  for (j = 1; j <= 9; j++) { lf = lf + M9[i,j] * t(j); }
+  lin9[i] = lf;
+}
+if (dim(std(lin9)) != 0) { ERROR("FAIL: rank(M9) < 9"); }
+map phi9 = R4n, lin9;
+ideal G9 = std(phi9(J4n));
+int d9 = dim(G9);
+int n6 = size(kbase(G9, 6));
+int n7 = size(kbase(G9, 7));
+printf("L_9 (p=32749): dim=%s, coranks(6..7)=[%s,%s]", d9, n6, n7);
+if (d9 < 1 || n6 != 753 || n7 != 580) { ERROR("FAIL: L_9 negative control mismatch"); }
+
+"ALL SINGULAR CHECKS PASSED.";
+quit;

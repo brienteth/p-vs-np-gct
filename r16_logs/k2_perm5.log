@@ -1,0 +1,33 @@
+============================================================================================
+PART 1 (KOL 2): EXACT Sing_2(V(perm_5)) AT k = 13 (C+BLAS CROSS-CHK), 14, 15 (D = 5)
+============================================================================================
+  [Sing_2(perm_5) k=13, D=5 | p=32749 | C_uint64==BLAS_exact (6188==6188)] shape=(9100, 6188), rank=6188/6188 (corank=0) [57.15s]
+  [Sing_2(perm_5) k=13, D=5 | p=65521 | C_uint64==BLAS_exact (6188==6188)] shape=(9100, 6188), rank=6188/6188 (corank=0) [52.01s]
+  [Sing_2(perm_5) k=14, D=5 | p=32749 | BLAS_int64_bounded(bs=128)] shape=(10500, 8568), rank=8428/8568 (corank=140) [45.77s]
+  [Sing_2(perm_5) k=14, D=5 | p=65521 | BLAS_int64_bounded(bs=128)] shape=(10500, 8568), rank=8428/8568 (corank=140) [40.63s]
+  [Sing_2(perm_5) k=15, D=5 | p=32749 | BLAS_int64_bounded(bs=128)] shape=(12000, 11628), rank=9778/11628 (corank=1850) [66.96s]
+  [Sing_2(perm_5) k=15, D=5 | p=65521 | BLAS_int64_bounded(bs=128)] shape=(12000, 11628), rank=9778/11628 (corank=1850) [64.08s]
+
+============================================================================================
+PART 2 (KOL 2): Sing(V(perm_5)) ON L_10 — EXACT D=6,7 RANKS & D=8..10 FOOTPRINT
+============================================================================================
+  [L_10 25 quartics | binom(13,4)=715 mons] nnz/poly: min=702, avg=708.2, max=712
+  [L_10 Sing(perm_5) D=6 | p=32749 | C_uint64==BLAS_exact (1295==1295)] shape=(1375, 5005), rank=1295/5005 (corank=3710, row_def=80) [5.07s]
+  [L_10 Sing(perm_5) D=6 | p=65521 | C_uint64==BLAS_exact (1295==1295)] shape=(1375, 5005), rank=1295/5005 (corank=3710, row_def=80) [5.15s]
+  [L_10 Sing(perm_5) D=7 | p=32749 | BLAS_int64_bounded(bs=128)] shape=(5500, 11440), rank=5060/11440 (corank=6380, row_def=440) [19.86s]
+  [L_10 Sing(perm_5) D=7 | p=65521 | BLAS_int64_bounded(bs=128)] shape=(5500, 11440), rank=5060/11440 (corank=6380, row_def=440) [19.52s]
+
+  Exact Combinatorial Bounds & Memory Footprint for L_10 (25 quartics on 10 vars):
+    D= 6: rows=  1,375, cols= 5,005, overdet=NO , est_csr_nnz=   973,720 (~0.01 GB), dense_uint64=   0.05 GB, c_kernel_U= 0.19 GB
+    D= 7: rows=  5,500, cols=11,440, overdet=NO , est_csr_nnz= 3,894,880 (~0.06 GB), dense_uint64=   0.47 GB, c_kernel_U= 0.98 GB
+    D= 8: rows= 17,875, cols=24,310, overdet=NO , est_csr_nnz=12,658,360 (~0.19 GB), dense_uint64=   3.24 GB, c_kernel_U= 4.40 GB
+    D= 9: rows= 50,050, cols=48,620, overdet=YES, est_csr_nnz=35,443,408 (~0.53 GB), dense_uint64=  18.13 GB, c_kernel_U=17.61 GB
+    D=10: rows=125,125, cols=92,378, overdet=YES, est_csr_nnz=88,608,520 (~1.32 GB), dense_uint64=  86.12 GB, c_kernel_U=63.58 GB
+
+============================================================================================
+PART 3 (KOL 2): EXACT F_p DEGREE-5 [t^5] STRUCTURE AT r = 3, 4 FOR perm_5
+============================================================================================
+  [r=4 zero-row | p=32749] coeffs t^0..t^5 = [0, 0, 0, 0, 0, 22532], formula [t^5] = 22532
+  [r=3 zero-row + Q[2,:]=0 | p=32749] coeffs t^0..t^5 = [0, 0, 0, 0, 0, 3125] (non-vanishing 2x2 Q-minor & adj*VAU terms => no universal str<=4 collapse verified!)
+
+ALL ROUND 16 KOL 2 EXACT PERM_5 CHECKS PASSED (EXIT CODE 0) IN 378.91s

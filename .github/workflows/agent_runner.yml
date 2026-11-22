@@ -1,0 +1,51 @@
+name: 0G 24/7 Autonomous Agent Council
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # Runs automatically every 30 minutes
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  run-council-round:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Compile C Rank Engine
+        run: |
+          gcc -O3 -shared -fPIC -o paper_dc_perm4/exact_mod_rref.so paper_dc_perm4/exact_mod_rref.c
+          python3 test_c_engine_contract.py
+
+      - name: Run 0G Council Round
+        env:
+          0G_API_KEY: ${{ secrets.ZERO_G_API_KEY || 'sk-79870bc0-1c98-411b-9131-9c42dd942a23' }}
+        run: |
+          python3 run_actions_round.py
+
+      - name: Commit and Push Results
+        run: |
+          git config --global user.name "0G Council Bot"
+          git config --global user.email "bot@0g.ai"
+          git add ENGEL_HARITASI.md agent_hub_0g/dossiers/ agent_hub_0g/logs/
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto: 0G Council Round Update [skip ci]"
+            git push
+          fi

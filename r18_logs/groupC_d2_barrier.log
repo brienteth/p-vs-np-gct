@@ -1,0 +1,67 @@
+==========================================================================================
+EXPERIMENT 1 (D2): HALF-USEFUL PROPERTY TEST — STRUCTURED VS RANDOM DISTRIBUTIONS
+==========================================================================================
+  Random Boolean functions: avg support = 512.9 / 1024, std = 15.6
+  perm_4 != 0 mod 3: support fraction = 0.447 (over 65536 inputs)
+  det_4 != 0 mod 3: support fraction = 0.328 (over 65536 inputs)
+
+  [ANALYSIS]: A 'half-useful' property P must satisfy:
+  1. P(perm mod 3) = YES for all n (Largeness on structured functions)
+  2. P(f) = NO for most random f (Failure on random functions)
+  3. P is NOT efficiently computable on all functions (avoids Natural Proofs)
+
+  The dual support size (127/317 vs 73/317) satisfies (1) and (2)
+  but FAILS (3): it is computed by an LP in polynomial time!
+  [D2 BARRIER STATUS]: Half-useful properties remain blocked by P-time computability.
+
+==========================================================================================
+EXPERIMENT 2 (D2): PSEUDORANDOMNESS DISTINGUISHER TEST FOR DUAL CORE
+==========================================================================================
+  Distinguisher 1 (support size): perm=127, det=73, random=100
+  Distinguisher 2 (autocorrelation): perm=56, det=16, random=23
+  Distinguisher 3 (Walsh L1): perm=10.4101, det=6.7823, random=8.2019
+
+  [ANALYSIS]: All three simple distinguishers can tell perm, det, and random apart.
+  This means the dual core is NOT pseudorandom — it has detectable structure.
+  But Razborov-Rudich requires that the separating property works on ALL functions,
+  not just on structured algebraic ones. The dual core's structure is specific to
+  perm/det and does not generalize to arbitrary Boolean functions.
+  [D2 BARRIER STATUS]: The dual core is distinguishable but not generalizable.
+
+==========================================================================================
+EXPERIMENT 3 (D2): ALGEBRATION-RESISTANCE CHECK FOR MODULAR RANK INVARIANTS
+==========================================================================================
+  Algebration test: does rk_F2([det_n != 0 mod 3]) relativize?
+
+  Consider an algebraic oracle A that computes det_n in AC^0[mod 3].
+  With oracle A, the Grassmannian ceiling would apply to A-augmented circuits.
+  BUT: an algebraic oracle can implement arbitrary polynomial maps,
+  potentially breaking the {0,1}-Grassmannian restriction by computing
+  F_3-linear combinations of inputs.
+
+  Therefore, rk_F2([det_n != 0 mod 3]) <= |Gr_{0,1}(2,n,F_3)| DOES relativize:
+  it holds relative to any oracle that preserves the {0,1} input structure.
+  But an algebraic oracle can violate the {0,1} restriction, so the ceiling
+  does NOT hold relative to algebraic oracles.
+
+  [D2 BARRIER STATUS]: The Grassmannian rank ceiling ALGEBRIZES.
+  It cannot prove P != NP by itself.
+
+  For algebration-resistant invariants, one would need:
+  1. A topological / cohomological property of polynomial families
+     that is NOT preserved by algebraic extension.
+  2. A combinatorial property that depends on the CIRCUIT STRUCTURE
+     (e.g., gate fan-in, depth) rather than the computed function.
+  Neither is available in our current framework.
+
+==========================================================================================
+FINAL D2 BARRIER SUMMARY
+==========================================================================================
+  Three independent barriers block transfer from algebraic rank to P != NP:
+  1. Natural Proofs: dual core is P-time computable => breaks pseudorandomness
+  2. Algebration: Grassmannian ceiling algebrizes => holds relative to algebraic oracles
+  3. Relativization: orbit-LP separation relativizes to random oracles
+  None of these can be bypassed without a fundamentally new technique.
+  [STATUS]: D2 barrier remains DEEP OPEN. Estimated distance: 6-8 conceptual leaps.
+
+ALL ROUND 18 DEEP BARRIER D2 EXPERIMENTS COMPLETED IN 0.04s (EXIT CODE 0)

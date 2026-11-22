@@ -1,0 +1,25 @@
+============================================================================================
+PART A (KOL 2 / E3.13): EXACT Sing_3 RESTRICTION ON THE 140 NULLSPACE OF Sing_2 AT k=14
+============================================================================================
+  k = 14 variables | Degree 5 forms: 8568 dims | Degree 2 forms: 105 dims
+  Number of independent tri-gradient operators: 100
+  Total tri-gradient constraint matrix size: 10500 rows x 8568 cols = 10500 x 8568
+  Exact rank of Sing_3 operator restricted to ker(Sing_2) (140 dims) mod 32749: 140 / 140
+  [PROVEN] The tri-gradient Sing_3 conditions have FULL RANK 140 on ker(Sing_2)!
+  => ker(Sing_2) \cap ker(Sing_3) = {0}.
+  => The combined singularity ideal Sing_2 \cap Sing_3 has ZERO corank at k=14!
+  => Codimension of (Sing_2 \cap Sing_3) is AT LEAST 14.
+
+============================================================================================
+PART B (KOL 2 / E3.13): EVALUATION OF THE m=13 WALL AND PENCIL NORMAL FORMS
+============================================================================================
+  Checking pencil vanishing at m=13:
+  - r = 4 (zero row): [t^5] = 22532 != 0 in general.
+    Contradiction requires: [t^5] == 0 identically on the slice W.
+    If [t^5] != 0, then W does NOT contain an isotropic origin line, and the reduction fails!
+  - (D, w-D) = (10, 2) boundary at m=13: degree D=10 exceeds m-4 = 9.
+    Therefore, the classical Macaulay-Koszul regular sequence fails at D=10.
+  [DURUM HÜKMÜ]: Sing_3 successfully eliminates the 140 null directions of Sing_2;
+  HOWEVER, m=13 remains BLOCKED by the non-vanishing of [t^5] (no universal str <= 4 collapse)!
+
+ALL ROUND 17 TRACK 2 CHECKS COMPLETED IN 0.47s (EXIT CODE 0)

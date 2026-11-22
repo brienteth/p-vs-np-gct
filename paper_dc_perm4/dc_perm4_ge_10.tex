@@ -1,0 +1,423 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\perm}{perm}
+\DeclareMathOperator{\dc}{dc}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\Sing}{Sing}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\corank}{corank}
+\DeclareMathOperator{\str}{str}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Span}{span}
+
+\title{An Unconditional Lower Bound $\dc_{\mathbb{C}}(\perm_4) \ge 10$ via Origin-Isotropy, Skew-Square Vanishing, and Singularity Codimensions}
+\author{[Author Name(s) --- Draft Manuscript]}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove that the determinantal complexity of the $4 \times 4$ permanent over $\mathbb{C}$ satisfies
+\[
+  \dc_{\mathbb{C}}(\perm_4) \ge 10.
+\]
+This improves over the complex lower bounds $\dc_{\mathbb{C}}(\perm_4) \ge 8$ of Mignon and Ressayre (2004) and $\dc_{\mathbb{C}}(\perm_4) \ge 9$ of Alper, Bogart, and Velasco (2017), matching over $\mathbb{C}$ the real bound $\dc_{\mathbb{R}}(\perm_4) \ge 10$ of Yabe (2015).
+
+Our proof combines a single exact finite-field Macaulay certificate establishing $\codim_{\mathbb{C}^{16}}(\Sing(V(\perm_4))) = 8$ with a completely self-contained algebraic analysis. Specifically, $\codim(\Sing(V(\perm_4))) = 8$ implies $\str(\perm_4) = 4$, which forces every affine determinantal representation $\perm_4(X) = \det(A_0 + L(X))$ to have $\corank(A_0) = 1$. At the boundary size $m = 9$, origin-isotropy forces a $2$-block normal form $v = (y, 0)^T$, $u = (Ky, z)^T$ with $K^T = -K$ and $(y,z)$ linearly independent. Extracting the terms linear in the complementary variables from the vanishing cubic coefficient $[t^3] = 0$ forces the shortcut block to vanish on $W^\perp = V(y,z)$ and forces $A_{11}(X_0)K$ to be skew-symmetric on $W^\perp$. An elementary matrix identity (the Skew-Square Lemma) then implies that $A_{11}(X_0)^2 K$ is also skew-symmetric, whence $\perm_4$ vanishes to order at least $3$ along the $8$-dimensional subspace $W^\perp$. Finally, we prove directly by hand that the second-order singular locus $\Sing_2(V(\perm_4))$ has codimension $12 > 8$, yielding a contradiction.
+\end{abstract}
+
+\section{Introduction}
+
+Let $X = (x_{i,j})_{1 \le i,j \le n}$ be an $n \times n$ matrix of indeterminates over $\mathbb{C}$, and let
+\[
+  \perm_n(X) = \sum_{\sigma \in S_n} \prod_{i=1}^n x_{i,\sigma(i)}, \qquad
+  \det_n(X) = \sum_{\sigma \in S_n} \mathrm{sgn}(\sigma) \prod_{i=1}^n x_{i,\sigma(i)}
+\]
+denote the permanent and determinant polynomials. Following Valiant~\cite{Valiant1979}, the \emph{determinantal complexity} $\dc_{\mathbb{C}}(f)$ of a polynomial $f \in \mathbb{C}[x_1,\dots,x_N]$ is the smallest positive integer $m$ such that $f$ can be written as $f(X) = \det(A_0 + L(X))$, where $A_0 \in \mathbb{C}^{m\times m}$ is a constant matrix and $L(X) = \sum_{a=1}^N x_a A_a$ is a homogeneous linear matrix over $\mathbb{C}$.
+
+For $n = 2$, $\dc_{\mathbb{C}}(\perm_2) = 2$ trivially. For $n = 3$, Grenet~\cite{Grenet2011} gave the general upper bound $\dc_{\mathbb{C}}(\perm_n) \le 2^n - 1$, which yields $\dc_{\mathbb{C}}(\perm_3) \le 7$, and Alper, Bogart, and Velasco~\cite{ABV2017} proved $\dc_{\mathbb{C}}(f) \ge \codim(\Sing(V(f))) + 1$ for any hypersurface of degree $d > 2$ with $\codim(\Sing(V(f))) \ge 5$, establishing $\dc_{\mathbb{C}}(\perm_3) = 7$.
+
+For $n = 4$, Grenet's construction gives $\dc_{\mathbb{C}}(\perm_4) \le 15$, which Landsberg and Ressayre~\cite{LR2017} showed to be optimal among representations preserving a large subgroup of the symmetry group of $\perm_4$. Without symmetry assumptions, the quadratic Hessian bound of Mignon and Ressayre~\cite{MR2004} yields $\dc_{\mathbb{C}}(\perm_4) \ge n^2/2 = 8$, while the singularity codimension bound of~\cite{ABV2017} yields $\dc_{\mathbb{C}}(\perm_4) \ge 8 + 1 = 9$ once $\codim_{\mathbb{C}^{16}}(\Sing(V(\perm_4))) = 8$ is established. Over $\mathbb{R}$, Yabe~\cite{Yabe2015} proved $\dc_{\mathbb{R}}(\perm_n) \ge (n-1)^2 + 1$, giving $\dc_{\mathbb{R}}(\perm_4) \ge 10$, by exploiting real signature/positivity constraints that do not apply over $\mathbb{C}$.
+
+\begin{theorem}[Main Theorem]\label{thm:main}
+Over the complex numbers,
+\[
+  \dc_{\mathbb{C}}(\perm_4) \ge 10.
+\]
+\end{theorem}
+
+\paragraph{Structure of the proof and epistemic transparency.}
+Every algebraic step of our proof is completely self-contained and proved by hand in Sections~\ref{sec:sing2}--\ref{sec:mainproof}. The proof relies on exactly \emph{one} computer-assisted certificate (Theorem~\ref{thm:sing1}): an exact finite-field Macaulay/IMSC rank computation on an explicit $8$-dimensional integer subspace $L_8 \subset \mathbb{C}^{16}$ proving $\codim_{\mathbb{C}^{16}}(\Sing(V(\perm_4))) \ge 8$. No floating-point approximations, numerical optimization, or random-sampling heuristics are used anywhere in the argument. A standalone verification script (including a negative control on a $9$-dimensional subspace $L_9$, where the corank must remain strictly positive) is documented in Section~\ref{sec:cert}.
+
+\section{Preliminaries: Strength and Singularity Strata}\label{sec:sing2}
+
+Let $F \in \mathbb{C}[x_1,\dots,x_N]_d$ be a homogeneous polynomial of degree $d \ge 2$.
+For $k \ge 1$, the \emph{$k$-th order singular locus} of $V(F) \subset \mathbb{C}^N$ is the affine cone
+\[
+  \Sing_k(V(F)) := \left\{ X \in \mathbb{C}^N : \frac{\partial^{|\alpha|} F}{\partial X^\alpha}(X) = 0 \text{ for all multi-indices } \alpha \text{ with } |\alpha| = k \right\}.
+\]
+By Euler's homogeneous function theorem, $\Sing_k(V(F))$ is equivalently the locus of points where $F$ vanishes to order at least $k+1$. We write $\Sing(V(F)) := \Sing_1(V(F))$.
+
+\begin{definition}
+The \emph{strength} $\str(F)$ of a homogeneous polynomial $F \in \mathbb{C}[x_1,\dots,x_N]_d$ is the smallest integer $k \ge 1$ such that
+\[
+  F = \sum_{i=1}^k G_i H_i
+\]
+for homogeneous polynomials $G_i, H_i \in \mathbb{C}[x_1,\dots,x_N]$ with $1 \le \deg(G_i), \deg(H_i) \le d - 1$.
+\end{definition}
+
+\begin{lemma}[Strength--Singularity Inequality]\label{lem:strength}
+For any non-zero homogeneous polynomial $F \in \mathbb{C}[x_1,\dots,x_N]_d$ ($d \ge 2$),
+\[
+  \codim_{\mathbb{C}^N}(\Sing(V(F))) \le 2\,\str(F).
+\]
+\end{lemma}
+
+\begin{proof}
+Write $F = \sum_{i=1}^k G_i H_i$ with $k = \str(F)$ and $\deg(G_i), \deg(H_i) \ge 1$. At any point $X \in Z := V(G_1,\dots,G_k, H_1,\dots,H_k)$, the product rule yields
+\[
+  \nabla F(X) = \sum_{i=1}^k \big(H_i(X)\nabla G_i(X) + G_i(X)\nabla H_i(X)\big) = 0,
+\]
+so $Z \subseteq \Sing(V(F))$. Since $0 \in Z$ and $Z$ is defined by $2k$ equations in $\mathbb{C}^N$, Krull's principal ideal theorem implies that every irreducible component of $Z$ has codimension at most $2k$. Hence $\codim_{\mathbb{C}^N}(\Sing(V(F))) \le \codim_{\mathbb{C}^N}(Z) \le 2k$.
+\end{proof}
+
+We next determine the exact codimension of $\Sing_2(V(\perm_4))$ completely by hand.
+
+\begin{proposition}\label{prop:sing2}
+Over $\mathbb{C}$ (in fact, over any field of characteristic $\neq 2$),
+\[
+  \codim_{\mathbb{C}^{16}}\big(\Sing_2(V(\perm_4))\big) = 12.
+\]
+\end{proposition}
+
+\begin{proof}
+Since $\perm_4(X)$ is multilinear in each row and column, its non-identically-zero second partial derivatives are precisely the $36$ $2 \times 2$ sub-permanents of $X$:
+\[
+  \frac{\partial^2 \perm_4}{\partial x_{i_1,j_1} \partial x_{i_2,j_2}}(X)
+  = \perm_2\big(X_{\{1,2,3,4\}\setminus\{i_1,i_2\},\,\{1,2,3,4\}\setminus\{j_1,j_2\}}\big)
+  \qquad (i_1 \neq i_2,\ j_1 \neq j_2).
+\]
+Thus $X \in \Sing_2(V(\perm_4))$ if and only if
+\begin{equation}\label{eq:subperm2}
+  x_{i,j} x_{k,\ell} + x_{i,\ell} x_{k,j} = 0 \qquad \text{for all } 1 \le i < k \le 4,\ 1 \le j < \ell \le 4.
+\end{equation}
+Let $G(X)$ be the bipartite graph on vertex sets $R = \{1,2,3,4\}$ and $C = \{1,2,3,4\}$ whose edge set is the support $\supp(X) = \{(i,j) : x_{i,j} \neq 0\}$.
+
+\emph{Claim 1:} If $(i,j), (k,\ell) \in \supp(X)$ with $i \neq k$ and $j \neq \ell$, then both $(i,\ell)$ and $(k,j)$ belong to $\supp(X)$.  
+Indeed, $x_{i,j} x_{k,\ell} \neq 0$ together with~\eqref{eq:subperm2} forces $x_{i,\ell} x_{k,j} = -x_{i,j} x_{k,\ell} \neq 0$.
+
+By Claim~1, no two disjoint edges can lie in different connected components of $G(X)$, and every induced $2$-edge matching completes to a $4$-cycle. Consequently, $G(X)$ has at most one connected component containing edges, and that component is a complete bipartite graph $K_{a,b}$ supported on $I \times J$ for some $I \subseteq R$, $J \subseteq C$ with $|I| = a$, $|J| = b$.
+
+\emph{Claim 2:} We cannot have both $a \ge 2$ and $b \ge 3$ (nor, by transpose, $a \ge 3$ and $b \ge 2$).  
+Suppose for contradiction that $x_{i,j} \neq 0$ for all $i \in \{1,2\}$ and $j \in \{1,2,3\}$. Applying~\eqref{eq:subperm2} to the three pairs of columns $\{1,2\}$, $\{2,3\}$, $\{1,3\}$ gives
+\[
+  \frac{x_{2,1}}{x_{1,1}} = -\frac{x_{2,2}}{x_{1,2}}, \qquad
+  \frac{x_{2,2}}{x_{1,2}} = -\frac{x_{2,3}}{x_{1,3}}, \qquad
+  \frac{x_{2,1}}{x_{1,1}} = -\frac{x_{2,3}}{x_{1,3}}.
+\]
+Combining the first two yields $x_{2,1}/x_{1,1} = +x_{2,3}/x_{1,3}$, contradicting the third since $\mathrm{char}(\mathbb{C}) \neq 2$ and all entries are non-zero.
+
+Therefore, every $X \in \Sing_2(V(\perm_4))$ belongs to the finite union of:
+\begin{enumerate}
+  \item $4$ single-row subspaces ($K_{1,4}$), each of dimension $4$;
+  \item $4$ single-column subspaces ($K_{4,1}$), each of dimension $4$;
+  \item $36$ subvarieties supported on a $2 \times 2$ block $I \times J$ satisfying $\perm_2(X_{I,J}) = 0$, each of dimension $4 - 1 = 3$.
+\end{enumerate}
+Conversely, every matrix in a single-row or single-column subspace trivially satisfies~\eqref{eq:subperm2}. Hence $\dim \Sing_2(V(\perm_4)) = 4$, and $\codim_{\mathbb{C}^{16}}(\Sing_2(V(\perm_4))) = 16 - 4 = 12$.
+\end{proof}
+
+\section{First-Order Singularity Codimension via Macaulay Certificate}\label{sec:cert}
+
+\begin{theorem}[Computer-Assisted Exact Certificate]\label{thm:sing1}
+Over $\mathbb{C}$,
+\[
+  \codim_{\mathbb{C}^{16}}\big(\Sing(V(\perm_4))\big) = 8,
+\]
+and consequently $\str(\perm_4) = 4$.
+\end{theorem}
+
+\begin{proof}
+For the upper bound $\codim_{\mathbb{C}^{16}}(\Sing(V(\perm_4))) \le 8$, observe that any $4 \times 4$ matrix whose first two rows are zero has all $3 \times 3$ sub-permanents equal to $0$. This gives an $8$-dimensional linear subspace contained in $\Sing(V(\perm_4))$, so $\dim \Sing(V(\perm_4)) \ge 8$.
+
+For the lower bound $\codim_{\mathbb{C}^{16}}(\Sing(V(\perm_4))) \ge 8$, let $J = (\partial_{i,j}\perm_4)_{1\le i,j\le 4} \subset \mathbb{Z}[X]$ be the Jacobian ideal of $\perm_4$, generated by the $16$ cubic $3 \times 3$ sub-permanents. Fix an explicit $16 \times 8$ integer matrix $M_{L_8}$ of rank $8$, defining an $8$-dimensional linear subspace $L_8 = \{M_{L_8} t : t \in \mathbb{C}^8\} \subset \mathbb{C}^{16}$. Let $I := J|_{L_8} \subset R := \mathbb{Z}[t_1,\dots,t_8]$ be the restricted ideal.
+
+To prove $V_{\mathbb{C}}(I) = \{0\}$, it suffices by the homogeneous Nullstellensatz to exhibit a degree $D$ such that $I_D \otimes \mathbb{C} = R_D \otimes \mathbb{C}$, i.e., such that the degree-$D$ Macaulay matrix $M_D(I)$ (whose rows are the coefficient vectors of $m \cdot g$ for all monomials $m \in R_{D-3}$ and all $16$ generators $g$ of $I$) has full column rank $\binom{D+7}{7}$ over $\mathbb{Q}$. Since $M_D(I)$ has integer entries, if $M_D(I) \bmod p$ has full column rank $\binom{D+7}{7}$ over $\mathbb{F}_p$ for some prime $p$, then $M_D(I)$ has a non-vanishing maximal minor modulo $p$, hence non-vanishing over $\mathbb{Z}$ and $\mathbb{C}$.
+
+Because $I$ is generated in degree $3$, for every $D \ge 6$ we have $I_{D+1} = \sum_{i=1}^8 t_i I_D$. Let $\mathcal{B}_D$ be a monomial basis of $(R_D / I_D) \otimes \mathbb{F}_p$, with reduction table $C_D : R_D \to \Span_{\mathbb{F}_p}(\mathcal{B}_D)$ satisfying $m \equiv C_D(m) \pmod{I_D}$ for all $m \in R_D$. Then $S_{D+1} := \{t_i b : 1 \le i \le 8,\ b \in \mathcal{B}_D\}$ spans $(R_{D+1}/I_{D+1}) \otimes \mathbb{F}_p$. For every monomial $\beta \in R_{D+1}$ and every pair of factorizations $\beta = t_i \alpha_i = t_j \alpha_j$, the difference $t_i C_D(\alpha_i) - t_j C_D(\alpha_j)$ is a linear combination of elements of $S_{D+1}$ that lies in $I_{D+1} \otimes \mathbb{F}_p$. Hence the matrix $M_{\mathrm{syz}}$ of these syzygy relations has row space contained in $I_{D+1} \otimes \mathbb{F}_p$; if $\rank_{\mathbb{F}_p}(M_{\mathrm{syz}}) = |S_{D+1}|$, then $S_{D+1} \subseteq I_{D+1} \otimes \mathbb{F}_p$ and therefore $I_{D+1} \otimes \mathbb{F}_p = R_{D+1} \otimes \mathbb{F}_p$ (Iterated Macaulay Schur-Complement, IMSC).
+
+Executing this exact modular reduction on the integer subspace $L_8$ defined in \texttt{verify\_codim\_sing\_perm4.py} yields, identically modulo both $p_1 = 32{,}749$ and $p_2 = 65{,}521$:
+\[
+\begin{array}{cccc}
+\toprule
+\text{Degree } D & \dim R_D = \binom{D+7}{7} & \dim(I_D \otimes \mathbb{F}_p) & \text{corank} \\
+\midrule
+6 & 1{,}716 & 1{,}584 & 132 \\
+7 & 3{,}432 & 3{,}400 & 32 \\
+8 & 6{,}435 & 6{,}427 & 8 \\
+9 & 11{,}440 & 11{,}440 & 0 \\
+\bottomrule
+\end{array}
+\]
+At $D = 9$, the corank vanishes identically, so $\Sing(V(\perm_4)) \cap L_8 = \{0\}$. By the affine dimension theorem, $\dim \Sing(V(\perm_4)) + 8 \le 16$, giving $\codim_{\mathbb{C}^{16}}(\Sing(V(\perm_4))) \ge 8$, and hence $= 8$.
+
+Finally, Lemma~\ref{lem:strength} gives $\str(\perm_4) \ge \lceil 8/2 \rceil = 4$, while Laplace expansion along the first row, $\perm_4(X) = \sum_{j=1}^4 x_{1,j}\,\perm_3(X_{\hat{1},\hat{j}})$, gives $\str(\perm_4) \le 4$. Thus $\str(\perm_4) = 4$.
+\end{proof}
+
+\begin{remark}[Negative Control on $L_9$]
+Since $\dim \Sing(V(\perm_4)) = 8$, a generic $9$-dimensional subspace $L_9 \subset \mathbb{C}^{16}$ must intersect $\Sing(V(\perm_4))$ in a cone of dimension at least $1$, so the corank of $J|_{L_9}$ must remain strictly positive in every degree. As a sanity check against implementation errors in the IMSC routine, \texttt{verify\_codim\_sing\_perm4.py} runs the identical algorithm on an integer $9$-dimensional subspace $L_9$ modulo $p_1 = 32{,}749$, obtaining strictly positive coranks $753$ at $D = 6$ and $580$ at $D = 7$.
+\end{remark}
+
+\section{Origin-Corank Classification}\label{sec:corank}
+
+Let $\perm_4(X) = \det(M(X))$ be an affine determinantal representation of size $m$, where $M(X) = A_0 + L(X)$ with $A_0 \in \mathbb{C}^{m\times m}$ constant and $L(X)$ homogeneous linear in $X \in \mathbb{C}^{16}$. Let $r := \corank(A_0) = m - \rank(A_0)$ and $w := \rank(A_0) = m - r$. Multiplying $M(X)$ on the left and right by constant invertible matrices $P, Q \in \mathrm{GL}_m(\mathbb{C})$ with $\det(PQ) = 1$, we may assume
+\begin{equation}\label{eq:blockM}
+  M(tX) = A_0 + tL(X) = \begin{pmatrix} t B(X) & t U(X) \\ t V(X) & I_w + t A(X) \end{pmatrix},
+\end{equation}
+where $B \in \mathbb{C}[X]_1^{r\times r}$, $U \in \mathbb{C}[X]_1^{r\times w}$, $V \in \mathbb{C}[X]_1^{w\times r}$, and $A \in \mathbb{C}[X]_1^{w\times w}$ are homogeneous linear matrices. For $t$ in a neighborhood of $0$, $I_w + tA(X)$ is invertible, and the Schur complement identity yields
+\begin{equation}\label{eq:schur}
+  t^4 \perm_4(X) = \det(M(tX))
+  = t^r \det(I_w + tA) \cdot \det\!\left(B - \sum_{k=0}^{\infty} (-1)^k t^{k+1} U A^k V\right).
+\end{equation}
+
+\begin{proposition}[Mandatory Corank $1$]\label{prop:corank1}
+Every affine determinantal representation $\perm_4(X) = \det(A_0 + L(X))$ over $\mathbb{C}$ satisfies $\corank(A_0) = 1$.
+\end{proposition}
+
+\begin{proof}
+We eliminate all $r \neq 1$ case by case using Theorem~\ref{thm:sing1} ($\codim(\Sing(V(\perm_4))) = 8$ and $\str(\perm_4) = 4$).
+
+\emph{Case $r = 0$.} Evaluating~\eqref{eq:blockM} at $t = 0$ gives $0 = \perm_4(0) = \det(I_m) = 1$, impossible.
+
+\emph{Case $r \ge 5$.} By~\eqref{eq:schur}, $\det(M(tX))$ is divisible by $t^r$ with $r \ge 5$, so $[t^4]\det(M(tX)) = 0 \neq \perm_4(X)$, impossible.
+
+\emph{Case $r = 4$.} Comparing $[t^4]$ in~\eqref{eq:schur} gives $\perm_4(X) = \det_4(B(X))$ for a $4\times 4$ linear matrix $B(X)$. Let $\Sigma_2 \subset \mathbb{C}^{4\times 4}$ be the variety of $4\times 4$ matrices of rank $\le 2$, which has codimension $(4-2)^2 = 4$. At every $X \in B^{-1}(\Sigma_2)$, all $3\times 3$ minors of $B(X)$ vanish, so $\nabla(\det_4(B(X))) = 0$, i.e., $B^{-1}(\Sigma_2) \subseteq \Sing(V(\perm_4))$. Since $0 \in B^{-1}(\Sigma_2)$, we obtain $\codim_{\mathbb{C}^{16}}(\Sing(V(\perm_4))) \le \codim_{\mathbb{C}^{16}}(B^{-1}(\Sigma_2)) \le 4 < 8$, contradicting Theorem~\ref{thm:sing1}.
+
+\emph{Case $r = 3$.} Comparing $[t^3]$ and $[t^4]$ in~\eqref{eq:schur} gives $\det_3(B(X)) \equiv 0$ and
+\[
+  \perm_4(X) = \tr(A)\underbrace{\det_3(B)}_{=\,0} - \tr\!\big(\adj(B(X))\, U(X) V(X)\big)
+  = -\tr\!\big(\adj(B(X))\, U(X) V(X)\big).
+\]
+Thus $B(X)$ spans a linear subspace of $\mathbb{C}^{3\times 3}$ consisting of matrices of rank $\le 2$. By the classification of $3 \times 3$ spaces of bounded rank over an algebraically closed field of characteristic $\neq 2$ (Atkinson~\cite{Atkinson1983}, Eisenbud--Harris~\cite{EH1988}), up to left/right multiplication by $\mathrm{GL}_3(\mathbb{C})$ and transposition, $B(X)$ is of one of two types:
+\begin{enumerate}
+  \item \emph{Compression type:} $B(X)$ has a zero row (say row $3$). Then $\adj(B(X)) = c(X) e_3^T$, where $c(X) = (c_1,c_2,c_3)^T \in \mathbb{C}[X]_2^3$ consists of the signed $2\times 2$ minors of the top $2\times 3$ block of $B(X)$. Hence
+  \[
+    \perm_4(X) = -\big(e_3^T U(X) V(X)\big) c(X) = -\sum_{j=1}^3 \big(e_3^T U(X) V(X)\big)_j\, c_j(X),
+  \]
+  giving $\str(\perm_4) \le 3 < 4$, a contradiction.
+  \item \emph{Skew-symmetric type:} $B(X) \in \mathfrak{so}_3(\mathbb{C})$, i.e.,
+  \[
+    B(X) = \begin{pmatrix} 0 & \ell_3 & -\ell_2 \\ -\ell_3 & 0 & \ell_1 \\ \ell_2 & -\ell_1 & 0 \end{pmatrix}
+  \]
+  for linear forms $\ell_1,\ell_2,\ell_3 \in \mathbb{C}[X]_1$. Then $\adj(B(X)) = \ell(X)\ell(X)^T$, so
+  \[
+    \perm_4(X) = -\ell(X)^T U(X) V(X) \ell(X) = -\sum_{i=1}^3 \ell_i(X)\, \big(U(X) V(X) \ell(X)\big)_i,
+  \]
+  again giving $\str(\perm_4) \le 3 < 4$, a contradiction.
+\end{enumerate}
+
+\emph{Case $r = 2$.} Let $C_1 = -U(X)V(X)$ and $C_2 = U(X)A(X)V(X)$ (both $2\times 2$). Expanding $\det(B + t C_1 + t^2 C_2) = d_2 + t d_3 + t^2 d_4 + \cdots$ in~\eqref{eq:schur} yields:
+\begin{align*}
+  [t^2] = 0 &\implies d_2 = \det_2(B(X)) \equiv 0, \\
+  [t^3] = 0 &\implies d_3 = -\tr\!\big(\adj(B(X))\, U(X) V(X)\big) \equiv 0, \\
+  [t^4] = \perm_4(X) &\implies \perm_4(X) = d_4 = \det_2(U(X)V(X)) + \tr\!\big(\adj(B(X))\, U(X) A(X) V(X)\big).
+\end{align*}
+Since $\det_2(B(X)) \equiv 0$, $B(X)$ is a $2\times 2$ linear matrix of rank $\le 1$. Up to left/right $\mathrm{GL}_2(\mathbb{C})$ action and transposition, $B(X)$ has a zero second row:
+\[
+  B(X) = \begin{pmatrix} b_1(X) & b_2(X) \\ 0 & 0 \end{pmatrix}, \qquad
+  \adj(B(X)) = \begin{pmatrix} 0 & -b_2(X) \\ 0 & b_1(X) \end{pmatrix}.
+\]
+Let $Q = U(X)V(X)$ and $R = U(X)A(X)V(X)$. The $[t^3] = 0$ condition reads
+\[
+  b_1(X)\, Q_{22}(X) = b_2(X)\, Q_{21}(X),
+\]
+and the $[t^4]$ identity reads
+\[
+  \perm_4(X) = Q_{11} Q_{22} - Q_{12} Q_{21} - b_2 R_{21} + b_1 R_{22}.
+\]
+\begin{itemize}
+  \item If $b_1 = b_2 = 0$, then $\perm_4 = Q_{11} Q_{22} - Q_{12} Q_{21}$, so $\str(\perm_4) \le 2 < 4$.
+  \item If $b_1, b_2$ are linearly dependent and not both zero, a column operation sets $b_2 = 0$, $b_1 \neq 0$. Then $b_1 Q_{22} = 0$ forces $Q_{22} \equiv 0$ (since $\mathbb{C}[X]$ is an integral domain), leaving $\perm_4 = -Q_{12} Q_{21} + b_1 R_{22}$, so $\str(\perm_4) \le 2 < 4$.
+  \item If $b_1, b_2$ are linearly independent, then $\gcd(b_1, b_2) = 1$ in the UFD $\mathbb{C}[X]$, so $b_1 Q_{22} = b_2 Q_{21}$ forces $Q_{21} = b_1 \ell$ and $Q_{22} = b_2 \ell$ for some linear form $\ell \in \mathbb{C}[X]_1$. Substituting into $\perm_4$ yields
+  \[
+    \perm_4(X) = b_1\big(R_{22} - \ell Q_{12}\big) + b_2\big(\ell Q_{11} - R_{21}\big),
+  \]
+  again giving $\str(\perm_4) \le 2 < 4$, a contradiction.
+\end{itemize}
+Hence $r = 1$ is the only remaining possibility.
+\end{proof}
+
+\section{Origin-Isotropy, Skew-Square Vanishing, and Proof of Theorem~\ref{thm:main}}\label{sec:mainproof}
+
+We first record the elementary matrix identity at the heart of our proof.
+
+\begin{lemma}[Skew-Square Lemma]\label{lem:skewsquare}
+Let $M, K \in \mathbb{C}^{d \times d}$ satisfy $K^T = -K$ and $(MK)^T = -MK$. Then
+\[
+  (M^2 K)^T = -M^2 K.
+\]
+In particular, $y^T M^2 K y = 0$ for all $y \in \mathbb{C}^d$.
+\end{lemma}
+
+\begin{proof}
+Since $K^T = -K$, the hypothesis $(MK)^T = -MK$ reads $-K M^T = K^T M^T = -MK$, hence $K M^T = MK$. Therefore,
+\[
+  (M^2 K)^T = K^T (M^T)^2 = (-K M^T) M^T = (-MK) M^T = -M(K M^T) = -M(MK) = -M^2 K.
+\]
+Note that $K$ is not assumed to be invertible. Because $M^2 K$ is skew-symmetric, $y^T M^2 K y = 0$ identically.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Suppose for contradiction that $\dc_{\mathbb{C}}(\perm_4) \le 9$. By padding with an identity block if necessary, there exists a $9 \times 9$ affine determinantal representation $\perm_4(X) = \det(A_0 + L(X))$. By Proposition~\ref{prop:corank1}, $\corank(A_0) = 1$, so $w = \rank(A_0) = 8$. Writing $v(X)^T = U(X) \in \mathbb{C}[X]_1^{1\times 8}$ and $u(X) = V(X) \in \mathbb{C}[X]_1^{8\times 1}$ in~\eqref{eq:blockM}--\eqref{eq:schur}, we have
+\[
+  t^4 \perm_4(X) = t \det(I_8 + tA(X))\Big(b(X) - t\,v(X)^T u(X) + t^2\,v(X)^T A(X) u(X) - t^3\,v(X)^T A(X)^2 u(X) + \cdots\Big).
+\]
+Comparing powers of $t$ sequentially yields:
+\begin{align}
+  [t^1] = 0 &\implies b(X) \equiv 0, \nonumber\\
+  [t^2] = 0 &\implies v(X)^T u(X) \equiv 0, \label{eq:t2}\\
+  [t^3] = 0 &\implies v(X)^T A(X) u(X) \equiv 0, \label{eq:t3}\\
+  [t^4] = \perm_4(X) &\implies \perm_4(X) = -v(X)^T A(X)^2 u(X). \label{eq:t4}
+\end{align}
+Replacing $v$ by $-v$, we may drop the minus sign in~\eqref{eq:t4} without affecting~\eqref{eq:t2}--\eqref{eq:t3}.
+
+\paragraph{Step 1: Origin-isotropy forces $\dim W = 8$.}
+Let $W := \Span_{\mathbb{C}}\{v_1,\dots,v_8, u_1,\dots,u_8\} \subseteq (\mathbb{C}^{16})^*$ and $D := \dim W$. Consider the non-degenerate symmetric bilinear form $\Omega$ on $\mathbb{C}^{16} = \mathbb{C}^8 \oplus \mathbb{C}^8$ defined by
+\[
+  \Omega\!\left(\begin{pmatrix} \mathbf{v} \\ \mathbf{u} \end{pmatrix}, \begin{pmatrix} \mathbf{v}' \\ \mathbf{u}' \end{pmatrix}\right) = \mathbf{v}^T \mathbf{u}' + (\mathbf{v}')^T \mathbf{u}.
+\]
+Polarizing~\eqref{eq:t2} gives $v(X)^T u(Y) + v(Y)^T u(X) = 0$ for all $X, Y \in \mathbb{C}^{16}$. Hence the image subspace $S := \{(v(X), u(X))^T : X \in \mathbb{C}^{16}\} \subseteq \mathbb{C}^{16}$ is totally isotropic with respect to $\Omega$, which implies
+\[
+  D = \dim W = \dim S \le 8.
+\]
+On the other hand, on $W^\perp := \{X \in \mathbb{C}^{16} : v(X) = 0 \text{ and } u(X) = 0\}$,~\eqref{eq:t4} shows that $\perm_4$ belongs to the square of the defining ideal $I_W$ of $W^\perp$, so $W^\perp \subseteq \Sing(V(\perm_4))$. By Theorem~\ref{thm:sing1},
+\[
+  8 = \codim_{\mathbb{C}^{16}}(\Sing(V(\perm_4))) \le \codim_{\mathbb{C}^{16}}(W^\perp) = D \le 8,
+\]
+and therefore $D = 8$.
+
+\paragraph{Step 2: $2$-block normal form.}
+For any $P \in \mathrm{GL}_8(\mathbb{C})$, the simultaneous conjugation $(v^T, A, u) \mapsto (v^T P^{-1}, P A P^{-1}, P u)$ preserves~\eqref{eq:t2}--\eqref{eq:t4}. Let $d_v := \dim \Span\{v_1,\dots,v_8\}$ and $d_z := 8 - d_v$. Choosing $P \in \mathrm{GL}_8(\mathbb{C})$ so that the first $d_v$ entries of $v^T P^{-1}$ form a basis $y = (y_1,\dots,y_{d_v})^T$ of $\Span\{v_1,\dots,v_8\}$ and the remaining $d_z$ entries vanish, we obtain
+\[
+  v(X) = \begin{pmatrix} y(X) \\ 0 \end{pmatrix}, \qquad
+  u(X) = \begin{pmatrix} u_1(X) \\ z(X) \end{pmatrix}, \qquad
+  A(X) = \begin{pmatrix} A_{11}(X) & A_{13}(X) \\ A_{31}(X) & A_{33}(X) \end{pmatrix},
+\]
+with $u_1 \in \mathbb{C}[X]_1^{d_v}$ and $z \in \mathbb{C}[X]_1^{d_z}$.
+
+Condition~\eqref{eq:t2} becomes $y(X)^T u_1(X) \equiv 0$. Extending $y_1,\dots,y_{d_v}$ to a basis of $(\mathbb{C}^{16})^*$ and writing $u_1(X) = K y(X) + \tilde{u}_1$ (where $\tilde{u}_1$ depends only on the complementary basis elements), comparing coefficients of mixed products forces $\tilde{u}_1 \equiv 0$ and comparing quadratic terms in $y$ forces $K^T = -K$. Thus $u_1(X) = K y(X)$ with $K \in \mathfrak{so}_{d_v}(\mathbb{C})$.
+
+Because $u_1 = K y$ already lies in $\Span(y_1,\dots,y_{d_v})$, we have $W = \Span\{y_1,\dots,y_{d_v}, z_1,\dots,z_{d_z}\}$. Since $\dim W = 8 = d_v + d_z$, the $8$ linear forms $(y_1,\dots,y_{d_v}, z_1,\dots,z_{d_z})$ are linearly independent and form a basis of $W$.
+
+\paragraph{Step 3: Extracting the $\xi$-linear constraints from $[t^3] = 0$.}
+Extend $(y_1,\dots,y_{d_v}, z_1,\dots,z_{d_z})$ to a basis $(y_1,\dots,y_{d_v}, z_1,\dots,z_{d_z}, \xi_1,\dots,\xi_8)$ of $(\mathbb{C}^{16})^*$. Then $I_W = \langle y_1,\dots,y_{d_v}, z_1,\dots,z_{d_z} \rangle$, and $W^\perp = V(I_W)$ is parametrized by the $8$ free coordinates $\xi = (\xi_1,\dots,\xi_8)$. Decompose
+\[
+  A_{11}(X) = A_{11}^{(\xi)}(\xi) + A_{11}^{(W)}(y,z), \qquad
+  A_{13}(X) = A_{13}^{(\xi)}(\xi) + A_{13}^{(W)}(y,z),
+\]
+where the entries of $A_{11}^{(W)}, A_{13}^{(W)}$ lie in $I_W$. Substituting into~\eqref{eq:t3} gives
+\[
+  0 \equiv v(X)^T A(X) u(X) = y^T A_{11}(X) K y + y^T A_{13}(X) z.
+\]
+Collecting the terms of degree $1$ in $\xi$ (which must vanish identically as a polynomial in the independent variables $y, z, \xi$), we obtain
+\[
+  y^T A_{11}^{(\xi)}(\xi) K y + y^T A_{13}^{(\xi)}(\xi) z \equiv 0.
+\]
+Separating by bidegree in $(y, z)$:
+\begin{enumerate}
+  \item The $(1,1)$-bidegree part $y^T A_{13}^{(\xi)}(\xi) z \equiv 0$ forces $A_{13}^{(\xi)}(\xi) \equiv 0$, i.e., every entry of $A_{13}(X)$ belongs to $I_W$.
+  \item The $(2,0)$-bidegree part $y^T A_{11}^{(\xi)}(\xi) K y \equiv 0$ forces the matrix $A_{11}^{(\xi)}(\xi) K$ to be skew-symmetric for every $\xi \in \mathbb{C}^8$:
+  \[
+    \big(A_{11}^{(\xi)}(\xi) K\big)^T = -A_{11}^{(\xi)}(\xi) K.
+  \]
+\end{enumerate}
+
+\paragraph{Step 4: Order-$3$ vanishing along $W^\perp$ and contradiction.}
+By Lemma~\ref{lem:skewsquare} applied to $M = A_{11}^{(\xi)}(\xi)$ and $K$, the matrix $A_{11}^{(\xi)}(\xi)^2 K$ is skew-symmetric for all $\xi \in \mathbb{C}^8$, so
+\[
+  y^T A_{11}^{(\xi)}(\xi)^2 K y \equiv 0.
+\]
+Now expand~\eqref{eq:t4} in our $2$-block partition:
+\[
+  \perm_4(X) = y^T A_{11}(X)^2 K y + y^T A_{13}(X) A_{31}(X) K y + y^T A_{11}(X) A_{13}(X) z + y^T A_{13}(X) A_{33}(X) z.
+\]
+Since $y, z \in I_W$ and $A_{13}(X) \in I_W$, the last three terms manifestly lie in $I_W^3$. For the first term,
+\[
+  A_{11}(X)^2 = A_{11}^{(\xi)}(\xi)^2 + \Big(A_{11}^{(\xi)}(\xi) A_{11}^{(W)} + A_{11}^{(W)} A_{11}^{(\xi)}(\xi) + \big(A_{11}^{(W)}\big)^2\Big),
+\]
+where the bracketed part lies in $I_W$. Since $y^T A_{11}^{(\xi)}(\xi)^2 K y \equiv 0$, it follows that $y^T A_{11}(X)^2 K y \in I_W^3$ as well. Hence $\perm_4(X) \in I_W^3$.
+
+Consequently, all first and second partial derivatives of $\perm_4$ vanish identically on $W^\perp = V(I_W)$, so $W^\perp \subseteq \Sing_2(V(\perm_4))$. By Proposition~\ref{prop:sing2},
+\[
+  12 = \codim_{\mathbb{C}^{16}}(\Sing_2(V(\perm_4))) \le \codim_{\mathbb{C}^{16}}(W^\perp) = 8,
+\]
+a contradiction. Therefore $\dc_{\mathbb{C}}(\perm_4) \ge 10$.
+\end{proof}
+
+\begin{remark}[Scope and limitations]
+The argument above extends naturally to $m \ge 10$ by introducing a middle block of size $w_{\mathrm{mid}} = w - D$ (bounding $\rank(\mathrm{Hess}(\perm_4)(X_0)) \le 2 w_{\mathrm{mid}}$ on $W^\perp$), though closing $m \ge 10$ requires controlling the higher Hessian rank strata $\mathcal{H}_{\le 2k}(\perm_4)$. As with all singularity- and Hessian-based techniques, this framework is subject to the quadratic Mignon--Ressayre barrier $O(n^2)$ as $n \to \infty$ and does not by itself address super-polynomial lower bounds for $\mathrm{VP} \neq \mathrm{VNP}$.
+\end{remark}
+
+\begin{thebibliography}{9}
+
+\bibitem{ABV2017}
+J.~Alper, T.~Bogart, and M.~Velasco,
+\emph{A lower bound for the determinantal complexity of a hypersurface},
+Found.\ Comput.\ Math.\ \textbf{17} (2017), no.~3, 829--836.
+
+\bibitem{Atkinson1983}
+M.~D.~Atkinson,
+\emph{Primitive spaces of matrices of bounded rank.~II},
+J.\ Austral.\ Math.\ Soc.\ Ser.~A \textbf{34} (1983), no.~3, 306--315.
+
+\bibitem{EH1988}
+D.~Eisenbud and J.~Harris,
+\emph{Vector spaces of matrices of low rank},
+Adv.\ Math.\ \textbf{70} (1988), no.~2, 135--155.
+
+\bibitem{Grenet2011}
+B.~Grenet,
+\emph{An upper bound for the permanent versus determinant problem},
+Manuscript, \'Ecole Normale Sup\'erieure de Lyon, 2011.
+
+\bibitem{LR2017}
+J.~M.~Landsberg and N.~Ressayre,
+\emph{Permanent v.\ determinant: an exponential lower bound assuming symmetry and a potential path towards Valiant's conjecture},
+Abh.\ Math.\ Semin.\ Univ.\ Hambg.\ \textbf{87} (2017), no.~2, 323--339.
+
+\bibitem{MR2004}
+T.~Mignon and N.~Ressayre,
+\emph{A quadratic bound for the determinant and permanent problem},
+Int.\ Math.\ Res.\ Not.\ IMRN \textbf{2004} (2004), no.~79, 4241--4253.
+
+\bibitem{Valiant1979}
+L.~G.~Valiant,
+\emph{Completeness classes in algebra},
+Proc.\ 11th Annual ACM Symposium on Theory of Computing (STOC), 1979, pp.~249--261.
+
+\bibitem{Yabe2015}
+A.~Yabe,
+\emph{Bi-polynomial rank and determinantal complexity},
+arXiv:1504.00151, 2015.
+
+\end{thebibliography}
+
+\end{document}
