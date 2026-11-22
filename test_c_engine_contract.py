@@ -5,15 +5,15 @@ Verifies all contract preconditions, error return codes, and exact rank calculat
 """
 
 import ctypes
-import numpy as np
 import os
 import subprocess
 
 def test_c_contract():
-    so_path = "/Users/bl10buer/Desktop/matemk/p-vs-np-gct/paper_dc_perm4/exact_mod_rref.so"
-    c_path = "/Users/bl10buer/Desktop/matemk/p-vs-np-gct/paper_dc_perm4/exact_mod_rref.c"
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    so_path = os.path.join(base_dir, "paper_dc_perm4/exact_mod_rref.so")
+    c_path = os.path.join(base_dir, "paper_dc_perm4/exact_mod_rref.c")
     
-    # Recompile
+    # Recompile if needed or test existing
     subprocess.run(["gcc", "-O3", "-shared", "-fPIC", "-o", so_path, c_path], check=True)
     lib = ctypes.CDLL(so_path)
     

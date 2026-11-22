@@ -27,7 +27,12 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Compile C Rank Engine
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install numpy aiohttp
+
+      - name: Compile and Test C Rank Engine
         run: |
           gcc -O3 -shared -fPIC -o paper_dc_perm4/exact_mod_rref.so paper_dc_perm4/exact_mod_rref.c
           python3 test_c_engine_contract.py
