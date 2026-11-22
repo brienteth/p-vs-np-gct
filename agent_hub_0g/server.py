@@ -90,8 +90,12 @@ if __name__ == "__main__":
     print(f"   24/7 Autonomous AI Council ready.")
     print(f"==================================================================")
     
-    # Auto-start orchestrator in autonomous 24/7 mode
-    orchestrator.start()
+    # Only auto-start local worker loop if explicitly requested; otherwise cloud runner handles continuous execution
+    if os.environ.get("AUTO_START_COUNCIL", "0") == "1":
+        orchestrator.start()
+        print("   [Autonomous Council Worker: Started locally]")
+    else:
+        print("   [Autonomous Council: Cloud Runner active on GitHub Actions; UI listening]")
     
     app = create_app()
     web.run_app(app, host="0.0.0.0", port=port)
