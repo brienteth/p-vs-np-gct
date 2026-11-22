@@ -243,7 +243,7 @@ class AutonomousAgentOrchestrator:
             self.agent_statuses[agent["id"]]["status"] = "thinking"
 
             specific_task = agent_tasks.get(agent["id"], f"Konuyu analiz et: {topic}")
-            dialogue_summary = "\n".join([f"- {d['name']}: {d['summary']}" for d in round_dialogue[-3:]])
+            dialogue_summary = "\n".join([f"- {d.get('name') or d.get('agent_name')}: {d['summary']}" for d in round_dialogue[-3:]])
 
             prompt = (
                 f"TUR {round_num} STRATEJİK HEDEF:\n{topic}\n"
@@ -284,7 +284,7 @@ class AutonomousAgentOrchestrator:
                     "text": res["content"]
                 }
                 self.emit_log(msg_entry)
-                round_dialogue.append({"agent_name": agent["name"], "role": agent["role"], "summary": res["content"][:180], "text": res["content"]})
+                round_dialogue.append({"name": agent["name"], "agent_name": agent["name"], "role": agent["role"], "summary": res["content"][:180], "text": res["content"]})
                 time.sleep(2)
 
             except Exception as e:
