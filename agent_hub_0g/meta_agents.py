@@ -18,7 +18,7 @@ import json
 import re
 from typing import Dict, List, Any, Tuple
 
-BASE_DIR = "/Users/bl10buer/Desktop/matemk/p-vs-np-gct"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENGEL_MAP_PATH = os.path.join(BASE_DIR, "ENGEL_HARITASI.md")
 DOSSIER_DIR = os.path.join(BASE_DIR, "agent_hub_0g/dossiers")
 os.makedirs(DOSSIER_DIR, exist_ok=True)
