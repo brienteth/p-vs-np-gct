@@ -23,6 +23,7 @@ if BASE_DIR not in sys.path:
 ENV_PATH = os.path.join(BASE_DIR, ".env")
 LOG_DIR = os.path.join(BASE_DIR, "agent_hub_0g/logs")
 LIVE_LOG_FILE = os.path.join(LOG_DIR, "live_debate.jsonl")
+TARTISMA_LOGU_MD = os.path.join(BASE_DIR, "TARTISMA_LOGU.md")
 ROUTER_URL = "https://router-api.0g.ai/v1/chat/completions"
 
 def load_0g_api_key() -> str:
@@ -242,12 +243,49 @@ class AutonomousAgentOrchestrator:
         # If all external API calls fail (e.g. sandbox or temporary network block), fall back gracefully:
         return self.generate_analytical_fallback(system_prompt, user_prompt)
 
+    def _format_md_entry(self, entry: Dict[str, Any]) -> str:
+        t = entry.get("type", "")
+        ts = entry.get("timestamp", "")
+        rnd = entry.get("round", "?")
+        text = (entry.get("text") or "").strip()
+
+        if t == "director_briefing":
+            name = entry.get("director_name", "Prof. Henri Poincaré")
+            avatar = entry.get("avatar", "🧭")
+            return f"\n---\n\n## Tur {rnd} — `{ts}` (0G Otonom Konsey Tartışması)\n\n### {avatar} {name}\n\n{text}\n"
+        elif t == "agent_message":
+            model = entry.get("model", "")
+            if "offline" in model:
+                return ""
+            name = entry.get("agent_name", "Ajan")
+            avatar = entry.get("avatar", "🏛️")
+            role = entry.get("role", "")
+            tokens = entry.get("tokens", 0)
+            reply_to = entry.get("reply_to")
+            reply_line = f"> ↩️ **{reply_to}** tezine yanıt / tartışma\n\n" if reply_to else ""
+            return (
+                f"\n#### {avatar} {name} ({role}) · `{ts}` · `{model}` · `{tokens} tok`\n\n"
+                f"{reply_line}{text}\n"
+            )
+        elif t == "cartographer_update":
+            name = entry.get("cartographer_name", "Prof. Alexander Grothendieck")
+            avatar = entry.get("avatar", "🗺️")
+            return f"\n### {avatar} {name} (Tur {rnd} Harita Sentezi) · `{ts}`\n\n{text}\n"
+        return ""
+
     def emit_log(self, entry: Dict[str, Any]):
         entry["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
         self.logs_queue.append(entry)
         try:
             with open(LIVE_LOG_FILE, "a", encoding="utf-8") as f:
                 f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        except Exception:
+            pass
+        try:
+            md_chunk = self._format_md_entry(entry)
+            if md_chunk:
+                with open(TARTISMA_LOGU_MD, "a", encoding="utf-8") as f:
+                    f.write(md_chunk)
         except Exception:
             pass
 
