@@ -143,7 +143,7 @@ class AutonomousAgentOrchestrator:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            "temperature": 0.35,
+            "temperature": 0.65,
             "max_tokens": max_tokens
         }
         # For thinking models, explicitly request reasoning to be included
@@ -303,7 +303,12 @@ class AutonomousAgentOrchestrator:
                 "agent_tasks": {a["id"]: f"Kullanıcı hipotezini kendi uzmanlık alanından ({a['role']}) incele: {custom_topic}" for a in self.agents}
             }
         else:
-            task_plan = self.director.generate_targeted_tasks(round_num, current_map)
+            recent_topics = [
+                e.get("topic", "")
+                for e in list(self.logs_queue)
+                if e.get("type") == "director_briefing" and e.get("topic")
+            ][-10:]
+            task_plan = self.director.generate_targeted_tasks(round_num, current_map, recent_topics)
 
         topic = task_plan.get("topic", f"Tur {round_num} İlerleme Hedefi")
         goal = task_plan.get("strategic_goal", "")
