@@ -303,12 +303,16 @@
 
     <!-- TIER 2: 6 SPECIALIST AGENTS GRID -->
     <div>
-      <div class="flex items-center justify-between mb-3">
+      <div class="flex flex-wrap items-center justify-between mb-3 gap-2">
         <h2 class="text-sm font-semibold text-slate-300 flex items-center space-x-2">
           <i class="fa-solid fa-users-viewfinder text-emerald-400"></i>
-          <span>Tier 2: 6 Uzman Araştırmacı Ajan</span>
+          <span>Tier 2: 6 Uzman Araştırmacı Ajan (Canlı Durum Paneli)</span>
         </h2>
-        <span class="text-xs text-slate-500 font-mono">Direktör tarafından her tur hedefe yönelik görevlendirilir</span>
+        <div class="flex items-center space-x-3 text-[11px] font-mono">
+          <span class="flex items-center text-amber-400"><span class="w-2 h-2 rounded-full bg-amber-400 animate-ping mr-1.5"></span>Düşünüyor / Tez Hazırlıyor</span>
+          <span class="flex items-center text-emerald-400"><span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5"></span>Yanıtladı ✓</span>
+          <span class="flex items-center text-slate-400"><span class="w-2 h-2 rounded-full bg-slate-500 mr-1.5"></span>Sıra Bekliyor</span>
+        </div>
       </div>
 
       <div id="agents-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3">
@@ -318,12 +322,15 @@
 
     <!-- MAIN TERMINAL & LIVE STREAM -->
     <div class="flex flex-col bg-dark-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl h-[550px]">
-      <div class="bg-dark-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+      <div class="bg-dark-950 px-4 py-3 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center space-x-2">
           <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
           <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
           <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
-          <span class="text-xs font-mono text-slate-400 ml-2 font-semibold">0G Network Realtime Stream (Poincaré &bull; 6 Specialists &bull; Grothendieck)</span>
+          <span class="text-xs font-mono text-slate-300 ml-2 font-semibold flex items-center space-x-1.5">
+            <span>0G Canlı Bilimsel Diyalektik &amp; Tartışma Akışı</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-indigo-900/50 text-indigo-300 border border-indigo-700/50">Karşıt Sav &amp; İtirazlar Aktif</span>
+          </span>
         </div>
         <div class="flex items-center space-x-3 text-xs">
           <label class="flex items-center space-x-1.5 cursor-pointer text-slate-400 hover:text-slate-200">
@@ -448,8 +455,62 @@
           if (res.ok) {
             const text = await res.text();
             const lines = text.trim().split('\n').filter(l => l.trim());
-            const logs = lines.slice(-40).map(l => JSON.parse(l));
+            const logs = lines.slice(-50).map(l => JSON.parse(l));
             const lastRound = logs.length > 0 && logs[logs.length-1].round ? logs[logs.length-1].round : 33;
+            
+            // Build dynamic council agents with exact states based on the latest round logs:
+            const councilDef = [
+              {id: "prof-euler", name: "Prof. Euler", avatar: "🏛️", role: "Formal Proofs", model: "0gm-1.0-35b-a3b"},
+              {id: "prof-hilbert", name: "Prof. Hilbert", avatar: "📐", role: "Algebraic Geometry", model: "0gm-1.0-35b-a3b"},
+              {id: "prof-strassen", name: "Prof. Strassen", avatar: "⚡", role: "Border Complexity", model: "0gm-1.0-35b-a3b"},
+              {id: "prof-noether", name: "Prof. Noether", avatar: "🌀", role: "Symmetry Orbits", model: "0gm-1.0-35b-a3b"},
+              {id: "prof-wigner", name: "Prof. Wigner", avatar: "🎲", role: "Grassmannian Rank", model: "0gm-1.0-35b-a3b"},
+              {id: "prof-valiant", name: "Prof. Valiant", avatar: "💻", role: "VNP vs VP", model: "0gm-1.0-35b-a3b"}
+            ];
+
+            const roundLogs = logs.filter(l => l.round === lastRound && l.type === 'agent_message');
+            let nextThinkingFound = false;
+
+            const computedAgents = councilDef.map(c => {
+              const spoke = roundLogs.find(l => l.agent_id === c.id);
+              if (spoke) {
+                return {
+                  ...c,
+                  status: "responded",
+                  last_thought: spoke.text.slice(0, 140) + "...",
+                  last_time: spoke.timestamp ? spoke.timestamp.split(' ')[1] : ""
+                };
+              } else if (!nextThinkingFound) {
+                nextThinkingFound = true;
+                return {
+                  ...c,
+                  status: "thinking",
+                  last_thought: "Önceki tezleri inceliyor ve karşı-argüman hazırlıyor...",
+                  last_time: "Şimdi"
+                };
+              } else {
+                return {
+                  ...c,
+                  status: "waiting",
+                  last_thought: "Söz sırasını bekliyor...",
+                  last_time: ""
+                };
+              }
+            });
+
+            // Extract last briefings
+            let lastBrief = "Tur #" + lastRound + " Stratejisi: D_9^hom evrensel corank >= 1 cebirsel sürekliliği";
+            let lastCarto = "Tur #" + (lastRound-1) + " sentezlendi. ENGEL_HARITASI.md GitHub Actions ile güncellendi.";
+
+            const lastBriefEntry = [...logs].reverse().find(l => l.type === 'director_briefing');
+            if (lastBriefEntry && lastBriefEntry.text) {
+              lastBrief = lastBriefEntry.text.replace(/\*\*/g, '').slice(0, 180) + '...';
+            }
+            const lastCartoEntry = [...logs].reverse().find(l => l.type === 'cartographer_update');
+            if (lastCartoEntry && lastCartoEntry.text) {
+              lastCarto = lastCartoEntry.text.replace(/\*\*/g, '').slice(0, 180) + '...';
+            }
+
             data = {
               state: "running",
               current_round: lastRound,
@@ -461,21 +522,14 @@
               meta_agents: {
                 director: {
                   name: "Prof. Henri Poincaré (Araştırma Direktörü & Stratejist)",
-                  last_briefing: "Tur #" + lastRound + " Stratejisi: D_9^hom evrensel corank >= 1 cebirsel sürekliliği"
+                  last_briefing: lastBrief
                 },
                 cartographer: {
                   name: "Prof. Alexander Grothendieck (Haritacı & Denetçi)",
-                  last_update: "Tur #" + (lastRound-1) + " sentezlendi. ENGEL_HARITASI.md GitHub Actions ile güncellendi."
+                  last_update: lastCarto
                 }
               },
-              agents: [
-                {id: "prof-euler", name: "Prof. Euler", avatar: "🏛️", role: "Formal Proofs", status: "active", model: "0gm-1.0-35b-a3b"},
-                {id: "prof-hilbert", name: "Prof. Hilbert", avatar: "📐", role: "Algebraic Geometry", status: "idle", model: "0gm-1.0-35b-a3b"},
-                {id: "prof-strassen", name: "Prof. Strassen", avatar: "⚡", role: "Border Complexity", status: "idle", model: "0gm-1.0-35b-a3b"},
-                {id: "prof-noether", name: "Prof. Noether", avatar: "🌀", role: "Symmetry Orbits", status: "idle", model: "0gm-1.0-35b-a3b"},
-                {id: "prof-wigner", name: "Prof. Wigner", avatar: "🎲", role: "Grassmannian Rank", status: "idle", model: "0gm-1.0-35b-a3b"},
-                {id: "prof-valiant", name: "Prof. Valiant", avatar: "💻", role: "VNP vs VP", status: "idle", model: "0gm-1.0-35b-a3b"}
-              ],
+              agents: computedAgents,
               recent_logs: logs
             };
           }
@@ -492,8 +546,6 @@
       document.getElementById('stat-calls').innerText = data.stats.total_calls;
 
       // Calculate dynamic progress towards the goal:
-      // Base verified points: 40% (Milestone 1, 2, 3)
-      // Active milestone 4: up to +25% based on round depth
       const roundNum = data.current_round || 33;
       const dynamicPct = Math.min(88, 45 + (roundNum * 0.35));
       updateHighwayProgress(roundNum, dynamicPct);
@@ -514,22 +566,63 @@
     function renderAgentsGrid(agents) {
       const grid = document.getElementById('agents-grid');
       if (!agents || !grid) return;
-      grid.innerHTML = agents.map(a => `
-        <div class="bg-dark-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between shadow-md">
-          <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="text-xl">${a.avatar}</span>
-              <span class="text-[10px] text-emerald-400 font-semibold font-mono">0G Aktif</span>
+      grid.innerHTML = agents.map(a => {
+        let statusBadge = '';
+        let cardBorder = 'border-slate-800 bg-dark-900';
+        let statusFooter = '';
+
+        if (a.status === 'thinking') {
+          cardBorder = 'border-amber-500/90 bg-gradient-to-b from-amber-950/40 via-dark-900 to-dark-950 shadow-[0_0_20px_rgba(245,158,11,0.3)] ring-1 ring-amber-400/50 scale-[1.02]';
+          statusBadge = `
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 mr-1.5 animate-ping"></span>DÜŞÜNÜYOR...
+            </span>
+          `;
+          statusFooter = `
+            <span class="text-amber-400 font-semibold flex items-center">
+              <svg class="animate-spin -ml-0.5 mr-1 h-3 w-3 text-amber-400 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+              Tez Hazırlıyor
+            </span>
+          `;
+        } else if (a.status === 'responded' || a.status === 'active') {
+          cardBorder = 'border-emerald-600/70 bg-gradient-to-b from-emerald-950/20 via-dark-900 to-dark-950 shadow-md';
+          statusBadge = `
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/40">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5"></span>YANITLADI ✓
+            </span>
+          `;
+          statusFooter = `
+            <span class="text-emerald-400 font-mono text-[9px]">${a.last_time || 'Bu Tur'} &bull; Sözünü Sundu</span>
+          `;
+        } else { // waiting / idle
+          cardBorder = 'border-slate-800/80 bg-dark-950/60 opacity-60';
+          statusBadge = `
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] text-slate-400 bg-slate-800/80 border border-slate-700/50">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-500 mr-1.5"></span>Sıra Bekliyor
+            </span>
+          `;
+          statusFooter = `
+            <span class="text-slate-500 text-[9px]">Söz Sırası Bekliyor</span>
+          `;
+        }
+
+        return `
+          <div class="${cardBorder} rounded-xl p-3 flex flex-col justify-between transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-2xl">${a.avatar}</span>
+                ${statusBadge}
+              </div>
+              <h4 class="text-xs font-bold text-slate-200 truncate">${escapeHtml(a.name)}</h4>
+              <p class="text-[10px] text-slate-400 line-clamp-1 mt-0.5">${escapeHtml(a.role)}</p>
             </div>
-            <h4 class="text-xs font-bold text-slate-200 truncate">${a.name}</h4>
-            <p class="text-[10px] text-slate-400 line-clamp-1 mt-0.5">${a.role}</p>
+            <div class="mt-2.5 pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[9px] text-slate-500 font-mono">
+              <span class="truncate max-w-[80px]">${a.model || '0gm-35b'}</span>
+              ${statusFooter}
+            </div>
           </div>
-          <div class="mt-2 pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[9px] text-slate-500 font-mono">
-            <span>${a.model || '0gm-35b'}</span>
-            <span>Online</span>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderLogsStream(logs) {
@@ -543,30 +636,72 @@
       body.innerHTML = logs.map(l => {
         if (l.type === 'director_briefing') {
           return `
-            <div class="p-3 rounded-lg bg-indigo-950/60 border border-indigo-700/60 shadow-md my-2">
-              <div class="flex items-center space-x-2 text-indigo-300 font-bold mb-1">
-                <span>${l.avatar || '🧭'}</span><span>${l.director_name} (Strateji)</span>
+            <div class="p-3.5 rounded-xl bg-gradient-to-r from-indigo-950/70 to-dark-950 border border-indigo-700/60 shadow-lg my-2">
+              <div class="flex items-center justify-between text-indigo-300 font-bold mb-1.5 text-xs">
+                <div class="flex items-center space-x-2">
+                  <span class="text-lg">${l.avatar || '🧭'}</span>
+                  <span class="text-sm">${escapeHtml(l.director_name)}</span>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-900/60 border border-indigo-600/40 text-indigo-200 font-mono">Direktör Görev Dağılımı</span>
+                </div>
+                <span class="font-mono text-[10px] text-slate-400">${l.timestamp ? l.timestamp.split(' ')[1] : ''}</span>
               </div>
-              <div class="text-slate-200 text-xs font-mono whitespace-pre-wrap">${escapeHtml(l.text)}</div>
+              <div class="text-slate-200 text-xs font-mono whitespace-pre-wrap leading-relaxed">${escapeHtml(l.text)}</div>
             </div>
           `;
         } else if (l.type === 'cartographer_update') {
           return `
-            <div class="p-3 rounded-lg bg-emerald-950/60 border border-emerald-700/60 shadow-md my-2">
-              <div class="flex items-center space-x-2 text-emerald-300 font-bold mb-1">
-                <span>${l.avatar || '🗺️'}</span><span>${l.cartographer_name} (Harita Sentezi)</span>
+            <div class="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/70 to-dark-950 border border-emerald-700/60 shadow-lg my-2">
+              <div class="flex items-center justify-between text-emerald-300 font-bold mb-1.5 text-xs">
+                <div class="flex items-center space-x-2">
+                  <span class="text-lg">${l.avatar || '🗺️'}</span>
+                  <span class="text-sm">${escapeHtml(l.cartographer_name)}</span>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-900/60 border border-emerald-600/40 text-emerald-200 font-mono">Epistemik Harita Sentezi</span>
+                </div>
+                <span class="font-mono text-[10px] text-slate-400">${l.timestamp ? l.timestamp.split(' ')[1] : ''}</span>
               </div>
-              <div class="text-slate-200 text-xs font-mono whitespace-pre-wrap">${escapeHtml(l.text)}</div>
+              <div class="text-slate-200 text-xs font-mono whitespace-pre-wrap leading-relaxed">${escapeHtml(l.text)}</div>
             </div>
           `;
         } else if (l.type === 'agent_message') {
-          return `
-            <div class="p-3 rounded-lg bg-dark-950 border border-slate-800/90 shadow-sm my-1">
-              <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-                <span class="font-bold text-slate-200">${l.avatar || '🏛️'} ${l.agent_name}</span>
-                <span class="font-mono text-emerald-400 text-[10px]">${l.model || '0G'} &bull; ${l.tokens || 0} tok</span>
+          // Detect who this agent is replying to or debating with
+          let debateHeader = '';
+          const replyTarget = l.reply_to || (l.text && l.text.match(/@Prof\.?\s*([A-Za-zçşğüöıİĞÜŞÖÇ]+)/i) ? l.text.match(/@Prof\.?\s*([A-Za-zçşğüöıİĞÜŞÖÇ]+)/i)[0] : null);
+          
+          if (replyTarget) {
+            debateHeader = `
+              <div class="inline-flex items-center space-x-1.5 px-2.5 py-1 mb-2 rounded-lg bg-indigo-950/80 border border-indigo-500/40 text-[11px] text-indigo-300 shadow-sm">
+                <span class="text-indigo-400 text-sm">↩️</span>
+                <span><b>${escapeHtml(replyTarget)}</b>'ın Tezini İnceliyor &amp; Tartışıyor</span>
               </div>
-              <div class="text-slate-300 leading-relaxed whitespace-pre-wrap math-content">${escapeHtml(l.text)}</div>
+            `;
+          }
+
+          let formattedText = escapeHtml(l.text || '')
+            .replace(/(@Prof\.?\s*[A-Za-zçşğüöıİĞÜŞÖÇ]+)/g, '<span class="bg-indigo-900/70 text-indigo-200 border border-indigo-600/50 px-1.5 py-0.5 rounded font-bold font-mono text-[11px]">$1</span>')
+            .replace(/\[İSPAT\]/g, '<span class="bg-emerald-950/90 text-emerald-300 border border-emerald-500/50 px-1.5 py-0.5 rounded font-bold text-[10px]">⚖️ İSPAT</span>')
+            .replace(/\[İTİRAZ\]/g, '<span class="bg-rose-950/90 text-rose-300 border border-rose-500/50 px-1.5 py-0.5 rounded font-bold text-[10px]">⚔️ İTİRAZ / ÇÜRÜTME</span>')
+            .replace(/\[KARŞI SAV\]/g, '<span class="bg-rose-950/90 text-rose-300 border border-rose-500/50 px-1.5 py-0.5 rounded font-bold text-[10px]">⚔️ KARŞI SAV</span>')
+            .replace(/\[KESİN HESAP\]/g, '<span class="bg-blue-950/90 text-blue-300 border border-blue-500/50 px-1.5 py-0.5 rounded font-bold text-[10px]">🔢 KESİN HESAP</span>')
+            .replace(/\[SANI\]/g, '<span class="bg-amber-950/90 text-amber-300 border border-amber-500/50 px-1.5 py-0.5 rounded font-bold text-[10px]">💡 SANI</span>');
+
+          return `
+            <div class="p-3.5 rounded-xl bg-dark-950 border border-slate-800/90 shadow-sm my-2 hover:border-slate-700/80 transition-colors">
+              <div class="flex items-center justify-between text-xs text-slate-400 mb-2 pb-1.5 border-b border-slate-800/60">
+                <div class="flex items-center space-x-2">
+                  <span class="text-base">${l.avatar || '🏛️'}</span>
+                  <span class="font-bold text-slate-200 text-sm">${escapeHtml(l.agent_name)}</span>
+                  <span class="text-[10px] text-slate-400 px-1.5 py-0.5 rounded bg-slate-800/80">${escapeHtml(l.role || '')}</span>
+                </div>
+                <div class="flex items-center space-x-2 font-mono text-[10px]">
+                  <span class="text-indigo-400">${l.model || '0G'}</span>
+                  <span class="text-slate-600">&bull;</span>
+                  <span class="text-emerald-400 font-semibold">${l.tokens || 0} tok</span>
+                  <span class="text-slate-600">&bull;</span>
+                  <span class="text-slate-400">${l.timestamp ? l.timestamp.split(' ')[1] : ''}</span>
+                </div>
+              </div>
+              ${debateHeader}
+              <div class="text-slate-300 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap math-content">${formattedText}</div>
             </div>
           `;
         } else {

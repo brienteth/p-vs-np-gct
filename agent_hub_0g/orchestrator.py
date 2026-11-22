@@ -232,8 +232,11 @@ class AutonomousAgentOrchestrator:
             "text": f"🧭 **DİREKTÖR BRİFİNGİ (Tur {round_num}):**\n**Hedef Konu:** {topic}\n**Stratejik Amaç:** {goal}"
         })
 
-        # STEP 3: 6 SPECIALISTS SOLVE THEIR ASSIGNED TASKS
+        # STEP 3: 6 SPECIALISTS SOLVE THEIR ASSIGNED TASKS IN DIRECT SCIENTIFIC DEBATE
         round_dialogue = []
+        for a in self.agents:
+            self.agent_statuses[a["id"]]["status"] = "waiting"
+
         for agent in self.agents:
             if self._stop_event.is_set():
                 break
@@ -243,16 +246,34 @@ class AutonomousAgentOrchestrator:
             self.agent_statuses[agent["id"]]["status"] = "thinking"
 
             specific_task = agent_tasks.get(agent["id"], f"Konuyu analiz et: {topic}")
-            dialogue_summary = "\n".join([f"- {d.get('name') or d.get('agent_name')}: {d['summary']}" for d in round_dialogue[-3:]])
+            prev_speaker = round_dialogue[-1] if round_dialogue else None
+
+            if prev_speaker:
+                prev_name = prev_speaker.get("name") or prev_speaker.get("agent_name")
+                prev_role = prev_speaker.get("role", "")
+                prev_summary = prev_speaker.get("summary", "")
+                debate_prompt = (
+                    f"ÖNCEKİ KONUŞMACI ({prev_name} - {prev_role}) ŞU TEZİ SAVUNDU:\n"
+                    f"\"{prev_summary}\"\n\n"
+                    f"DİYALEKTİK BİLİMSEL TARTIŞMA ŞARTI:\n"
+                    f"Sözlerine MUTLAKA doğrudan {prev_name}'e hitap ederek başla: '@{prev_name}: [Tezine katılıyorum / itiraz ediyorum çünkü...]' "
+                    f"diyerek onun sunduğu savı/denklemi kendi uzmanlığın ({agent['role']}) açısından doğrudan eleştir, açıklarını veya çelişkilerini göster ya da sağlamlaştır. "
+                    f"Ardından Direktörün sana verdiği görevi ({specific_task}) çöz.\n"
+                    f"İfadelerini [İSPAT], [İTİRAZ], [KESİN HESAP] veya [SANI] etiketleriyle damgala."
+                )
+            else:
+                debate_prompt = (
+                    f"DİYALEKTİK AÇILIŞ TEZİ:\n"
+                    f"Bu turun ilk konuşmacısısın. Konseye doğrudan hitap ederek Direktör Poincaré'nin belirlediği hedef ({topic}) hakkındaki açılış savını sun. "
+                    f"Ardından senden sonra söz alacak olan Prof. Hilbert ve Prof. Strassen'e meydan okuyan somut bir soru veya hipotez bırak.\n"
+                    f"İfadelerini [İSPAT], [İTİRAZ], [KESİN HESAP] veya [SANI] etiketleriyle damgala."
+                )
 
             prompt = (
                 f"TUR {round_num} STRATEJİK HEDEF:\n{topic}\n"
                 f"DİREKTÖRÜN SANA ÖZEL ATADIĞI GÖREV:\n{specific_task}\n\n"
-                f"ÖNCEKİ AJANLARIN TEZLERİ:\n{dialogue_summary if dialogue_summary else 'İlk konuşmacısın.'}\n\n"
-                f"GÖREVİN ({agent['name']}):\n"
-                f"Sana atanan bu özel görevi uzmanlığın ({agent['role']}) çerçevesinde çöz. "
-                "Matematiksel olarak somut, denklemler içeren ve diğer üyelere hitap eden özlü bir analiz sun (maks 150-200 kelime). "
-                "İddialarını [İSPAT], [KESİN HESAP] veya [SANI] olarak etiketle."
+                f"{debate_prompt}\n\n"
+                f"Uzmanlığın: {agent['role']}. Maksimum 150-200 kelime, matematiksel ve somut ol."
             )
 
             try:
@@ -265,11 +286,12 @@ class AutonomousAgentOrchestrator:
                 self.stats["total_cost_micro_usd"] += res["cost_micro"]
                 self.stats["last_active"] = time.strftime("%Y-%m-%d %H:%M:%S")
 
-                self.agent_statuses[agent["id"]]["status"] = "active"
+                self.agent_statuses[agent["id"]]["status"] = "responded"
                 self.agent_statuses[agent["id"]]["last_thought"] = res["content"][:200] + "..."
                 self.agent_statuses[agent["id"]]["model"] = res["model"]
                 self.agent_statuses[agent["id"]]["last_time"] = time.strftime("%H:%M:%S")
 
+                reply_to = prev_speaker.get("name") if prev_speaker else None
                 msg_entry = {
                     "type": "agent_message",
                     "round": round_num,
@@ -277,6 +299,7 @@ class AutonomousAgentOrchestrator:
                     "agent_name": agent["name"],
                     "avatar": agent["avatar"],
                     "role": agent["role"],
+                    "reply_to": reply_to,
                     "model": res["model"],
                     "tokens": res["tokens"],
                     "cost_micro": res["cost_micro"],
@@ -289,6 +312,7 @@ class AutonomousAgentOrchestrator:
 
             except Exception as e:
                 self.stats["error_count"] += 1
+                self.agent_statuses[agent["id"]]["status"] = "error"
                 err_entry = {
                     "type": "error",
                     "round": round_num,
@@ -297,8 +321,6 @@ class AutonomousAgentOrchestrator:
                 }
                 self.emit_log(err_entry)
                 time.sleep(4)
-
-            self.agent_statuses[agent["id"]]["status"] = "idle"
 
         self.active_agent_id = None
 
