@@ -43,7 +43,9 @@ jobs:
           gcc -O3 -shared -fPIC -o paper_dc_perm4/exact_mod_rref.so paper_dc_perm4/exact_mod_rref.c
           python3 test_c_engine_contract.py
           python3 proofs_retrospective/verify_retrospective_claims.py
+          python3 proofs_retrospective/flow_bottleneck_lab.py
           lean proofs_retrospective/PvsNP_Retrospective.lean
+          lean proofs_retrospective/GlobalBottleneck.lean
 
       - name: Run Continuous 0G Council
         env:

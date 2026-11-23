@@ -127,6 +127,21 @@ FRONTIER_STAGES = [
             "prof-wigner": "Mignon–Ressayre n^2/2 kuadratik sınırını aşmak için Hessian'ın ötesinde 3. ve 4. derece yüksek-türev tensörlerinin rank spektrumunu incele.",
             "prof-valiant": "n=4 ve n=5'ten genel n'e sıçrayabilmek için hangi tek kritik teoremin (ana darboğaz) kırılması gerektiğini 3 somut maddeyle özetle."
         }
+    },
+    {
+        "code": "FLOW-BOTTLENECK",
+        "title": "Küresel Bilgi Akışı & Ardışık Kavşak Darboğazı (Multi-Cut Flow Capacity vs Green-Wave Circuits)",
+        "goal": "Yerel kapı hızı yerine devrenin ortasından geçen ardışık kesitlerdeki küresel bilgi akışı tavanını (min(k_1, k_2) ve Grassmannian koridor kapasitesi) kullanarak det_n ile perm_n / 3-SAT ayrımını genel n'e taşımak.",
+        "tasks": {
+            "prof-euler": "Ardışık k-kesitli devrelerde durum kapasitesi min(k_1,...,k_t) üst sınırının çoklu-parti iletişim matrisi rankına aktarım lemmasını kur.",
+            "prof-hilbert": "Determinantın her kesitte düşük boyutlu Grassmannian koridoruna (yeşil dalga) sığmasının Plücker idealiyle ilişkisini formüle et.",
+            "prof-strassen": "Çoklu-kesit tensör açılımlarında (multi-flattening) sınır rankı çöküşünün neden ardışık kavşak kapasitesini aşamadığını göster.",
+            "prof-noether": "S_n x S_n simetrisinin kesit boyunca bilgi sıkıştırmasını (orbit pooling) perm_n için neden engellediğini kanıtla.",
+            "prof-wigner": "Rastgele kesit ailelerinde perm_n vs det_n mod-3 benzersiz durum sayısının (row profile capacity) n büyüdükçe ayrışma hızını analiz et.",
+            "prof-valiant": "Küresel bilgi akışı darboğazının Karchmer–Wigderson oyunları ve Doğal İspatlar bariyeri açısından neden güçlü bir P != NP yolu olduğunu değerlendir.",
+            "prof-turing": "Python/numpy ile n=3,4 için ardışık kesitlerde benzersiz kavşak durum sayısını ve F_2 rank taşmasını ölçüp assert ile doğrula.",
+            "prof-curry": "Saf Lean 4 çekirdeğinde (0 sorry) ardışık darboğaz kapasitesi min(k_1, k_2) veya güvercin yuvası ayrım lemmasını kanıtla."
+        }
     }
 ]
 
