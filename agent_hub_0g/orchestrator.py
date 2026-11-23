@@ -170,19 +170,19 @@ class AutonomousAgentOrchestrator:
             except Exception as e:
                 print(f"[Orchestrator] Error loading saved logs: {e}")
 
-    def call_0g_api(self, model: str, system_prompt: str, user_prompt: str, max_tokens: int = 8000) -> Dict[str, Any]:
+    def call_0g_api(self, model: str, system_prompt: str, user_prompt: str, max_tokens: int = 8000, code_mode: bool = False) -> Dict[str, Any]:
         payload = {
             "model": model,
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            "temperature": 0.65,
+            "temperature": 0.25 if code_mode else 0.65,
             "max_tokens": max_tokens
         }
-        # For thinking models, explicitly request reasoning to be included
+        # For thinking models: disable thinking in code_mode so clean ```python/```lean blocks are emitted directly
         if "0gm" in model:
-            payload["chat_template_kwargs"] = {"enable_thinking": True}
+            payload["chat_template_kwargs"] = {"enable_thinking": (not code_mode)}
 
         cmd = [
             "/usr/bin/curl",
@@ -265,11 +265,11 @@ class AutonomousAgentOrchestrator:
             "id": "fallback-safe"
         }
 
-    def call_0g_with_fallback(self, system_prompt: str, user_prompt: str) -> Dict[str, Any]:
+    def call_0g_with_fallback(self, system_prompt: str, user_prompt: str, code_mode: bool = False) -> Dict[str, Any]:
         last_err = ""
         for model in self.candidate_models:
             try:
-                res = self.call_0g_api(model, system_prompt, user_prompt)
+                res = self.call_0g_api(model, system_prompt, user_prompt, code_mode=code_mode)
                 if res["content"]:
                     return res
             except Exception as e:
@@ -436,7 +436,8 @@ class AutonomousAgentOrchestrator:
 
             try:
                 t0 = time.time()
-                res = self.call_0g_with_fallback(agent["system"], prompt)
+                is_coder = agent["id"] in ("prof-turing", "prof-curry")
+                res = self.call_0g_with_fallback(agent["system"], prompt, code_mode=is_coder)
                 duration = time.time() - t0
                 final_content = res["content"]
 

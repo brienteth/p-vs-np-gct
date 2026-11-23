@@ -17,6 +17,13 @@ os.makedirs(VERIFIED_DIR, exist_ok=True)
 
 
 def find_lean_binary() -> Optional[str]:
+    # Prefer direct toolchain binary to avoid elan network check latency
+    tc_root = os.path.expanduser("~/.elan/toolchains")
+    if os.path.isdir(tc_root):
+        for entry in sorted(os.listdir(tc_root), reverse=True):
+            cand = os.path.join(tc_root, entry, "bin", "lean")
+            if os.path.isfile(cand) and os.access(cand, os.X_OK):
+                return cand
     elan_lean = os.path.expanduser("~/.elan/bin/lean")
     if os.path.isfile(elan_lean) and os.access(elan_lean, os.X_OK):
         return elan_lean

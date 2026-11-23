@@ -82,11 +82,7 @@ theorem perm3_eq_det3_mod2 (a11 a12 a13 a21 a22 a23 a31 a32 a33 : Int) :
     perm3 a11 a12 a13 a21 a22 a23 a31 a32 a33 % 2 =
     det3  a11 a12 a13 a21 a22 a23 a31 a32 a33 % 2 := by
   unfold perm3 det3
-  have h :
-      (a11 * (a22 * a33 + a23 * a32) + a12 * (a21 * a33 + a23 * a31) + a13 * (a21 * a32 + a22 * a31)) -
-      (a11 * (a22 * a33 - a23 * a32) - a12 * (a21 * a33 - a23 * a31) + a13 * (a21 * a32 - a22 * a31)) =
-      2 * (a11 * (a23 * a32) + a12 * (a21 * a33) + a13 * (a22 * a31)) := by
-    omega
+  simp only [Int.mul_add, Int.mul_sub]
   omega
 
 /-- Theorem 7 (E5.6 — 3x3 Mod-3 Non-Zero Separation Witness):
