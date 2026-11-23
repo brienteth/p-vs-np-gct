@@ -161,7 +161,8 @@ class MetaAgentDirector:
             f"Ana Konu: {stage['title']}\n"
             f"Hedef: {stage['goal']}\n\n"
             f"GÖREV: Tur {round_num} için [{stage['code']}] cephesini bir adım ileri taşıyacak "
-            "6 özgün, birbirine bağlı uzman görevi üret. Yanıtını SADECE geçerli JSON olarak ver:\n"
+            "8 özgün, birbirine bağlı uzman görevi üret (6 teorisyen + 1 Python deneysel kanıtçı Turing + 1 Lean 4 biçimsel kanıtçı Curry). "
+            "Yanıtını SADECE geçerli JSON olarak ver:\n"
             "{\n"
             f'  "topic": "[{stage["code"]}] {stage["title"]} (veya daha spesifik alt başlık)",\n'
             '  "strategic_goal": "Bu turda kırılacak somut matematiksel hedef",\n'
@@ -171,7 +172,9 @@ class MetaAgentDirector:
             '    "prof-strassen": "...",\n'
             '    "prof-noether": "...",\n'
             '    "prof-wigner": "...",\n'
-            '    "prof-valiant": "..."\n'
+            '    "prof-valiant": "...",\n'
+            '    "prof-turing": "Python/numpy ile çalıştırılıp assert ile doğrulanacak somut sayısal/cebirsel deney",\n'
+            '    "prof-curry": "Saf Lean 4 çekirdeğinde zero-sorry ile kanıtlanacak somut lemma/tanıklık"\n'
             "  }\n"
             "}"
         )
@@ -189,15 +192,20 @@ class MetaAgentDirector:
             data = json.loads(raw)
             if not isinstance(data.get("agent_tasks"), dict) or len(data["agent_tasks"]) < 6:
                 raise ValueError("Incomplete agent_tasks")
+            data["agent_tasks"].setdefault("prof-turing", f"{stage['code']} için Python/numpy ile çalıştırılabilir sayısal/cebirsel doğrulama deneyi yaz.")
+            data["agent_tasks"].setdefault("prof-curry", f"{stage['code']} için saf Lean 4 çekirdeğinde zero-sorry lemma kanıtla.")
             self.last_briefing = f"Tur {round_num} [{stage['code']}]: {data.get('topic', stage['title'])}"
             return data
         except Exception:
             topic = f"[{stage['code']}] {stage['title']}"
             self.last_briefing = f"Tur {round_num} [{stage['code']}]: {stage['title']}"
+            tasks = dict(stage["tasks"])
+            tasks["prof-turing"] = f"{stage['code']} cephesindeki en kritik teorik iddiayı Python 3 + numpy ile deneysel olarak test et ve assert ile doğrula."
+            tasks["prof-curry"] = f"{stage['code']} cephesindeki somut bir cebirsel/kombinatoryal lemmayı saf Lean 4 çekirdeğinde zero-sorry ile kanıtla."
             return {
                 "topic": topic,
                 "strategic_goal": stage["goal"],
-                "agent_tasks": stage["tasks"]
+                "agent_tasks": tasks
             }
 
 

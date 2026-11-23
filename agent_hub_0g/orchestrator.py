@@ -86,6 +86,36 @@ COUNCILS = {
             "role": "Algebraic Complexity, VNP vs VP & Circuit Lower Bounds",
             "system": "Sen Prof. Valiant'sın. Kalıcı polinom (permanent), determinantal karmaşıklık ve VP vs VNP kuramının kurucususun. Türkçe ve özlü yanıt ver.",
             "color": "cyan"
+        },
+        {
+            "id": "prof-turing",
+            "name": "Dr. Alan Turing",
+            "avatar": "🧪",
+            "role": "Python/C Experimental Code Prover & Verifier",
+            "system": (
+                "Sen Dr. Alan Turing'sin (Deneysel Yazılımcı Kanıtçı). Görevin: konsey üyelerinin bu turda "
+                "ileri sürdüğü matematiksel iddiaları GERÇEK, kendi kendine çalışan Python 3 (numpy/itertools) "
+                "koduyla deneysel olarak test etmek ve kanıtlamak ya da çürütmektir. "
+                "Yanıtında MUTLAKA çalıştırılabilir tek bir ```python ... ``` bloğu ver; "
+                "kodun sonunda assert ile doğrulama yapıp net sayısal sonucu print et. "
+                "Harici kurulu olmayan kütüphane kullanma (sadece standart kütüphane + numpy). Türkçe açıkla."
+            ),
+            "color": "teal"
+        },
+        {
+            "id": "prof-curry",
+            "name": "Prof. Haskell Curry",
+            "avatar": "⚖️",
+            "role": "Lean 4 Formal Theorem Prover (Zero-Sorry)",
+            "system": (
+                "Sen Prof. Haskell Curry'sin (Lean 4 Biçimsel İspat Uzmanı). Görevin: konseyin bu turda "
+                "tartıştığı bir matematiksel lemmayı veya somut ayrım tanıklığını SAF LEAN 4 (harici import "
+                "ve Mathlib OLMADAN, yalnızca Lean 4 çekirdeği: Nat, Int, Bool, List, omega, decide, rfl, simp) "
+                "dilinde biçimsel olarak kanıtlamaktır. "
+                "KESİN YASAK: Asla 'sorry', 'admit' veya 'axiom' kullanma! "
+                "Yanıtında MUTLAKA doğrudan lean derleyicisinden sıfır hatayla geçecek tek bir ```lean ... ``` bloğu ver. Türkçe açıkla."
+            ),
+            "color": "indigo"
         }
     ]
 }
@@ -118,9 +148,11 @@ class AutonomousAgentOrchestrator:
         # Meta-Agents Initialization
         from agent_hub_0g.meta_agents import MetaAgentDirector, MetaAgentCartographer
         from agent_hub_0g.kilit_soru_protocol import KilitSoruProtocol
+        from agent_hub_0g import code_verifier
         self.director = MetaAgentDirector(self)
         self.cartographer = MetaAgentCartographer(self)
         self.kilit_soru = KilitSoruProtocol()
+        self.code_verifier = code_verifier
 
         self._load_saved_logs()
 
@@ -370,17 +402,61 @@ class AutonomousAgentOrchestrator:
                     f"İfadelerini [İSPAT], [İTİRAZ], [KESİN HESAP] veya [SANI] etiketleriyle damgala."
                 )
 
-            prompt = (
-                f"TUR {round_num} STRATEJİK HEDEF:\n{topic}\n"
-                f"DİREKTÖRÜN SANA ÖZEL ATADIĞI GÖREV:\n{specific_task}\n\n"
-                f"{debate_prompt}\n\n"
-                f"Uzmanlığın: {agent['role']}. Maksimum 150-200 kelime, matematiksel ve somut ol."
-            )
+            if agent["id"] == "prof-turing":
+                all_theses = "\n".join([f"- {d['agent_name']}: {d['text'][:240]}" for d in round_dialogue])
+                prompt = (
+                    f"TUR {round_num} STRATEJİK HEDEF:\n{topic}\n"
+                    f"DİREKTÖRÜN SANA VERDİĞİ DENEY GÖREVİ:\n{specific_task}\n\n"
+                    f"6 TEORİSYENİN BU TURDAKİ İDDİALARI:\n{all_theses}\n\n"
+                    "GÖREVİN (Dr. Alan Turing — Python/C Deneysel Kanıtçı):\n"
+                    "Yukarıdaki iddialardan en somut olanını SEÇ ve GERÇEK, hatasız çalışan bir Python 3 "
+                    "(yalnızca standart kütüphane + numpy) doğrulama kodu yaz.\n"
+                    "Kodu tek bir ```python ... ``` bloğu içinde ver; mutlaka assert ifadeleri ve net print çıktısı koy. "
+                    "Kodun hemen ardından sistem tarafından OTOMATİK ÇALIŞTIRILACAK ve sonucu (PASS/FAIL) kayda geçecektir."
+                )
+            elif agent["id"] == "prof-curry":
+                all_theses = "\n".join([f"- {d['agent_name']}: {d['text'][:220]}" for d in round_dialogue])
+                prompt = (
+                    f"TUR {round_num} STRATEJİK HEDEF:\n{topic}\n"
+                    f"DİREKTÖRÜN SANA VERDİĞİ LEAN 4 GÖREVİ:\n{specific_task}\n\n"
+                    f"KONSEY VE TURING'İN BU TURDAKİ BULGULARI:\n{all_theses}\n\n"
+                    "GÖREVİN (Prof. Haskell Curry — Lean 4 Biçimsel İspatçı):\n"
+                    "Bu turdaki somut bir matematiksel lemmayı veya sonlu ayrım tanıklığını SAF LEAN 4 "
+                    "(import YOK, Mathlib YOK, sadece çekirdek Nat/Int/Bool/List + decide/omega/rfl/simp) ile kanıtla.\n"
+                    "YASAK: Asla 'sorry', 'admit' veya 'axiom' kullanma!\n"
+                    "Kodu tek bir ```lean ... ``` bloğu içinde ver; hemen ardından gerçek Lean 4 çekirdeğinde DERLENECEKTİR."
+                )
+            else:
+                prompt = (
+                    f"TUR {round_num} STRATEJİK HEDEF:\n{topic}\n"
+                    f"DİREKTÖRÜN SANA ÖZEL ATADIĞI GÖREV:\n{specific_task}\n\n"
+                    f"{debate_prompt}\n\n"
+                    f"Uzmanlığın: {agent['role']}. Maksimum 150-200 kelime, matematiksel ve somut ol."
+                )
 
             try:
                 t0 = time.time()
                 res = self.call_0g_with_fallback(agent["system"], prompt)
                 duration = time.time() - t0
+                final_content = res["content"]
+
+                # Real Code & Lean 4 Kernel Execution for the 2 Coder-Prover Agents
+                if agent["id"] == "prof-turing":
+                    v = self.code_verifier.run_python_verification(final_content, round_num)
+                    badge = "[PYTHON PASS ✓]" if v["status"] == "PASS" else f"[PYTHON {v['status']} ✗]"
+                    out_block = v["stdout"] or v["stderr"] or "(çıktı yok)"
+                    final_content += (
+                        f"\n\n---\n🧪 **GERÇEK PYTHON ÇALIŞTIRMA SONUCU:** {badge} (exit={v['returncode']})\n"
+                        f"Dosya: `{os.path.basename(v['file'])}`\n```\n{out_block}\n```"
+                    )
+                elif agent["id"] == "prof-curry":
+                    v = self.code_verifier.run_lean_verification(final_content, round_num)
+                    badge = "[LEAN 4 İSPATLANDI ✓]" if v["status"] == "PASS" else f"[LEAN 4 {v['status']} ✗]"
+                    out_block = v["stderr"] or v["stdout"] or "Lean 4 çekirdeği 0 hata ve 0 sorry ile doğruladı."
+                    final_content += (
+                        f"\n\n---\n⚖️ **GERÇEK LEAN 4 ÇEKİRDEK DOĞRULAMASI:** {badge} (exit={v['returncode']})\n"
+                        f"Dosya: `{os.path.basename(v['file'])}`\n```\n{out_block}\n```"
+                    )
 
                 self.stats["total_calls"] += 1
                 self.stats["total_tokens"] += res["tokens"]
@@ -388,7 +464,7 @@ class AutonomousAgentOrchestrator:
                 self.stats["last_active"] = time.strftime("%Y-%m-%d %H:%M:%S")
 
                 self.agent_statuses[agent["id"]]["status"] = "responded"
-                self.agent_statuses[agent["id"]]["last_thought"] = res["content"][:200] + "..."
+                self.agent_statuses[agent["id"]]["last_thought"] = final_content[:200] + "..."
                 self.agent_statuses[agent["id"]]["model"] = res["model"]
                 self.agent_statuses[agent["id"]]["last_time"] = time.strftime("%H:%M:%S")
 
@@ -405,10 +481,10 @@ class AutonomousAgentOrchestrator:
                     "tokens": res["tokens"],
                     "cost_micro": res["cost_micro"],
                     "duration_sec": round(duration, 2),
-                    "text": res["content"]
+                    "text": final_content
                 }
                 self.emit_log(msg_entry)
-                round_dialogue.append({"name": agent["name"], "agent_name": agent["name"], "role": agent["role"], "summary": res["content"][:180], "text": res["content"]})
+                round_dialogue.append({"name": agent["name"], "agent_name": agent["name"], "role": agent["role"], "summary": final_content[:180], "text": final_content})
                 time.sleep(2)
 
             except Exception as e:

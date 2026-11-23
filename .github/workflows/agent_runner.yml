@@ -31,15 +31,19 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Dependencies
+      - name: Install Dependencies & Lean 4
         run: |
           pip install --upgrade pip
           pip install numpy aiohttp
+          curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y --default-toolchain stable
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
 
-      - name: Compile and Test C Rank Engine
+      - name: Compile C Rank Engine & Run Retrospective Proofs (Python + Lean 4)
         run: |
           gcc -O3 -shared -fPIC -o paper_dc_perm4/exact_mod_rref.so paper_dc_perm4/exact_mod_rref.c
           python3 test_c_engine_contract.py
+          python3 proofs_retrospective/verify_retrospective_claims.py
+          lean proofs_retrospective/PvsNP_Retrospective.lean
 
       - name: Run Continuous 0G Council
         env:
