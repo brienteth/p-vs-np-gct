@@ -1,0 +1,47 @@
+[
+  {
+    "code": "QH-1",
+    "title": "Orbit Geometrisinin Cebirsel Yapısı",
+    "goal": "Perm-Det orbitleri arasındaki mesafenin cebirsel nedenlerini anlamak.",
+    "tasks": {
+      "prof-euler": "Orbit mesafesinin n'ye bağlı asimptotik davranışını analiz et.",
+      "prof-hilbert": "Orbit kapalı mı? Kapalı değilse, kapanışındaki özel noktaları tanımla.",
+      "prof-strassen": "Rank-1 güncellemelerinin orbit üzerindeki etkisini cebirsel olarak modelle.",
+      "prof-noether": "Orbit simetrilerinin alt cebirsel yapıları nasıl etkilediğini incele.",
+      "prof-wigner": "Orbit mesafesinin fiziksel bir potansiyel enerjisi olarak yorumlanıp yorumlanamayacağını araştır.",
+      "prof-valiant": "Bu orbit yapısının, hesaplama karmaşıklığı sınıfları (VP, VNP) üzerindeki etkisini değerlendir.",
+      "prof-turing": "Orbit mesafesini hesaplayan algoritmanın karmaşıklığını analiz et.",
+      "prof-curry": "Orbit geometrisini tip teorisi çerçevesinde modelle."
+    }
+  },
+  {
+    "code": "QH-2",
+    "title": "Optimizasyon Peyzajının Dinamiği",
+    "goal": "Perm-Det orbitleri arasındaki optimizasyon peyzajının dinamiklerini anlamak.",
+    "tasks": {
+      "prof-euler": "Yerel minimumların sayısının n'ye bağlı dağılımını analiz et.",
+      "prof-hilbert": "Yerel minimumların cebirsel derecesini ve çokluğunu belirle.",
+      "prof-strassen": "Yerel minimumlardan global optimuma ulaşmanın en kısa yolunu bul.",
+      "prof-noether": "Yerel minimumların simetri grupları arasındaki ilişkisini incele.",
+      "prof-wigner": "Yerel minimumların fiziksel bir sistemdeki enerji seviyeleri olarak yorumlanıp yorumlanamayacağını araştır.",
+      "prof-valiant": "Bu optimizasyon probleminin, hesaplama karmaşıklığı sınıfları (VP, VNP) üzerindeki etkisini değerlendir.",
+      "prof-turing": "Optimizasyon algoritmasının yakınsama hızını analiz et.",
+      "prof-curry": "Optimizasyon peyzajını tip teorisi çerçevesinde modelle."
+    }
+  },
+  {
+    "code": "QH-3",
+    "title": "ABP Yaklaşımının Sınırları",
+    "goal": "ABP yaklaşımının perm ve det için sınırlarını anlamak.",
+    "tasks": {
+      "prof-euler": "ABP yaklaşımının hata terimlerinin asimptotik davranışını analiz et.",
+      "prof-hilbert": "ABP yaklaşımının hata terimlerinin cebirsel yapısını belirle.",
+      "prof-strassen": "ABP yaklaşımının en iyi hata sınırını bul.",
+      "prof-noether": "ABP yaklaşımının simetri grupları arasındaki ilişkisini incele.",
+      "prof-wigner": "ABP yaklaşımının fiziksel bir sistemdeki enerji seviyeleri olarak yorumlanıp yorumlanamayacağını araştır.",
+      "prof-valiant": "Bu yaklaşımın, hesaplama karmaşıklığı sınıfları (VP, VNP) üzerindeki etkisini değerlendir.",
+      "prof-turing": "ABP yaklaşımının hesaplama karmaşıklığını analiz et.",
+      "prof-curry": "ABP yaklaşımını tip teorisi çerçevesinde modelle."
+    }
+  }
+]

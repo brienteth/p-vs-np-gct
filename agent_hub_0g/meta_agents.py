@@ -155,8 +155,24 @@ class MetaAgentDirector:
         self.role = "Stratejik Görev Planlama & Hedef Yönetimi"
         self.last_briefing = "Sistem başlatıldı. Engel Haritası taranıyor."
 
+    def _get_all_frontiers(self) -> List[Dict[str, Any]]:
+        stages = list(FRONTIER_STAGES)
+        qh_path = os.path.join(BASE_DIR, "question_hunter", "outputs", "council_frontiers.json")
+        if os.path.exists(qh_path):
+            try:
+                with open(qh_path, "r", encoding="utf-8") as f:
+                    extra = json.load(f)
+                if isinstance(extra, list):
+                    for s in extra:
+                        if isinstance(s, dict) and s.get("code") and s.get("title") and isinstance(s.get("tasks"), dict):
+                            stages.append(s)
+            except Exception:
+                pass
+        return stages
+
     def generate_targeted_tasks(self, round_num: int, current_map_summary: str, recent_topics: List[str] = None) -> Dict[str, Any]:
-        stage = FRONTIER_STAGES[round_num % len(FRONTIER_STAGES)]
+        all_stages = self._get_all_frontiers()
+        stage = all_stages[round_num % len(all_stages)]
         recent_str = "\n".join([f"- {t}" for t in (recent_topics or [])[-8:]]) or "(Yok)"
 
         system_prompt = (

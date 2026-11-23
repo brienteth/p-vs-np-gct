@@ -1,0 +1,1204 @@
+[
+  {
+    "id": "P4-Q1",
+    "question": "Sabit m=14'te, perm_4'e en yakın kalıntıyı veren parametre noktalarının çanak sayısı, det_4'ünkinden üstel mi büyük?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik katsayı vektörünün doğrudan fonksiyonu değil; enerji peyzajının topolojisi, yani (f, m) çiftinin özelliği",
+      "G2": "Cisim büyütmesi altında çanak sayısı (topolojik özellik) değişmez",
+      "G3": "Jenerik polinom da çanaklıdır; ayrım perm ile det arasında, jeneriğe karşı değil",
+      "G4": "Mevcut LM altyapısı, 200 başlangıç, ~6 saat, n=4",
+      "G5": "Çanak sayısı üstel ise temsiller arası geçiş maliyeti üsteldir; ara adım: bağlı bileşen sayısı -> dc"
+    },
+    "proxy": {
+      "script": "lm_basins.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 200,
+      "hours": 6,
+      "output": "kalıntı histogramı + çanak kümeleme tablosu"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 3
+    },
+    "falsifier": {
+      "metric": "eşik altı çanak sayısı",
+      "threshold": "perm/det < 3",
+      "kills_if": "n=3 ve n=4'te oran 3'ün altında kalırsa"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "frustrated valley gözlemi",
+        "stuck_at": "çanak sayısı sayılmamış, sadece kalıntı tabanı raporlanmış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "bileşen sayısı üstel -> temsiller arası mesafe üstel -> dc alt sınırı",
+    "role": "P4",
+    "role_name": "Cebirsel Geometrici (GCT İçi)",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P4-Q2",
+    "question": "Temsil modulisinin bileşen sayısı perm'de üstel mi?",
+    "objects": [
+      "perm_n",
+      "det_n"
+    ],
+    "barrier_escape": {
+      "G1": "Moduli uzayı topolojisi, katsayı vektörünün doğrusal fonksiyonu değil",
+      "G2": "Cebirsel küme bileşenleri cisim uzatımında değişmez",
+      "G3": "Jenerik polinomun moduli uzayı tek bileşenlidir; perm'in çok bileşenli olması ayrımı sağlar",
+      "G4": "Homotopi devamı (Bertini) ile bileşen sayısı sayılabilir",
+      "G5": "Bileşen sayısı üstel ise, temsiller arası geçiş için üstel kaynak gerekir"
+    },
+    "proxy": {
+      "script": "homotopy_count.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 100,
+      "hours": 12,
+      "output": "bileşen sayısı tablosu"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "bileşen sayısı",
+      "threshold": "polynomial",
+      "kills_if": "n=4'te bileşen sayısı polinomiyse"
+    },
+    "prior_art": [
+      {
+        "who": "GCT literatürü",
+        "where": "orbit kapanışı çalışmaları",
+        "stuck_at": "bileşen sayısı yerine orbit boyutu hesaplanmış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "bileşen sayısı üstel -> temsiller arası mesafe üstel -> dc alt sınırı",
+    "role": "P4",
+    "role_name": "Cebirsel Geometrici (GCT İçi)",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P4-Q3",
+    "question": "Perm_4'ün Hessian rankı, det_4'ün Hessian rankından en az 2 kat mı büyük?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Hessian rankı, katsayı vektörünün doğrusal fonksiyonu değil",
+      "G2": "Cisim uzatımında rank değişmez",
+      "G3": "Jenerik polinomun Hessian rankı tamdır; perm'in düşük rankı ayrımı sağlar",
+      "G4": "Hessian matrisi oluşturulup rank hesaplanabilir",
+      "G5": "Hessian rankı düşükse, temsiller arası geçiş zorlaşır"
+    },
+    "proxy": {
+      "script": "hessian_rank.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 1,
+      "hours": 1,
+      "output": "Hessian rankı"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "n^2",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "Hessian rankı oranı",
+      "threshold": "2",
+      "kills_if": "n=4'te oran 2'nin altında çıkarsa"
+    },
+    "prior_art": [
+      {
+        "who": "Hessian rankı çalışmaları",
+        "where": "rank hesaplamaları",
+        "stuck_at": "perm ve det için rank aynı bulunmuş"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "Hessian rankı düşükse -> temsiller arası mesafe büyük -> dc alt sınırı",
+    "role": "P4",
+    "role_name": "Cebirsel Geometrici (GCT İçi)",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P2-Q1",
+    "question": "perm_n'in çözüm uzayındaki nötr yönlerin boyutu, det_n'inkinden üstel mi büyük?",
+    "objects": [
+      "perm_n",
+      "det_n"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik katsayı vektörünün doğrudan fonksiyonu değil; (f, m) çiftinin geometrik peyzajının topolojik özelliği",
+      "G2": "Cisim büyütmesi altında nötr yönlerin boyutu (tangent space dim) değişmez (tanım gereği)",
+      "G3": "Jenerik polinomlar için nötr yönler yoktur; ayrım perm ile det arasında, jeneriğe karşı değil",
+      "G4": "Mevcut LM altyapısı, 200 başlangıç, ~6 saat, n=3,4,5",
+      "G5": "Nötr yönler üstel ise temsiller arası geçiş maliyeti üsteldir; ara adım: nötr yön sayısı -> dc"
+    },
+    "proxy": {
+      "script": "neutral_directions.py",
+      "n": [
+        3,
+        4,
+        5
+      ],
+      "starts": 200,
+      "hours": 6,
+      "output": "nötr yön boyutu histogramı + det/perm oranı"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "nötr yön boyutu oranı",
+      "threshold": "perm/det < 2",
+      "kills_if": "n=3,4,5'te oran 2'nin altında kalırsa"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "frustrated valley gözlemi",
+        "stuck_at": "nötr yönler sayılmamış, sadece kalıntı tabanı raporlanmış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "nötr yönler üstel -> temsiller arası mesafe üstel -> dc alt sınırı",
+    "role": "P2",
+    "role_name": "Moleküler / Kategorik Biyolog",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P2-Q2",
+    "question": "perm_n'in çözüm uzayındaki çanak sayısı, det_n'inkinden üstel mi büyük?",
+    "objects": [
+      "perm_n",
+      "det_n"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik katsayı vektörünün doğrudan fonksiyonu değil; (f, m) çiftinin geometrik peyzajının topolojik özelliği",
+      "G2": "Cisim büyütmesi altında çanak sayısı değişmez (tanım gereği)",
+      "G3": "Jenerik polinomlar için çanak sayısı sınırlıdır; ayrım perm ile det arasında, jeneriğe karşı değil",
+      "G4": "Mevcut LM altyapısı, 200 başlangıç, ~6 saat, n=3,4,5",
+      "G5": "Çanak sayısı üstel ise temsiller arası geçiş maliyeti üsteldir; ara adım: çanak sayısı -> dc"
+    },
+    "proxy": {
+      "script": "basins.py",
+      "n": [
+        3,
+        4,
+        5
+      ],
+      "starts": 200,
+      "hours": 6,
+      "output": "çanak sayısı histogramı + det/perm oranı"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "çanak sayısı oranı",
+      "threshold": "perm/det < 2",
+      "kills_if": "n=3,4,5'te oran 2'nin altında kalırsa"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "frustrated valley gözlemi",
+        "stuck_at": "çanak sayısı sayılmamış, sadece kalıntı tabanı raporlanmış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "çanak sayısı üstel -> temsiller arası mesafe üstel -> dc alt sınırı",
+    "role": "P2",
+    "role_name": "Moleküler / Kategorik Biyolog",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P2-Q3",
+    "question": "perm_n'in çözüm uzayındaki bağlı bileşen sayısı, det_n'inkinden üstel mi büyük?",
+    "objects": [
+      "perm_n",
+      "det_n"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik katsayı vektörünün doğrudan fonksiyonu değil; (f, m) çiftinin geometrik peyzajının topolojik özelliği",
+      "G2": "Cisim büyütmesi altında bağlı bileşen sayısı değişmez (tanım gereği)",
+      "G3": "Jenerik polinomlar için bağlı bileşen sayısı sınırlıdır; ayrım perm ile det arasında, jeneriğe karşı değil",
+      "G4": "Mevcut LM altyapısı, 200 başlangıç, ~6 saat, n=3,4,5",
+      "G5": "Bağlı bileşen sayısı üstel ise temsiller arası geçiş maliyeti üsteldir; ara adım: bağlı bileşen sayısı -> dc"
+    },
+    "proxy": {
+      "script": "connected_components.py",
+      "n": [
+        3,
+        4,
+        5
+      ],
+      "starts": 200,
+      "hours": 6,
+      "output": "bağlı bileşen sayısı histogramı + det/perm oranı"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "bağlı bileşen sayısı oranı",
+      "threshold": "perm/det < 2",
+      "kills_if": "n=3,4,5'te oran 2'nin altında kalırsa"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "frustrated valley gözlemi",
+        "stuck_at": "bağlı bileşen sayısı sayılmamış, sadece kalıntı tabanı raporlanmış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "bağlı bileşen sayısı üstel -> temsiller arası mesafe üstel -> dc alt sınırı",
+    "role": "P2",
+    "role_name": "Moleküler / Kategorik Biyolog",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P5-Q1",
+    "question": "Sabit m=14'te, perm_4'e en yakın kalıntıyı veren parametre noktalarının çanak sayısı, det_4'ünkinden üstel mi büyük?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik katsayı vektörünün fonksiyonu değil; enerji peyzajının topolojisi, (f, m) çiftinin özelliği",
+      "G2": "Cisim büyütmesi altında çanak sayısı sabit kalır (tanım gereği)",
+      "G3": "Jenerik polinom da çanaklıdır; ayrım perm ile det arasında, jeneriğe karşı değil",
+      "G4": "Mevcut LM altyapısı, 200 başlangıç, ~6 saat, n=4",
+      "G5": "Çanak sayısı üstel ise temsiller arası geçiş maliyeti üsteldir; ara adım: bağlı bileşen sayısı -> dc"
+    },
+    "proxy": {
+      "script": "lm_basins.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 200,
+      "hours": 6,
+      "output": "kalıntı histogramı + çanak kümeleme tablosu"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 3
+    },
+    "falsifier": {
+      "metric": "eşik altı çanak sayısı",
+      "threshold": "perm/det < 3",
+      "kills_if": "n=3 ve n=4'te oran 3'ün altında kalırsa"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "frustrated valley gözlemi",
+        "stuck_at": "çanak sayısı sayılmamış, sadece kalıntı tabanı raporlanmış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "bileşen sayısı üstel -> temsiller arası mesafe üstel -> dc alt sınırı",
+    "role": "P5",
+    "role_name": "Karmaşıklık Teorisyeni / Bariyer Uzmanı",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P5-Q2",
+    "question": "Perm_4 ve det_4'ün apolar dual uzaylarındaki (perm^⊥, det^⊥) en küçük boyutlu sıfır kümesinin (singular locus) kodimensiyonu, jenerik bir (f,g) çiftine kıyasla perm için anlamlı derecede mi yüksek?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Kodimensiyon, katsayı vektörünün doğrudan bir fonksiyonu değil; cebirsel kümenin geometrik yapısı",
+      "G2": "Cisim genişlemesi cebirsel kümenin boyutunu değiştirmez",
+      "G3": "Jenerik çiftin singular locus'u daha küçüktür (daha pürüzsüz); perm'in 'daha kötü' olması ayrımı sağlar",
+      "G4": "Macaulay2 veya Singular ile n=4 için tam sayısal hesaplama mümkündür",
+      "G5": "Singular locus'un büyüklüğü, temsildeki 'zor' yönlerin sayısını artırır, bu da dc'yi yukarı iter"
+    },
+    "proxy": {
+      "script": "sing_locus_calc.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 1,
+      "hours": 2,
+      "output": "kodimensiyon sayıları ve ideal generatorları"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "O(n^2)",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "kodimensiyon farkı",
+      "threshold": "diff < 1",
+      "kills_if": "n=4'te perm ve det'in singular locus kodimensiyonları eşit veya perm daha küçükse"
+    },
+    "prior_art": [
+      {
+        "who": "ABV 2017",
+        "where": "codim Sing(perm_n)=n²/2",
+        "stuck_at": "det için benzer detaylı karşılaştırma yapılmamış, sadece jenerik durum ele alınmış"
+      }
+    ],
+    "tags": [
+      "SAYISAL"
+    ],
+    "link_to_dc": "daha büyük singular locus -> daha fazla 'zorlu' yön -> daha yüksek dc",
+    "role": "P5",
+    "role_name": "Karmaşıklık Teorisyeni / Bariyer Uzmanı",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P5-Q3",
+    "question": "Perm_4 ve det_4'ün Hessian matrislerinin rank dağılımları (rank histogramları), jenerik bir (f,g) çiftinin dağılımına kıyasla perm için daha geniş bir varyasyona mı sahip?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Rank dağılımı, katsayı vektörünün doğrudan bir fonksiyonu değil; Hessian'ın spektral özelliği",
+      "G2": "Cisim genişlemesi rank'ı değiştirmez",
+      "G3": "Jenerik polinomun Hessian rankı sabittir (tam rank); perm'in 'daha değişken' olması ayrımı sağlar",
+      "G4": "n=4 için Hessian matrisleri küçük, rank hesaplamaları polinom zamanda",
+      "G5": "Daha geniş rank dağılımı, temsildeki 'zayıf' yönlerin varlığını gösterir, bu da dc'yi yukarı iter"
+    },
+    "proxy": {
+      "script": "hessian_rank_dist.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 100,
+      "hours": 1,
+      "output": "rank histogramları ve varyans değerleri"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "O(n)",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "rank varyansı",
+      "threshold": "perm_var < det_var",
+      "kills_if": "n=4'te perm'in rank varyansı det'ininkinden küçük veya eşitse"
+    },
+    "prior_art": [
+      {
+        "who": "Hüttenhain–Lairez",
+        "where": "shifted partial derivatives",
+        "stuck_at": "Hessian rankı jenerik noktada ayırmaz, ancak dağılım varyansı incelenmemiş"
+      }
+    ],
+    "tags": [
+      "SAYISAL"
+    ],
+    "link_to_dc": "daha geniş rank dağılımı -> daha fazla 'zayıf' yön -> daha yüksek dc",
+    "role": "P5",
+    "role_name": "Karmaşıklık Teorisyeni / Bariyer Uzmanı",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P1-Q1",
+    "question": "Temsil popülasyonunun örtüşme dağılımı perm_4'te ultrametrik mi, det_4'te değil mi?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik tek polinomun katsayı vektörünün fonksiyonu değil; iki temsilin (f, g) çiftinin paylaştığı aralığın geometrisi, yani (f, g) çiftinin özelliği.",
+      "G2": "Cisim büyütmesi altında örtüşme matrisinin spektral yapısı (özellikle ultrametriklik) değişmez kalır; bu bir cebirsel sayı problemi değil, topolojik bir özelliktir.",
+      "G3": "Jenerik polinomlar için örtüşme dağılımı düzdür (tek tepe); ayrım perm ile det arasında, jeneriğe karşı değil. Perm'in frustre yapısı ultrametrikliği zorlar.",
+      "G4": "Mevcut LM altyapısı, 200 başlangıç, ~6 saat, n=4 için çanak grafiği çıkarımı yapabilir.",
+      "G5": "Ultrametriklik, çanaklar arası mesafenin üçgen eşitsizliğini ihlal etme oranının sıfır olmasıyla ölçülür; bu, temsiller arası geçiş maliyetinin üstel olmasının bir göstergesidir."
+    },
+    "proxy": {
+      "script": "replica_overlap.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 200,
+      "hours": 6,
+      "output": "örtüşme matrisi + ultrametriklik ihlali oranı"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "ultrametric",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "üçgen eşitsizliği ihlali oranı",
+      "threshold": "0.05",
+      "kills_if": "perm_4'te ihlali oranı 0.05'in üzerinde çıkarsa"
+    },
+    "prior_art": [
+      {
+        "who": "Parisi ve ark.",
+        "where": "spin camı teorisi",
+        "stuck_at": "bu yapıyı doğrudan polinom temsiline taşıyamadı"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "ultrametrik örtüşme -> çanaklar arası mesafe üstel -> temsiller arası geçiş maliyeti üstel -> dc alt sınırı",
+    "role": "P1",
+    "role_name": "Düzensiz Sistemler Fizikçisi",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P1-Q2",
+    "question": "Perm_4'ün çanak grafiğindeki çanak sayısı, det_4'ünkinden üstel mi büyük?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik tek polinomun katsayı vektörünün fonksiyonu değil; enerji peyzajının topolojisi, (f, m) çiftinin özelliği.",
+      "G2": "Cisim büyütmesi altında çanak sayısı sabit kalır (tanım gereği).",
+      "G3": "Jenerik polinom da çanaklıdır; ayrım perm ile det arasında, jeneriğe karşı değil.",
+      "G4": "Mevcut LM altyapısı, 200 başlangıç, ~6 saat, n=4 için çanak sayısı sayımı yapabilir.",
+      "G5": "Çanak sayısı üstel ise temsiller arası geçiş maliyeti üsteldir; ara adım: bağlı bileşen sayısı -> dc."
+    },
+    "proxy": {
+      "script": "lm_basins.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 200,
+      "hours": 6,
+      "output": "kalıntı histogramı + çanak kümeleme tablosu"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 3
+    },
+    "falsifier": {
+      "metric": "eşik altı çanak sayısı",
+      "threshold": "perm/det < 3",
+      "kills_if": "n=3 ve n=4'te oran 3'ün altında kalırsa"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "frustrated valley gözlemi",
+        "stuck_at": "çanak sayısı sayılmamış, sadece kalıntı tabanı raporlanmış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "bileşen sayısı üstel -> temsiller arası mesafe üstel -> dc alt sınırı",
+    "role": "P1",
+    "role_name": "Düzensiz Sistemler Fizikçisi",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P1-Q3",
+    "question": "Perm_4'ün çanak grafiğindeki çanaklar arası ortalama mesafe, det_4'ünkinden üstel mi büyük?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik tek polinomun katsayı vektörünün fonksiyonu değil; enerji peyzajının topolojisi, (f, m) çiftinin özelliği.",
+      "G2": "Cisim büyütmesi altında çanaklar arası mesafe ölçeklenir ama oranı sabit kalır.",
+      "G3": "Jenerik polinom da çanaklıdır; ayrım perm ile det arasında, jeneriğe karşı değil.",
+      "G4": "Mevcut LM altyapısı, 200 başlangıç, ~6 saat, n=4 için çanaklar arası mesafe hesaplaması yapabilir.",
+      "G5": "Çanaklar arası mesafe üstel ise temsiller arası geçiş maliyeti üsteldir; ara adım: çanaklar arası mesafe -> dc."
+    },
+    "proxy": {
+      "script": "lm_basins.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 200,
+      "hours": 6,
+      "output": "çanaklar arası mesafe dağılımı"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 3
+    },
+    "falsifier": {
+      "metric": "ortalama çanaklar arası mesafe oranı",
+      "threshold": "perm/det < 3",
+      "kills_if": "n=3 ve n=4'te oran 3'ün altında kalırsa"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "frustrated valley gözlemi",
+        "stuck_at": "çanaklar arası mesafe hesaplanmamış, sadece çanak sayısı raporlanmış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "çanaklar arası mesafe üstel -> temsiller arası geçiş maliyeti üstel -> dc alt sınırı",
+    "role": "P1",
+    "role_name": "Düzensiz Sistemler Fizikçisi",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P7-Q1",
+    "question": "m=14'te perm_4 ve det_4 için LM yakınsaması sırasında kaydedilen yerel minimumların çanak (basin) hacim oranı, perm_4 lehine üstel mi büyür?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik, katsayı vektörünün doğrudan fonksiyonu değil; (f, m) çiftinin optimizasyon peyzajının topolojik özelliği (çanak sayısı/hacmi)",
+      "G2": "Çanak sayısı ve hacmi, cisim genişletilse bile (tamsayılar üstünde) değişmez kalır",
+      "G3": "Jenerik polinomlar için bile çanaklıdır; ayrım, perm ve det'in simetri grupları arasındaki farktan kaynaklanan peyzaj asimetrisidir",
+      "G4": "LM algoritması, n=4 için 200 rastgele başlangıç noktasında ~6 saat içinde çalıştırılabilir",
+      "G5": "Çanak hacminin üstel artması, temsiller arası geçiş maliyetinin üstel olduğunu ima eder; bu da dc alt sınırına doğrudan bağlanır"
+    },
+    "proxy": {
+      "script": "lm_basins.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 200,
+      "hours": 6,
+      "output": "kalıntı histogramı + çanak kümeleme tablosu"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 3
+    },
+    "falsifier": {
+      "metric": "eşik altı çanak sayısı",
+      "threshold": "perm/det < 3",
+      "kills_if": "n=3 ve n=4'te oran 3'ün altında kalırsa"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "frustrated valley gözlemi",
+        "stuck_at": "çanak sayısı sayılmamış, sadece kalıntı tabanı raporlanmış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "bileşen sayısı üstel -> temsiller arası mesafe üstel -> dc alt sınırı",
+    "role": "P7",
+    "role_name": "Başarısız Programlar Tarihçisi",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P7-Q2",
+    "question": "Mod-3 Grassmannian'da perm_4 ve det_4'ün kesit ayrımı (55/55), n=5'te de geçerli mi ve bu ayrım, perm_5'in dc'sinin 13'ün üzerinde olduğunu gösteren bir alt sınır mı sağlar?",
+    "objects": [
+      "perm_5",
+      "det_5"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik, katsayı vektörünün doğrudan fonksiyonu değil; (f, m) çiftinin simetri grupları altında orbit yapısının bir özelliği",
+      "G2": "Mod-3 Grassmannian kesit ayrımı, cisim genişletilse bile değişmez kalır",
+      "G3": "Jenerik polinomlar için bile ayrım vardır; ayrım, perm ve det'in simetri grupları arasındaki farktan kaynaklanan orbit yapısı farkıdır",
+      "G4": "Mod-3 Grassmannian kesit ayrımı, n=5 için hesaplanabilir ve ~6 saat içinde doğrulanabilir",
+      "G5": "Kesit ayrımı, temsiller arası geçiş maliyetinin üstel olduğunu ima eder; bu da dc alt sınırına doğrudan bağlanır"
+    },
+    "proxy": {
+      "script": "grassmannian_cut.py",
+      "n": [
+        4,
+        5
+      ],
+      "starts": 100,
+      "hours": 6,
+      "output": "kesit ayrım tablosu"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 5
+    },
+    "falsifier": {
+      "metric": "kesit ayrımı",
+      "threshold": "55/55",
+      "kills_if": "n=5'te kesit ayrımı 55/55 değilse"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 9",
+        "where": "Mod-3 Grassmannian kesit ayrımı",
+        "stuck_at": "n=5'te kesit ayrımı hesaplanmamış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "kesit ayrımı -> temsiller arası mesafe üstel -> dc alt sınırı",
+    "role": "P7",
+    "role_name": "Başarısız Programlar Tarihçisi",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P7-Q3",
+    "question": "Akış darboğazı (flow bottleneck) metriği, perm_4 ve det_4 için hesaplandığında, perm_4'ün akış darboğazı det_4'ünkinden üstel mi büyük?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik, katsayı vektörünün doğrudan fonksiyonu değil; (f, m) çiftinin optimizasyon peyzajının akış özelliklerinin bir özelliği",
+      "G2": "Akış darboğazı metriği, cisim genişletilse bile değişmez kalır",
+      "G3": "Jenerik polinomlar için bile akış darboğazı vardır; ayrım, perm ve det'in simetri grupları arasındaki farktan kaynaklanan akış özellikleri farkıdır",
+      "G4": "Akış darboğazı metriği, n=4 için hesaplanabilir ve ~6 saat içinde doğrulanabilir",
+      "G5": "Akış darboğazının üstel büyümesi, temsiller arası geçiş maliyetinin üstel olduğunu ima eder; bu da dc alt sınırına doğrudan bağlanır"
+    },
+    "proxy": {
+      "script": "flow_bottleneck.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 100,
+      "hours": 6,
+      "output": "akış darboğazı tablosu"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "akış darboğazı",
+      "threshold": "perm/det < 3",
+      "kills_if": "n=3 ve n=4'te oran 3'ün altında kalırsa"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 10",
+        "where": "akış darboğazı metriği",
+        "stuck_at": "n=4'te akış darboğazı hesaplanmamış"
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "akış darboğazı -> temsiller arası mesafe üstel -> dc alt sınırı",
+    "role": "P7",
+    "role_name": "Başarısız Programlar Tarihçisi",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P3-Q1",
+    "question": "Perm_4'ün Fourier dönüşümünün (Hadamard bazında) maksimum katsayı mutlak değeri, det_4'ün maksimum katsayı mutlak değerinden en az 10 kat büyük müdür?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik katsayı vektörünün kendisi değil, onun maksimum normudur (L-infinity); bu, katsayıların büyüklük dağılımını ölçer, sadece varlığını değil.",
+      "G2": "Fourier dönüşümü, değişkenlerin lineer kombinasyonu (Hadamard) ile yapılır; bu, cisim genişletmesi altında niceliğin ölçeklenmesini sağlar ama sıfırlanmasını veya sonsuzlaşmasını engellemez.",
+      "G3": "Jenerik polinomlar için katsayılar genellikle daha düzgün dağılır. Perm ve det'in simetrisi, katsayıların belirli alt uzaylara sıkışmasını sağlar; bu sıkışma jenerik durumdan farklıdır.",
+      "G4": "n=4 için katsayı sayısı 16'dır. Tam tamsayı aritmetiği ile anında hesaplanabilir. n=5 için 256 katsayı, yine hesaplama maliyeti açısından ihmal edilebilir.",
+      "G5": "Maksimum katsayı büyüklüğü, polinomun 'spikiness' (keskinlik) özelliğini yansıtır. Yüksek spikiness, küçük temsillerle (küçük dc) yaklaşılamayacağını gösterir."
+    },
+    "proxy": {
+      "script": "perm_det_fourier_norms.py",
+      "n": [
+        3,
+        4,
+        5
+      ],
+      "starts": 1,
+      "hours": 1,
+      "output": "perm_n ve det_n için max|f_hat| değerleri ve oranları"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "poly(n) * 2^n",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "max|perm_hat| / max|det_hat| oranı",
+      "threshold": "10",
+      "kills_if": "n=4'te oran 10'un altında çıkarsa"
+    },
+    "prior_art": [
+      {
+        "who": "Bourgain, 2014",
+        "where": "Fourier sparseness of permanents",
+        "stuck_at": "Genel üst sınırlar elde edildi ama perm ve det arasındaki spesifik katsayı büyüklüğü farkı sayısal olarak karşılaştırılmadı."
+      }
+    ],
+    "tags": [
+      "SAYISAL"
+    ],
+    "link_to_dc": "Yüksek maksimum katsayı, polinomun düşük dereceli polinomlarla iyi yaklaşılamayacağını (küçük dc) ima eder.",
+    "role": "P3",
+    "role_name": "Kuantum Bilgi Teorisyeni",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P3-Q2",
+    "question": "Perm_5'in Clifford extent'ı (stabilizer extent), det_5'in Clifford extent'ından en az 5 kat büyük müdür?",
+    "objects": [
+      "perm_5",
+      "det_5"
+    ],
+    "barrier_escape": {
+      "G1": "Clifford extent, polinomun stabilizer durumlarının süperpozisyonu olarak yazılmasının minimum sayısıdır. Bu, katsayı vektörünün doğrusal kombinasyonu değil, bir kaynak maliyetidir.",
+      "G2": "Extent, değişken sayısı n ile ölçeklenir ancak sabit bir faktör altında cisim genişlemesiyle değişmez.",
+      "G3": "Jenerik polinomlar için extent büyük olabilir. Perm ve det'in simetrisi, extent'ı düşürebilir ama perm'in daha karmaşık yapısı extent'ı artırır.",
+      "G4": "n=5 için extent hesabı, stabilizer gruplarının yapısına bağlıdır. n=5 için hesaplanabilir, n=6 için zorlaşır.",
+      "G5": "Extent, kuantum devre derinliği ile ilişkilidir. Yüksek extent, kuantum avantajının daha zor elde edileceğini gösterir."
+    },
+    "proxy": {
+      "script": "clifford_extent_calc.py",
+      "n": [
+        3,
+        4,
+        5
+      ],
+      "starts": 1,
+      "hours": 12,
+      "output": "perm_n ve det_n için Clifford extent değerleri"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "exp(c*n)",
+      "visible_at_n": 5
+    },
+    "falsifier": {
+      "metric": "extent(perm_n) / extent(det_n) oranı",
+      "threshold": "5",
+      "kills_if": "n=5'te oran 5'in altında çıkarsa"
+    },
+    "prior_art": [
+      {
+        "who": "Bravyi, Smith, Smolin, 2016",
+        "where": "Trading classical and quantum computational resources",
+        "stuck_at": "Extent'in üst sınırları verildi ama perm ve det için spesifik karşılaştırma yapılmadı."
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "Extent, kuantum kaynakların maliyetidir. Yüksek extent, klasik simülasyonun zor olduğunu gösterir.",
+    "role": "P3",
+    "role_name": "Kuantum Bilgi Teorisyeni",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P3-Q3",
+    "question": "Perm_4'ün baz-geçiş spektrumundaki (Hadamard ↔ Fourier) düzlük oranı, det_4'ün düzlük oranından en az 2 kat büyük müdür?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Düzlük oranı, katsayı vektörünün dağılımının düzgünlüğünü ölçer. Bu, katsayıların kendisi değil, onların dağılımıdır.",
+      "G2": "Baz-geçiş, lineer dönüşümdür. Düzlük oranı, bu dönüşüm altında ölçeklenir ama sıfırlanmaz.",
+      "G3": "Jenerik polinomlar için düzlük oranı farklı olabilir. Perm ve det'in simetrisi, düzlük oranını etkiler.",
+      "G4": "n=4 için baz-geçiş spektrumu hesaplanabilir.",
+      "G5": "Düzlük oranı, polinomun 'randomness' özelliğini yansıtır. Yüksek düzlük oranı, polinomun daha rastgele olduğunu gösterir."
+    },
+    "proxy": {
+      "script": "basis_change_flatness.py",
+      "n": [
+        3,
+        4
+      ],
+      "starts": 1,
+      "hours": 2,
+      "output": "perm_n ve det_n için düzlük oranları"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "poly(n)",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "flatness(perm_n) / flatness(det_n) oranı",
+      "threshold": "2",
+      "kills_if": "n=4'te oran 2'nin altında çıkarsa"
+    },
+    "prior_art": [
+      {
+        "who": "Bourgain, 2014",
+        "where": "Fourier sparseness of permanents",
+        "stuck_at": "Düzlük oranı için spesifik karşılaştırma yapılmadı."
+      }
+    ],
+    "tags": [
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "Düzlük oranı, polinomun düşük dereceli polinomlarla yaklaşılamayacağını gösterir.",
+    "role": "P3",
+    "role_name": "Kuantum Bilgi Teorisyeni",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P8-Q1",
+    "question": "n=4'te, det_4'ün m=14 boyutlu ABP ile en iyi yaklaşımdaki kalıntı normunun ortalama değeri, perm_4'ün aynı boyutta ve aynı başlangıç dağılımıyla elde edilen kalıntı normunun ortalamasından küçük müdür?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik kalıntı normunun (f - ABP(f)) bir fonksiyonu değil, (f, m) çiftinin optimizasyon peyzajındaki en iyi noktanın kalitesidir; nesne çifti gerektirir.",
+      "G2": "Kalıntı normu, değişkenlerin lineer dönüşümü altında (field extension) değişmezdir (sıfır noktası korunur).",
+      "G3": "Jenerik polinomlar için m=14 yeterince büyükse kalıntı sıfıra yaklaşır; bu soru jenerik karşılaştırma değil, perm ve det'in 'yaklaşılabilirlik zorluğu' karşılaştırmasıdır.",
+      "G4": "Mevcut LM altyapısı ve exact_mod_rref.c kullanılarak n=4 için 200 rastgele başlangıç noktasında ~4 saat içinde çalıştırılabilir.",
+      "G5": "Kalıntı normu farkı, temsiller arası mesafe (dc alt sınırı) ile doğrudan ilişkilidir; üstel fark dc'de üstel farka işaret eder."
+    },
+    "proxy": {
+      "script": "abp_fitting.py",
+      "n": [
+        4
+      ],
+      "starts": 200,
+      "hours": 4,
+      "output": "perm_4 ve det_4 için ortalama kalıntı normları ve standart sapmaları"
+    },
+    "prediction": {
+      "sign": "det < perm",
+      "scaling": "perm kalıntısı det'ten en az 10 kat büyük",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "ortalama kalıntı normu oranı",
+      "threshold": "perm/det < 2",
+      "kills_if": "n=4'te perm ve det için ortalama kalıntı normları 2 katın altında fark gösterirse"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "kalıntı tabanı ölçümleri",
+        "stuck_at": "sadece kalıntı tabanı raporlandı, ortalama kalıntı normu karşılaştırması yapılmadı"
+      }
+    ],
+    "tags": [
+      "SAYISAL"
+    ],
+    "link_to_dc": "kalıntı normu farkı -> temsiller arası mesafe -> dc alt sınırı",
+    "role": "P8",
+    "role_name": "Ölçüm Mühendisi",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P8-Q2",
+    "question": "n=4'te, perm_4 ve det_4 için m=14 boyutlu ABP ile yapılan LM optimizasyonunda, yerel minimumların ortalama sayısı perm_4 için det_4'ünkinden büyük müdür?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik optimizasyon peyzajının topolojisine (yerel minimum sayısı) dayanır; tek nesneli değişmez değildir.",
+      "G2": "Yerel minimum sayısı, değişkenlerin lineer dönüşümü altında değişmezdir.",
+      "G3": "Jenerik polinomlar için yerel minimum sayısı sınırlıdır; perm ve det'in peyzajları jenerik değildir, bu ayrımı sağlar.",
+      "G4": "Mevcut LM altyapısı ve 200 başlangıç noktası ile n=4'te ~6 saat içinde çalıştırılabilir.",
+      "G5": "Yerel minimum sayısı, temsiller arası geçiş maliyeti ile ilişkilidir; üstel fark dc'de üstel farka işaret eder."
+    },
+    "proxy": {
+      "script": "lm_basins.py",
+      "n": [
+        4
+      ],
+      "starts": 200,
+      "hours": 6,
+      "output": "perm_4 ve det_4 için yerel minimum sayıları ve dağılımları"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "perm yerel minimum sayısı det'ten en az 5 kat büyük",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "ortalama yerel minimum sayısı oranı",
+      "threshold": "perm/det < 2",
+      "kills_if": "n=4'te perm ve det için ortalama yerel minimum sayıları 2 katın altında fark gösterirse"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "çanak sayısı gözlemleri",
+        "stuck_at": "çanak sayısı sayılmadı, sadece kalıntı tabanı raporlandı"
+      }
+    ],
+    "tags": [
+      "SAYISAL"
+    ],
+    "link_to_dc": "yerel minimum sayısı -> temsiller arası geçiş maliyeti -> dc alt sınırı",
+    "role": "P8",
+    "role_name": "Ölçüm Mühendisi",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P8-Q3",
+    "question": "n=4'te, perm_4 ve det_4 için m=14 boyutlu ABP ile yapılan LM optimizasyonunda, yakınsama süresinin ortalaması perm_4 için det_4'ünkinden büyük müdür?",
+    "objects": [
+      "perm_4",
+      "det_4"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik optimizasyon sürecinin dinamiklerine (yakınsama süresi) dayanır; tek nesneli değişmez değildir.",
+      "G2": "Yakınsama süresi, değişkenlerin lineer dönüşümü altında değişmezdir (iterasyon sayısı aynı kalır, adım boyutu ölçeklenir).",
+      "G3": "Jenerik polinomlar için yakınsama süresi sınırlıdır; perm ve det'in peyzajları jenerik değildir, bu ayrımı sağlar.",
+      "G4": "Mevcut LM altyapısı ve 200 başlangıç noktası ile n=4'te ~4 saat içinde çalıştırılabilir.",
+      "G5": "Yakınsama süresi, temsiller arası mesafe ile ilişkilidir; üstel fark dc'de üstel farka işaret eder."
+    },
+    "proxy": {
+      "script": "lm_timing.py",
+      "n": [
+        4
+      ],
+      "starts": 200,
+      "hours": 4,
+      "output": "perm_4 ve det_4 için yakınsama süreleri ve dağılımları"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "perm yakınsama süresi det'ten en az 3 kat büyük",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "ortalama yakınsama süresi oranı",
+      "threshold": "perm/det < 2",
+      "kills_if": "n=4'te perm ve det için ortalama yakınsama süreleri 2 katın altında fark gösterirse"
+    },
+    "prior_art": [
+      {
+        "who": "depo Round 8",
+        "where": "yakınsama gözlemleri",
+        "stuck_at": "sadece yakınsama durumu raporlandı, süre karşılaştırması yapılmadı"
+      }
+    ],
+    "tags": [
+      "SAYISAL"
+    ],
+    "link_to_dc": "yakınsama süresi -> temsiller arası mesafe -> dc alt sınırı",
+    "role": "P8",
+    "role_name": "Ölçüm Mühendisi",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P6-Q1",
+    "question": "perm_n'in det_n orbitine, sadece rank-1 güncellemeleri ve 2x2 blok dönüşümleri kullanılarak ulaşmak için gereken minimum adım sayısı n²/2'den üstel büyüklükte midir?",
+    "objects": [
+      "perm_n",
+      "det_n"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik, tek bir polinomun katsayı vektörünün özelliği değil; iki polinom arasındaki 'geçiş maliyeti' (çift nesne) ve bu geçişi kısıtlayan operatör setinin (rank-1/blok) yapısıdır.",
+      "G2": "Orbit mesafesi ve operatör sayısı, alan genişletildiğinde (field extension) değişmez; cebirsel kapama altında tanımlıdır.",
+      "G3": "Bu soru jenerik polinomları karşılaştırmaz; perm ve det'in spesifik simetrisini ve orbit yakınlığını sorgular. Jenerik polinomlar bu mesafeye dahil değildir.",
+      "G4": "n=3,4 için BFS (Breadth-First Search) ile tam tarama yapılabilir. n=5 için alt sınır türetimi (LP/ILP) ile ölçülebilir.",
+      "G5": "Bu mesafe (d) üstel ise, perm'in determinantal temsili için gerekli matris boyutu üstel olmak zorundadır; çünkü her rank-1 güncelleme tek bir değişken ekler."
+    },
+    "proxy": {
+      "script": "orbit_bfs.py",
+      "n": [
+        3,
+        4,
+        5
+      ],
+      "starts": 1,
+      "hours": 24,
+      "output": "det_n'den perm_n'e giden en kısa yol uzunluğu (d)"
+    },
+    "prediction": {
+      "sign": "perm >> det",
+      "scaling": "2^n",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "minimum adım sayısı",
+      "threshold": "n²/2 + C",
+      "kills_if": "n=4'te adım sayısı 15'in altında veya n=5'te 25'in altında çıkarsa"
+    },
+    "prior_art": [
+      {
+        "who": "Sheshadri (arXiv:2611.06658)",
+        "where": "dc(perm_4)=15 ispatı",
+        "stuck_at": "Orbit mesafesini doğrudan hesaplamadı, sadece temsili buldu. Geçiş yolu (path) analizi yok."
+      }
+    ],
+    "tags": [
+      "SAYISAL",
+      "HİPOTEZ"
+    ],
+    "link_to_dc": "d(perm, det) > k ise, dc(perm) >= k + dc(det). Üstel d -> Üstel dc.",
+    "role": "P6",
+    "role_name": "Tersine Mühendis / Minimal Düzenleme Ajanı",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P6-Q2",
+    "question": "perm_n'in det_n orbitine en yakın noktasına (orbit mesafesi metriğinde) ulaşan tüm yerel minimumların sayısı, n=4 için 15'ten büyük midir?",
+    "objects": [
+      "perm_n",
+      "det_n"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik, tek bir fonksiyonun grafiği değil; (perm, det) çiftinin orbit etkisi altındaki 'çanak yapısı' (basin structure) ve yerel minimumların çokluğu.",
+      "G2": "Çanak sayısı ve yerel minimumların varlığı, cebirsel kapama altında değişmez.",
+      "G3": "Jenerik polinomlar için bu mesafe sıfırdır (orbit kapalıysa) veya tanımsızdır; ancak perm ve det orbitleri farklıdır. Soru, bu iki spesifik orbit arasındaki peyzajı sorar.",
+      "G4": "n=4 için LM optimizasyonu ile ~200 başlangıç noktasından yerel minimumlar bulunup sınıflandırılabilir.",
+      "G5": "Çok sayıda yerel minimum, perm'in det'e 'yakın' ama 'dokunulamaz' olduğunu gösterir; bu da kısa temsillerin (dc küçük) varlığını zorlaştırır."
+    },
+    "proxy": {
+      "script": "lm_basins.py",
+      "n": [
+        4
+      ],
+      "starts": 200,
+      "hours": 12,
+      "output": "orbit mesafesi fonksiyonunun yerel minimum sayısı"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "n!",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "yerel minimum sayısı",
+      "threshold": "15",
+      "kills_if": "n=4'te yerel minimum sayısı 15 veya daha az çıkarsa"
+    },
+    "prior_art": [
+      {
+        "who": "Depo Round 8",
+        "where": "Frustrated valley gözlemi",
+        "stuck_at": "Çanak sayısı sayılmamış, sadece kalıntı tabanı raporlanmış."
+      }
+    ],
+    "tags": [
+      "SAYISAL"
+    ],
+    "link_to_dc": "Yerel minimum çokluğu, perm'in det orbitine 'topolojik olarak' uzak olduğunu gösterir; bu da kısa temsillerin (dc küçük) varlığını zayıflatır.",
+    "role": "P6",
+    "role_name": "Tersine Mühendis / Minimal Düzenleme Ajanı",
+    "_schema_valid": true,
+    "_schema_errors": []
+  },
+  {
+    "id": "P6-Q3",
+    "question": "perm_n'in det_n orbitine en yakın noktasına ulaşmak için gereken 'işaret çevirme' (sign flip) sayısı, n=4 için 15'ten büyük midir?",
+    "objects": [
+      "perm_n",
+      "det_n"
+    ],
+    "barrier_escape": {
+      "G1": "Nicelik, tek bir polinomun özelliği değil; iki polinom arasındaki 'işaret farkı' (çift nesne) ve bu farkı gidermek için gereken temel operasyon sayısı.",
+      "G2": "İşaret çevirme sayısı, cebirsel kapama altında değişmez.",
+      "G3": "Jenerik polinomlar için bu mesafe sıfırdır; ancak perm ve det orbitleri farklıdır. Soru, bu iki spesifik orbit arasındaki 'işaret farkı' peyzajını sorar.",
+      "G4": "n=4 için perm ve det katsayılarının işaretleri karşılaştırılarak minimum işaret çevirme sayısı hesaplanabilir.",
+      "G5": "Yüksek işaret çevirme sayısı, perm'in det'e 'sembolik olarak' uzak olduğunu gösterir; bu da kısa temsillerin (dc küçük) varlığını zayıflatır."
+    },
+    "proxy": {
+      "script": "sign_flip.py",
+      "n": [
+        4
+      ],
+      "starts": 1,
+      "hours": 1,
+      "output": "minimum işaret çevirme sayısı"
+    },
+    "prediction": {
+      "sign": "perm > det",
+      "scaling": "n²/2",
+      "visible_at_n": 4
+    },
+    "falsifier": {
+      "metric": "minimum işaret çevirme sayısı",
+      "threshold": "15",
+      "kills_if": "n=4'te minimum işaret çevirme sayısı 15 veya daha az çıkarsa"
+    },
+    "prior_art": [
+      {
+        "who": "Bilinmiyor",
+        "where": "İşaret çevirme sayısı analizi",
+        "stuck_at": "Bu metrik daha önce çalışılmamış."
+      }
+    ],
+    "tags": [
+      "SAYISAL"
+    ],
+    "link_to_dc": "İşaret çevirme sayısı, perm'in det orbitine 'sembolik olarak' uzak olduğunu gösterir; bu da kısa temsillerin (dc küçük) varlığını zayıflatır.",
+    "role": "P6",
+    "role_name": "Tersine Mühendis / Minimal Düzenleme Ajanı",
+    "_schema_valid": true,
+    "_schema_errors": []
+  }
+]

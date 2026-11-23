@@ -1,0 +1,122 @@
+{
+  "program_title": "Orbit Topolojisi ve Yaklaşılabilirlik Sınırı: Perm-Det Mesafesinin Empirik İncelemesi",
+  "selected_questions": [
+    {
+      "order": 1,
+      "id": "P8-Q1",
+      "question": "n=4'te, perm_4'ün m=14 boyutlu ABP ile en iyi yaklaşımdaki kalıntı normunun ortalaması, det_4'ün aynı koşullardaki kalıntı normunun ortalamasından büyük müdür?",
+      "prerequisite_of": [
+        "P6-Q1",
+        "P6-Q2"
+      ],
+      "if_falsified_loss": "Yanlışsa (kalıntı farkı yoksa), perm ve det'in ABP uzayındaki 'yakınlığı' kanıtlanır. Bu, orbit mesafesinin (P6-Q1) ve yerel minimumların (P6-Q2) üstel büyüklükte olma ihtimalini düşürür. Kaybedilen: Üstel alt sınır arayışının temel dayanağı olan 'temsil zorluğu' farkı. Kazanılan: Daha ince taneli bir yakınsama analizi.",
+      "link_to_dc_or_vp_vnp": "Kalıntı normu farkı, doğrudan dc(perm) >= dc(det) + delta eşitsizliğinin pratik bir göstergesidir. Büyük fark, VP!=VNP'nin 'yumuşak' bir alt sınırına işaret eder."
+    },
+    {
+      "order": 2,
+      "id": "P6-Q1",
+      "question": "perm_n'in det_n orbitine, sadece rank-1 güncellemeleri ve 2x2 blok dönüşümleri kullanılarak ulaşmak için gereken minimum adım sayısı n²/2'den üstel büyüklükte midir?",
+      "prerequisite_of": [
+        "P6-Q2"
+      ],
+      "if_falsified_loss": "Yanlışsa (mesafe polinomiyse), perm'in det'e 'kısa yoldan' ulaşılabilir. Bu, P6-Q2'deki yerel minimumların çokluğunun bir 'tuzak' olduğunu, aslında global optimuma yakınlık olduğunu gösterir. Kaybedilen: Üstel komutasyon karmaşıklığı hipotezi. Kazanılan: Orbit geometrisinin daha düzgün olduğu kanıtı.",
+      "link_to_dc_or_vp_vnp": "Eğer d(perm, det) üstel ise, bu doğrudan dc(perm) için üstel alt sınır anlamına gelir (Sheshadri bağlantısı). Bu, VP!=VNP için güçlü bir kanıttır."
+    },
+    {
+      "order": 3,
+      "id": "P6-Q2",
+      "question": "perm_n'in det_n orbitine en yakın noktasına (orbit mesafesi metriğinde) ulaşan tüm yerel minimumların sayısı, n=4 için 15'ten büyük müdür?",
+      "prerequisite_of": [],
+      "if_falsified_loss": "Yanlışsa (yerel minimum azsa), optimizasyon peyzajı 'temiz'dir. Bu, P6-Q1'deki uzun yolun varlığına rağmen, global optimuma hızlı ulaşılabilir olabileceğini gösterir. Kaybedilen: Peyzajın 'frustrated' olduğu hipotezi. Kazanılan: Arama uzayının yapısı hakkında net bilgi.",
+      "link_to_dc_or_vp_vnp": "Yerel minimumların çokluğu, global optimuma ulaşmanın zorluğunu (optimizasyon karmaşıklığı) gösterir. Bu, hesaplama karmaşıklığı ile geometrik karmaşıklık arasında köprü kurar."
+    }
+  ],
+  "unified_proxy_suite": {
+    "family_name": "orbit_geometry_suite",
+    "scripts": [
+      "abp_fitting.py",
+      "orbit_bfs.py",
+      "lm_basins.py"
+    ],
+    "shared_primitives": [
+      "polynomial_ring_ops",
+      "orbit_distance_metric",
+      "local_minimizer",
+      "rank_update_generator"
+    ]
+  },
+  "first_72h_measurements": [
+    {
+      "step": 1,
+      "title": "ABP Yaklaşım Kalıntı Normu Karşılaştırması",
+      "hours": 8,
+      "accept_threshold": "perm_4 kalıntısı, det_4 kalıntısından en az 10 kat büyük",
+      "reject_threshold": "perm_4 kalıntısı, det_4 kalıntısından 2 kat küçük veya eşit",
+      "script": "abp_fitting.py"
+    },
+    {
+      "step": 2,
+      "title": "Orbit Mesafesi BFS Taraması (n=4)",
+      "hours": 24,
+      "accept_threshold": "Minimum adım sayısı 15'i aşar (n²/2 + C)",
+      "reject_threshold": "Minimum adım sayısı 15 veya altındadır",
+      "script": "orbit_bfs.py"
+    },
+    {
+      "step": 3,
+      "title": "Yerel Minimum Çanak Analizi (n=4)",
+      "hours": 12,
+      "accept_threshold": "Yerel minimum sayısı 15'i aşar",
+      "reject_threshold": "Yerel minimum sayısı 15 veya altındadır",
+      "script": "lm_basins.py"
+    }
+  ],
+  "vp_vnp_bridge_fragility": "Bu program, VP!=VNP'ye dolaylı yoldan bağlanır. Kalıntı normu farkı (P8-Q1) ve orbit mesafesi (P6-Q1) üstel ise, bu dc(perm) için üstel alt sınır demektir. Ancak, bu bağ kırılgandır çünkü: 1) Kalıntı normu farkı, doğrudan alt sınır değil, sadece bir göstergedir. 2) Orbit mesafesi, kullanılan operatör setine (rank-1/blok) bağlıdır; daha güçlü operatörlerle mesafe kısalabilir. 3) Yerel minimumlar, optimizasyon zorluğunu gösterir ama hesaplama karmaşıklığını kanıtlamaz. Bu nedenle, program VP!=VNP'yi kanıtlamaz, ancak 'yumuşak' bir alt sınır için güçlü kanıtlar sağlar.",
+  "council_frontiers": [
+    {
+      "code": "QH-1",
+      "title": "Orbit Geometrisinin Cebirsel Yapısı",
+      "goal": "Perm-Det orbitleri arasındaki mesafenin cebirsel nedenlerini anlamak.",
+      "tasks": {
+        "prof-euler": "Orbit mesafesinin n'ye bağlı asimptotik davranışını analiz et.",
+        "prof-hilbert": "Orbit kapalı mı? Kapalı değilse, kapanışındaki özel noktaları tanımla.",
+        "prof-strassen": "Rank-1 güncellemelerinin orbit üzerindeki etkisini cebirsel olarak modelle.",
+        "prof-noether": "Orbit simetrilerinin alt cebirsel yapıları nasıl etkilediğini incele.",
+        "prof-wigner": "Orbit mesafesinin fiziksel bir potansiyel enerjisi olarak yorumlanıp yorumlanamayacağını araştır.",
+        "prof-valiant": "Bu orbit yapısının, hesaplama karmaşıklığı sınıfları (VP, VNP) üzerindeki etkisini değerlendir.",
+        "prof-turing": "Orbit mesafesini hesaplayan algoritmanın karmaşıklığını analiz et.",
+        "prof-curry": "Orbit geometrisini tip teorisi çerçevesinde modelle."
+      }
+    },
+    {
+      "code": "QH-2",
+      "title": "Optimizasyon Peyzajının Dinamiği",
+      "goal": "Perm-Det orbitleri arasındaki optimizasyon peyzajının dinamiklerini anlamak.",
+      "tasks": {
+        "prof-euler": "Yerel minimumların sayısının n'ye bağlı dağılımını analiz et.",
+        "prof-hilbert": "Yerel minimumların cebirsel derecesini ve çokluğunu belirle.",
+        "prof-strassen": "Yerel minimumlardan global optimuma ulaşmanın en kısa yolunu bul.",
+        "prof-noether": "Yerel minimumların simetri grupları arasındaki ilişkisini incele.",
+        "prof-wigner": "Yerel minimumların fiziksel bir sistemdeki enerji seviyeleri olarak yorumlanıp yorumlanamayacağını araştır.",
+        "prof-valiant": "Bu optimizasyon probleminin, hesaplama karmaşıklığı sınıfları (VP, VNP) üzerindeki etkisini değerlendir.",
+        "prof-turing": "Optimizasyon algoritmasının yakınsama hızını analiz et.",
+        "prof-curry": "Optimizasyon peyzajını tip teorisi çerçevesinde modelle."
+      }
+    },
+    {
+      "code": "QH-3",
+      "title": "ABP Yaklaşımının Sınırları",
+      "goal": "ABP yaklaşımının perm ve det için sınırlarını anlamak.",
+      "tasks": {
+        "prof-euler": "ABP yaklaşımının hata terimlerinin asimptotik davranışını analiz et.",
+        "prof-hilbert": "ABP yaklaşımının hata terimlerinin cebirsel yapısını belirle.",
+        "prof-strassen": "ABP yaklaşımının en iyi hata sınırını bul.",
+        "prof-noether": "ABP yaklaşımının simetri grupları arasındaki ilişkisini incele.",
+        "prof-wigner": "ABP yaklaşımının fiziksel bir sistemdeki enerji seviyeleri olarak yorumlanıp yorumlanamayacağını araştır.",
+        "prof-valiant": "Bu yaklaşımın, hesaplama karmaşıklığı sınıfları (VP, VNP) üzerindeki etkisini değerlendir.",
+        "prof-turing": "ABP yaklaşımının hesaplama karmaşıklığını analiz et.",
+        "prof-curry": "ABP yaklaşımını tip teorisi çerçevesinde modelle."
+      }
+    }
+  ]
+}

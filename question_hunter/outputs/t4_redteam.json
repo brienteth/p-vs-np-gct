@@ -1,0 +1,424 @@
+{
+  "round": "T4",
+  "total": 6,
+  "survived_count": 0,
+  "killed_count": 6,
+  "kill_rate_pct": 100.0,
+  "kill_reason_distribution": {
+    "G1": 6,
+    "G5": 3,
+    "G2": 2,
+    "G3": 2
+  },
+  "survivors": [],
+  "killed": [
+    {
+      "question": {
+        "id": "P3-Q1",
+        "question": "Perm_4'ün katsayı vektörünün L1 normu, det_4'ün katsayı vektörünün L1 normundan en az 10 kat büyük müdür?",
+        "objects": [
+          "perm_4",
+          "det_4"
+        ],
+        "barrier_escape": {
+          "G1": "L1 normu, katsayıların mutlak değerlerinin toplamıdır; bu, polinomun 'genişliğini' (width) ölçer ve tek nesneli bir değişmezdir.",
+          "G2": "L1 normu, değişkenlerin lineer dönüşümü altında (Hadamard gibi) ölçeklenir ama sıfır olmaz; bu, cisim genişletmesine karşı dayanıklıdır.",
+          "G3": "Perm ve det'in simetrisi, katsayıların belirli alt uzaylarda yoğunlaşmasını sağlar; jenerik polinomlar için L1 normu daha düzgün dağılır ve bu simetrik sıkışma jenerik durumdan farklıdır.",
+          "G4": "n=4 için katsayı sayısı 16'dır; n=5 için 256 katsayı. Tam tamsayı aritmetiği ile anında hesaplanabilir, <=1 saat süresi yeterlidir.",
+          "G5": "L1 normu, polinomun 'spikiness' (keskinlik) özelliğini yansıtır. Yüksek L1 normu, polinomun düşük dereceli polinomlarla iyi yaklaşılamayacağını (küçük dc) gösterir. Bu, dc alt sınırı ile doğrudan bağlantılıdır: L1 normu büyükse, polinomun temsili karmaşıklığı da büyüktür."
+        },
+        "proxy": {
+          "script": "perm_det_l1_norms.py",
+          "n": [
+            3,
+            4,
+            5
+          ],
+          "starts": 200,
+          "hours": 6,
+          "output": "perm_n ve det_n için L1 normları ve oranları"
+        },
+        "prediction": {
+          "sign": "perm >> det",
+          "scaling": "poly(n) * 2^n",
+          "visible_at_n": 4
+        },
+        "falsifier": {
+          "metric": "L1(perm_n) / L1(det_n) oranı",
+          "threshold": "10",
+          "kills_if": "n=4'te oran 10'un altında çıkarsa"
+        },
+        "prior_art": [
+          {
+            "who": "Bourgain, 2014",
+            "where": "Fourier sparseness of permanents",
+            "stuck_at": "Genel üst sınırlar elde edildi ama perm ve det arasındaki spesifik katsayı büyüklüğü farkı sayısal olarak karşılaştırılmadı."
+          }
+        ],
+        "tags": [
+          "HİPOTEZ"
+        ],
+        "link_to_dc": "Yüksek L1 normu, polinomun düşük dereceli polinomlarla iyi yaklaşılamayacağını (küçük dc) ima eder. Bu, dc alt sınırı ile doğrudan bağlantılıdır: L1 normu büyükse, polinomun temsili karmaşıklığı da büyüktür.",
+        "role": "P3",
+        "role_name": "Kuantum Bilgi Teorisyeni"
+      },
+      "verdict": {
+        "id": "P3-Q1",
+        "gates": {
+          "G1": "KALDI",
+          "G2": "GEÇTİ",
+          "G3": "GEÇTİ",
+          "G4": "GEÇTİ",
+          "G5": "KALDI",
+          "G6": "GEÇTİ",
+          "G7": "GEÇTİ"
+        },
+        "failed_gates": [
+          "G1",
+          "G5"
+        ],
+        "survived": false,
+        "rationale": "G1: L1 normu katsayıların mutlak değerlerinin toplamıdır; bu nicelik polinomun kendisine (ve katsayı vektörüne) özeldir, rastgele polinomlar için aynı yapısal özellikleri taşımaz (çift nesneli değişmez değildir). G5: L1 normunun büyüklüğü doğrudan 'dc' (determinantal complexity) ile bağlantılı değildir; yüksek L1 normu sadece katsayıların dağılımını gösterir, polinomun düşük dereceli matris determinantlarıyla yaklaştırılabilirliğini (dc) garanti etmez. Mantıksal atlama var."
+      }
+    },
+    {
+      "question": {
+        "id": "P6-Q1",
+        "question": "perm_n'in det_n orbitine, sadece rank-1 güncellemeleri ve 2x2 blok dönüşümleri kullanılarak ulaşmak için gereken minimum adım sayısı n²/2'den üstel büyüklükte midir?",
+        "objects": [
+          "perm_n",
+          "det_n"
+        ],
+        "barrier_escape": {
+          "G1": "Nicelik, tek bir polinomun katsayı vektörünün özelliği değil; iki polinom arasındaki 'geçiş maliyeti' (çift nesne) ve bu geçişi kısıtlayan operatör setinin (rank-1/blok) yapısıdır.",
+          "G2": "Orbit mesafesi ve operatör sayısı, alan genişletildiğinde (field extension) değişmez; cebirsel kapama altında tanımlıdır.",
+          "G3": "Bu soru jenerik polinomları karşılaştırmaz; perm ve det'in spesifik simetrisini ve orbit yakınlığını sorgular. Jenerik polinomlar bu mesafeye dahil değildir.",
+          "G4": "n=3,4 için BFS (Breadth-First Search) ile tam tarama yapılabilir. n=5 için alt sınır türetimi (LP/ILP) ile ölçülebilir.",
+          "G5": "Bu mesafe (d) üstel ise, perm'in determinantal temsili için gerekli matris boyutu üstel olmak zorundadır; çünkü her rank-1 güncelleme tek bir değişken ekler."
+        },
+        "proxy": {
+          "script": "orbit_bfs.py",
+          "n": [
+            3,
+            4,
+            5
+          ],
+          "starts": 1,
+          "hours": 24,
+          "output": "det_n'den perm_n'e giden en kısa yol uzunluğu (d)"
+        },
+        "prediction": {
+          "sign": "perm >> det",
+          "scaling": "2^n",
+          "visible_at_n": 4
+        },
+        "falsifier": {
+          "metric": "minimum adım sayısı",
+          "threshold": "n²/2 + C",
+          "kills_if": "n=4'te adım sayısı 15'in altında veya n=5'te 25'in altında çıkarsa"
+        },
+        "prior_art": [
+          {
+            "who": "Sheshadri (2024)",
+            "where": "dc(perm_4)=15 ispatı",
+            "stuck_at": "Orbit mesafesini doğrudan hesaplamadı, sadece temsili buldu. Geçiş yolu (path) analizi yok."
+          }
+        ],
+        "tags": [
+          "SAYISAL",
+          "HİPOTEZ"
+        ],
+        "link_to_dc": "d(perm, det) > k ise, dc(perm) >= k + dc(det). Üstel d -> Üstel dc.",
+        "role": "P6",
+        "role_name": "Tersine Mühendis / Minimal Düzenleme Ajanı"
+      },
+      "verdict": {
+        "id": "P6-Q1",
+        "gates": {
+          "G1": "KALDI",
+          "G2": "GEÇTİ",
+          "G3": "GEÇTİ",
+          "G4": "GEÇTİ",
+          "G5": "GEÇTİ",
+          "G6": "GEÇTİ",
+          "G7": "GEÇTİ"
+        },
+        "failed_gates": [
+          "G1"
+        ],
+        "survived": false,
+        "rationale": "G1: Soru 'perm_n'in det_n orbitine ulaşmak için gereken minimum adım sayısı'nı soruyor. Bu, iki farklı polinom arasındaki 'geçiş maliyeti' veya 'mesafe' ile ilgilidir. G1 kuralı gereği, nicelik katsayı vektöründen polinom zamanda hesaplanmalı VE rastgele polinomlar için de aynı olmalıdır. Ancak burada nicelik, perm ve det'in spesifik simetrisine ve orbit yapısına bağlıdır; rastgele iki polinom için bu mesafe tanımlı değildir veya farklıdır. Bu bir çift nesneli (two-object) ölçümdür, tek nesneli değişmez değildir. Dolayısıyla G1'i geçemez."
+      }
+    },
+    {
+      "question": {
+        "id": "P6-Q2",
+        "question": "perm_n'in det_n orbitine en yakın noktasına (orbit mesafesi metriğinde) ulaşan tüm yerel minimumların sayısı, n=4 için 15'ten büyük midir?",
+        "objects": [
+          "perm_n",
+          "det_n"
+        ],
+        "barrier_escape": {
+          "G1": "Nicelik, tek bir fonksiyonun grafiği değil; (perm, det) çiftinin orbit etkisi altındaki 'çanak yapısı' (basin structure) ve yerel minimumların çokluğu.",
+          "G2": "Çanak sayısı ve yerel minimumların varlığı, cebirsel kapama altında değişmez.",
+          "G3": "Jenerik polinomlar için bu mesafe sıfırdır (orbit kapalıysa) veya tanımsızdır; ancak perm ve det orbitleri farklıdır. Soru, bu iki spesifik orbit arasındaki peyzajı sorar.",
+          "G4": "n=4 için LM optimizasyonu ile ~200 başlangıç noktasından yerel minimumlar bulunup sınıflandırılabilir.",
+          "G5": "Çok sayıda yerel minimum, perm'in det'e 'yakın' ama 'dokunulamaz' olduğunu gösterir; bu da kısa temsillerin (dc küçük) varlığını zorlaştırır."
+        },
+        "proxy": {
+          "script": "lm_basins.py",
+          "n": [
+            4
+          ],
+          "starts": 200,
+          "hours": 12,
+          "output": "orbit mesafesi fonksiyonunun yerel minimum sayısı"
+        },
+        "prediction": {
+          "sign": "perm > det",
+          "scaling": "n!",
+          "visible_at_n": 4
+        },
+        "falsifier": {
+          "metric": "yerel minimum sayısı",
+          "threshold": "15",
+          "kills_if": "n=4'te yerel minimum sayısı 15 veya daha az çıkarsa"
+        },
+        "prior_art": [
+          {
+            "who": "Depo Round 8",
+            "where": "Frustrated valley gözlemi",
+            "stuck_at": "Çanak sayısı sayılmamış, sadece kalıntı tabanı raporlanmış."
+          }
+        ],
+        "tags": [
+          "SAYISAL"
+        ],
+        "link_to_dc": "Yerel minimum çokluğu, perm'in det orbitine 'topolojik olarak' uzak olduğunu gösterir; bu da kısa temsillerin (dc küçük) varlığını zayıflatır.",
+        "role": "P6",
+        "role_name": "Tersine Mühendis / Minimal Düzenleme Ajanı"
+      },
+      "verdict": {
+        "id": "P6-Q2",
+        "gates": {
+          "G1": "KALDI",
+          "G2": "GEÇTİ",
+          "G3": "GEÇTİ",
+          "G4": "GEÇTİ",
+          "G5": "GEÇTİ",
+          "G6": "GEÇTİ",
+          "G7": "GEÇTİ"
+        },
+        "failed_gates": [
+          "G1"
+        ],
+        "survived": false,
+        "rationale": "G1: 'Yerel minimumların sayısı' niceliği, (perm, det) çiftinin orbit etkisi altındaki peyzajına özeldir. Rastgele bir polinom çifti için bu peyzaj ve yerel minimum sayısı tamamen farklı olacaktır. Bu, tek nesneli bir değişmez değildir ve rastgele polinomlar için 'aynı' değildir. G1 kriterini ihlal eder."
+      }
+    },
+    {
+      "question": {
+        "id": "P8-Q1",
+        "question": "n=4'te, perm_4'ün m=14 boyutlu ABP ile en iyi yaklaşımdaki kalıntı normunun ortalaması, det_4'ün aynı koşullardaki kalıntı normunun ortalamasından büyük müdür?",
+        "objects": [
+          "perm_4",
+          "det_4"
+        ],
+        "barrier_escape": {
+          "G1": "Nicelik, (f, m) çiftinin optimizasyon peyzajındaki en iyi noktanın kalitesidir; tek nesneli değişmez değildir.",
+          "G2": "Kalıntı normu, değişkenlerin lineer dönüşümü altında (field extension) değişmezdir (sıfır noktası korunur).",
+          "G3": "Bu soru jenerik karşılaştırma değil, perm ve det'in 'yaklaşılabilirlik zorluğu' karşılaştırmasıdır; jenerik polinomlar için m=14 yeterince büyükse kalıntı sıfıra yaklaşır.",
+          "G4": "Mevcut LM altyapısı ve exact_mod_rref.c kullanılarak n=4 için 200 rastgele başlangıç noktasında ~4 saat içinde çalıştırılabilir.",
+          "G5": "Kalıntı normu farkı, temsiller arası mesafe (dc alt sınırı) ile doğrudan ilişkilidir; üstel fark dc'de üstel farka işaret eder."
+        },
+        "proxy": {
+          "script": "abp_fitting.py",
+          "n": [
+            4
+          ],
+          "starts": 200,
+          "hours": 4,
+          "output": "perm_4 ve det_4 için ortalama kalıntı normları ve standart sapmaları"
+        },
+        "prediction": {
+          "sign": "perm > det",
+          "scaling": "perm kalıntısı det'ten en az 10 kat büyük",
+          "visible_at_n": 4
+        },
+        "falsifier": {
+          "metric": "ortalama kalıntı normu oranı",
+          "threshold": "perm/det < 2",
+          "kills_if": "n=4'te perm ve det için ortalama kalıntı normları 2 katın altında fark gösterirse"
+        },
+        "prior_art": [
+          {
+            "who": "depo Round 8",
+            "where": "kalıntı tabanı ölçümleri",
+            "stuck_at": "sadece kalıntı tabanı raporlandı, ortalama kalıntı normu karşılaştırması yapılmadı"
+          }
+        ],
+        "tags": [
+          "SAYISAL"
+        ],
+        "link_to_dc": "kalıntı normu farkı -> temsiller arası mesafe -> dc alt sınırı",
+        "role": "P8",
+        "role_name": "Ölçüm Mühendisi"
+      },
+      "verdict": {
+        "id": "P8-Q1",
+        "gates": {
+          "G1": "KALDI",
+          "G2": "GEÇTİ",
+          "G3": "GEÇTİ",
+          "G4": "GEÇTİ",
+          "G5": "GEÇTİ",
+          "G6": "GEÇTİ",
+          "G7": "GEÇTİ"
+        },
+        "failed_gates": [
+          "G1"
+        ],
+        "survived": false,
+        "rationale": "G1: 'En iyi yaklaşımdaki kalıntı normu' niceliği, perm_4 ve det_4'ün spesifik ABP (Arithmetic Branching Program) yaklaştırılabilirlik profillerine bağlıdır. Rastgele polinomlar için bu kalıntı normları ve ortalamaları farklı olacaktır. Bu, tek nesneli bir değişmez değildir ve rastgele polinomlar için 'aynı' değildir. G1 kriterini ihlal eder."
+      }
+    },
+    {
+      "question": {
+        "id": "P8-Q2",
+        "question": "n=4'te, perm_4 ve det_4 için m=14 boyutlu ABP ile yapılan LM optimizasyonunda, yerel minimumların ortalama sayısı perm_4 için det_4'ünkinden büyük müdür?",
+        "objects": [
+          "perm_4",
+          "det_4"
+        ],
+        "barrier_escape": {
+          "G1": "Nicelik optimizasyon peyzajının topolojisine (yerel minimum sayısı) dayanır; tek nesneli değişmez değildir.",
+          "G2": "Yerel minimum sayısı, değişkenlerin lineer dönüşümü altında değişmezdir.",
+          "G3": "Jenerik polinomlar için yerel minimum sayısı sınırlıdır; perm ve det'in peyzajları jenerik değildir, bu ayrımı sağlar.",
+          "G4": "Mevcut LM altyapısı ve 200 başlangıç noktası ile n=4'te ~6 saat içinde çalıştırılabilir.",
+          "G5": "Yerel minimum sayısı, temsiller arası geçiş maliyeti ile ilişkilidir; üstel fark dc'de üstel farka işaret eder."
+        },
+        "proxy": {
+          "script": "lm_basins.py",
+          "n": [
+            4
+          ],
+          "starts": 200,
+          "hours": 6,
+          "output": "perm_4 ve det_4 için yerel minimum sayıları ve dağılımları"
+        },
+        "prediction": {
+          "sign": "perm > det",
+          "scaling": "perm yerel minimum sayısı det'ten en az 5 kat büyük",
+          "visible_at_n": 4
+        },
+        "falsifier": {
+          "metric": "ortalama yerel minimum sayısı oranı",
+          "threshold": "perm/det < 2",
+          "kills_if": "n=4'te perm ve det için ortalama yerel minimum sayıları 2 katın altında fark gösterirse"
+        },
+        "prior_art": [
+          {
+            "who": "depo Round 8",
+            "where": "çanak sayısı gözlemleri",
+            "stuck_at": "çanak sayısı sayılmadı, sadece kalıntı tabanı raporlandı"
+          }
+        ],
+        "tags": [
+          "SAYISAL"
+        ],
+        "link_to_dc": "yerel minimum sayısı -> temsiller arası geçiş maliyeti -> dc alt sınırı",
+        "role": "P8",
+        "role_name": "Ölçüm Mühendisi"
+      },
+      "verdict": {
+        "id": "P8-Q2",
+        "gates": {
+          "G1": "KALDI",
+          "G2": "KALDI",
+          "G3": "KALDI",
+          "G4": "GEÇTİ",
+          "G5": "KALDI",
+          "G6": "GEÇTİ",
+          "G7": "GEÇTİ"
+        },
+        "failed_gates": [
+          "G1",
+          "G2",
+          "G3",
+          "G5"
+        ],
+        "survived": false,
+        "rationale": "G1: Yerel minimum sayısı, ABP parametre uzayındaki rastgele polinomlar için aynı değildir; bu, nicelik katsayı vektöründen polinom zamanda hesaplanan genel bir özellik değildir. G2: Lineer dönüşüm altında yerel minimumların sayısı değişmez değildir (optimizasyon peyzajı topolojisi değişir). G3: Ayrım perm/det'in simetri grubuna değil, jenerik ABP peyzajına dayandırılmıştır; bu, simetri inversiyonu kriterini ihlal eder. G5: 'Temsiller arası geçiş maliyeti' somut bir matematiksel köprü değildir; dc'ye bağlantı boş laftır."
+      }
+    },
+    {
+      "question": {
+        "id": "P8-Q3",
+        "question": "n=4'te, perm_4 ve det_4 için m=14 boyutlu ABP ile yapılan LM optimizasyonunda, yakınsama süresinin ortalaması perm_4 için det_4'ünkinden büyük müdür?",
+        "objects": [
+          "perm_4",
+          "det_4"
+        ],
+        "barrier_escape": {
+          "G1": "Nicelik optimizasyon sürecinin dinamiklerine (yakınsama süresi) dayanır; tek nesneli değişmez değildir.",
+          "G2": "Yakınsama süresi, değişkenlerin lineer dönüşümü altında değişmezdir (iterasyon sayısı aynı kalır, adım boyutu ölçeklenir).",
+          "G3": "Jenerik polinomlar için yakınsama süresi sınırlıdır; perm ve det'in peyzajları jenerik değildir, bu ayrımı sağlar.",
+          "G4": "Mevcut LM altyapısı ve 200 başlangıç noktası ile n=4'te ~4 saat içinde çalıştırılabilir.",
+          "G5": "Yakınsama süresi, temsiller arası mesafe ile ilişkilidir; üstel fark dc'de üstel farka işaret eder."
+        },
+        "proxy": {
+          "script": "lm_timing.py",
+          "n": [
+            4
+          ],
+          "starts": 200,
+          "hours": 4,
+          "output": "perm_4 ve det_4 için yakınsama süreleri ve dağılımları"
+        },
+        "prediction": {
+          "sign": "perm > det",
+          "scaling": "perm yakınsama süresi det'ten en az 3 kat büyük",
+          "visible_at_n": 4
+        },
+        "falsifier": {
+          "metric": "ortalama yakınsama süresi oranı",
+          "threshold": "perm/det < 2",
+          "kills_if": "n=4'te perm ve det için ortalama yakınsama süreleri 2 katın altında fark gösterirse"
+        },
+        "prior_art": [
+          {
+            "who": "depo Round 8",
+            "where": "yakınsama gözlemleri",
+            "stuck_at": "sadece yakınsama durumu raporlandı, süre karşılaştırması yapılmadı"
+          }
+        ],
+        "tags": [
+          "SAYISAL"
+        ],
+        "link_to_dc": "yakınsama süresi -> temsiller arası mesafe -> dc alt sınırı",
+        "role": "P8",
+        "role_name": "Ölçüm Mühendisi"
+      },
+      "verdict": {
+        "id": "P8-Q3",
+        "gates": {
+          "G1": "KALDI",
+          "G2": "KALDI",
+          "G3": "KALDI",
+          "G4": "GEÇTİ",
+          "G5": "KALDI",
+          "G6": "GEÇTİ",
+          "G7": "GEÇTİ"
+        },
+        "failed_gates": [
+          "G1",
+          "G2",
+          "G3",
+          "G5"
+        ],
+        "survived": false,
+        "rationale": "G1: Yakınsama süresi, rastgele polinomlar için aynı değildir; bu, niceliksel olarak genel bir özellik değildir. G2: Yakınsama süresi (zaman), lineer dönüşüm altında değişmez değildir (step size ve Hessian özdeğerleri ölçeklenir). G3: Jenerik olmayan peyzajlara dayalı ayrım, simetri inversiyonu kriterini ihlal eder. G5: 'Temsiller arası mesafe' somut bir bağlantı değildir; dc'ye geçiş mantıksal olarak kopuktur."
+      }
+    }
+  ]
+}
