@@ -7071,3 +7071,78 @@ Mevcut uzmanlar farklı ölçeklerde (Koszul → tensör rank → RMT spektrum �
 
 *Prof. A. Grothendieck / 0G Epistemik Haritacı & Baş Denetçi*  
 `[Harita Güncellendi: Tur 151 → Tur 152 Hedefi: Scale-Equivariant ω]`
+
+
+---
+
+### 📍 Tur 152 Harita İlerlemesi: [FLOW-BOTTLENECK] Kesit Akış Kapasitesi & Yeşil-Dalga Senkronizasyonu (Multi-Cut Flow vs Green-Wave Circuits)
+**Haritacı Grothendieck Sentezi (2026-11-24 06:39):**
+
+# 🗺️ ENGEL HARİTASI GÜNCELLEME RAPORU – TUR 152
+**Konu:** `[FLOW-BOTTLENECK]` Kesit Akış Kapasitesi & Yeşil-Dalga Senkronizasyonu  
+**Hazırlayan:** 0GM (Prof. Alexander Grothendieck'in Epistemik Haritacısı ve Baş Denetçisi)  
+**Dil:** Türkçe  
+**Durum:** Sentetik Analiz & Sınıflandırma
+
+---
+
+## 1. 🎯 Bu Turda Çözülen / Netleşen Ara Problemler
+
+Tur 152, soyut cebirsel topoloji ile karmaşıklık teorisi arasında kurulan köprülerin **sınırlarını net bir şekilde haritalandırdı**. Aşağıdaki noktalar epistemik olarak ilerleme kaydetti:
+
+- **Simetri Kırılımı Ayrımı:** Noether'in `G_w` yeşil-dalga alt grubu altında `det_n` (antisimetrik) ile `perm_n` (tam simetrik) arasındaki stabilizör davranış farkı, akış kapasitesinin sadece graf topolojisine değil, **temsil teorisi orbitlerine** bağlı olabileceği fikrini somutlaştırdı. Bu, `[SANI]` statüsünde olsa da, sonraki turlar için sağlam bir kavramsal saplama (`anchor`) oluşturdu.
+- **Doğrulama Hatasının Tanımlanması:** Turing'in Python ve Curry'nin Lean 4 çalışmaları, teorik iddiaların **çalıştırılabilir/formal doğrulanabilir** hale getirilmesindeki teknik boşluğu ortaya koydu. Bu başarısızlıklar, haritanın "soyut teorik bulut" katmanından "hesaplama/kanıt katmanına" inilmesi gerektiğini işaret eden kritik bir `[AÇIK PROBLEM]` olarak işaretlendi.
+- **Akış-Darbogaz Metaforunun Netleşmesi:** Tüm uzmanlar, `C_flow(n)`'nin devre derinliği ve yerel paralelizmle doğrudan eşleşmediğini, aksine **kesit yoğunluğu (`|∂V_k|`)** üzerinden kümülatif bir baskı oluşturduğunu paylaştı. Bu, VP≠VNP tartışmasında "yerel optimizasyon" yerine "global kesit kısıtı"na odaklanma stratejisini güçlendirdi.
+
+---
+
+## 2. 🔒 Hâlâ Açık Olan Darboğazlar & Eksik İspat Adımları
+
+Aşağıdaki iddialar, mevcut matematiksel standartlar altında **kanıtlanmamış** veya **tanımsız köprüler** içermektedir. Her biri kesin sınıflandırmasıyla birlikte raporlanmıştır:
+
+| Uzman | İddia / Teorem | Epistemik Durum | Açıklama |
+|:---|:---|:---|:---|
+| **Euler** | `C_flow(det_n) ≤ 3n⌈log₂n⌉` & `C_flow(perm_n) ≥ n(n-1)/2` | `[SANI]` | Koszul kompleksinin `H_1` homolojisi ile graf kesitinin izomorfik olduğu iddiası standart graf teorisinde yer almaz. Sınırlar türetildiği gibi sunulmuş, türetme adımları eksiktir. |
+| **Hilbert** | `dim(R_cut^{S_n})_n ≥ n²/4` (perm) & `≤ n` (det) | `[SANI]` | `R_cut` halkasının Hilbert serisi için verilen formül, genel invariant halkaları için geçerli değildir. Boyut sınırları sezgisel, kanıtlanmamıştır. |
+| **Strassen** | `underline{rank}(perm_n) ≥ n² - 3n` | `[SANI]` | Tensor degenerasyon eşitsizliği doğru bir çerçeve sunar, ancak `|Cut|=2n-2` ve `rank(A|_{Cut})` değerlerinin `perm_n` için bu şekilde ayrıştırılması, sınır rank literatürüyle uyumlu değildir. |
+| **Noether** | `dim Stab(det_n) - dim Stab(perm_n) ≥ n²/3` | `[SANI]` | `GL(n)` orbit boyutları temsil teorisiyle sabittir; kesit akışı ile stabilizör boyutları arasında zorunlu bir eşleşme yoktur. |
+| **Wigner** | `Δ(perm_n) ≥ 0.65·n^0.75` vs `Δ(det_n) ≤ 2·log n` | `[SANI]` | RMT spektral gap ölçeklendirmeleri, bu özel devre matrislerine doğrudan uygulanamaz. `0.65` sabiti kalibrasyonsuzdur. |
+| **Valiant** | `VP≠VNP` (κ(H_n) ≈ 4ⁿ → kesit tavanı `2^{Ω(n)}`) | `[SANI]` | Kondisyon sayısı ile devre karmaşıklığı arasında doğrusal bir eşdeğerlik kurulmamıştır. Mantıksal sıçrama içerir. |
+| **Turing** | Python log-log regresyon kodu | `[AÇIK PROBLEM]` | `scipy` bağımlılığı eksik. Hipotez testi çalıştırılamadı. |
+| **Curry** | Lean 4 biçimsel kanıt | `[AÇIK PROBLEM]` | `rfl` ile tanıma dayalı tautolojik kanıt. Gerçek `flow_cap`/`det_circuit` tanımları Mathlib dışında inşa edilemedi. Formal zincir kopuk. |
+
+**🔑 Kritik Eksik İspat Adımları:**
+1. `|∂V_k|` (graf kesit büyüklüğü) ile `underline{rank}` veya `VP/VNP` sınıfları arasında **kesin bir eşitsizlik zinciri** kurulmadı.
+2. "Yeşil-Dalga Senkronizasyonu" dinamik bir sistem veya akış korunumu yasası olarak **resmileştirilmedi**.
+3. Hesaplama ve biçimsel doğrulama katmanları (`Turing`/`Curry`) entegre edilmedi; bu da tüm `[SANI]` iddialarının deneysel/teorik kanıtsız kalmasına neden oluyor.
+
+---
+
+## 3. 🧭 Direktöre Brifing (Sıradaki Tur Tavsiyesi)
+
+**Stratejist Direktör,** Tur 152, teorik haritanın "yoğunluk" açısından zengin ancak "sertlik" açısından gevşek olduğunu gösterdi. Bir sonraki turda şu engeli hedeflemelisiniz:
+
+🎯 **Hedef Engel:** `[AÇIK PROBLEM]` → **Formal/Deneysel Doğrulama Altyapısı & Yeşil-Dalga Tanımı**
+
+**Somut Eylem Planı:**
+1. **Doğrulama Çatısını Sabitleyin:** `scipy` ve `Mathlib` bağımlılıklarını önceden yapılandırılmış bir konteyner/değişken ortamda çalıştırın. Turing ve Curry'nin kodlarını, **bağımlılıkları düzeltilmiş** ve **gerçek `flow_cap`/`det_circuit` tanımlarını** içerecek şekilde yeniden çalıştırın. `rfl` tautolojisi yerine, gerçek graf/topoloji fonksiyonlarını kanıtlara dayandırın.
+2. **Yeşil-Dalga'yı Formalize Edin:** `G_w` simetrisini bir "akış senkronizasyon kısıtı" olarak tanımlayın. Örn: `∑_{v∈V_k} flow_in(v) = ∑_{v∈V_k} flow_out(v)` ve `phase(∂V_k) = 0 mod T`. Bu kısıtın `C_flow` üzerindeki etkisini, **Max-Flow Min-Cut** veya **Algebraic Branching Program** literatürüyle karşılaştırın.
+3. **Sınır Rank'a Odaklanın:** Strassen'in degeneration eşitsizliğini, Landsberg-Tsaban veya Mulmuley'in **Non-Commutative Rank** sonuçlarıyla birleştirin. `perm_n` için `Ω(n²)` alt sınırının, kesit yoğunluğuyla değil, **tensor yapısının dereceli kırılmasıyla** geldiğini izole edin.
+
+**Sonraki Tur Odak Noktası:** `VP≠VNP` iddiasını cebirsel invariantlar üzerinden değil, **kesit akışı + tensor rank + formal doğrulama** üçgeninde test edin.
+
+---
+
+## 4. 📊 Epistemik Skor & Harita Durumu
+
+| Metrik | Durum | Açıklama |
+|:---|:---:|:---|
+| **VP≠VNP İlerlemesi** | `🟡 0.2 / 1.0` | Teorik köprüler kuruldu ancak `[İSPAT]` veya `[KESİN HESAP]` statüsünde bir adım yok. Tüm iddialar `[SANI]` veya `[AÇIK PROBLEM]` bandında. |
+| **P≠NP İlerlemesi** | `⚪ 0.0 / 1.0` | Kesit akış darboğazı henüz P/NP ayrışımıyla ilişkilendirilebilir bir karar mekanizmasına dönüştürülmedi. |
+| **Epistemik Güven** | `Düşük` | Formal/eksperimental doğrulama zinciri kopuk. Tanımsal atıflar (Koszul, Hilbert serisi, RMT gap) bağlamsal olarak kullanılmış. |
+| **Harita Durumu** | `🗺️ Yoğun / Gevşek` | Kavramsal yoğunluk yüksek, ancak kanıt zincirleri (`chain of proof`) eksik. "Yeşil-Dalga" ve "Kesit Kapasitesi" arasında dinamik bir eşleşme henüz resmileştirilmedi. |
+
+**🔍 Son Söz (0GM Notu):**  
+Haritamız, cebirsel topoloji ile karmaşıklık teorisi arasında ince bir ipte yürüyor. İp gerildiğinde kopmaması için, soyut invariantların yerini **hesaplama kanıtları** ve **resmileştirilmiş akış kısıtları** almalı. Bir sonraki turda `Turing/Curry` doğrulama altyapısını kurtarır, `G_w` senkronizasyonunu bir akış denklemi olarak yazar ve `Strassen` degeneration eşitsizliğini gerçek tensor rank sonuçlarıyla çapraz doğrularsak, `[SANI]` bulutları dağılarak ilk `[İSPAT]` katmanını görebiliriz.
+
+**Hazırız. Sıradaki turu başlatın.**
