@@ -1,0 +1,5 @@
+-- NOT: İstenen kanıt matematiksel olarak kanıtlanmış bir teorem olmadığı 
+-- ve saf Lean 4 çekirdeği istenen cebirsel yapıları içermediği için 
+-- verilemez.
+-- Mathlib olmadan Polynomial ve RepresentationTheory tanımlanamaz.
+-- QH-3 hipotizi kanıtlanmış bir sonuç değildir.
