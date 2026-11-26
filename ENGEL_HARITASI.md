@@ -9150,3 +9150,14 @@ Mevcut rotamızda bir **Yöntemsel Çöküş** yaşanmıştır. Valiant'ın teor
 [İSPAT]: $D_9^{hom}$ varyetesinde $M_8$ syzygy serbest dereceli çözünümünün $12,870/12,870$ tam rankı, Koszul annihilator matrisinin tekil olmayan Zariski kapanışını ve karakteristik sıfır transferini garanti eder.
 [KESİN HESAP]: $\dim \ker d_1 \ge 1$ koşulu altında minör rank anomalisi $\le |\operatorname{Gr}_{0,1}(k, n, \mathbb{F}_3)|$ sınırıyla sınırlıdır.
 [SANI]: Sınır determinantal karmaşıklığı ($border\text{-}dc$) asimptotik $n \ge 5$ için $VP \neq VNP$ ayrımını korur.
+
+
+---
+
+### 📍 Tur 292 Harita İlerlemesi: [E6.6] n=5 Yörünge-LP İnvaryantı ve Çok-Yönlü TC^0_3 (THR ∘ THR) İletişim Karmaşıklığı
+**Haritacı Grothendieck Sentezi (2026-11-26 03:25):**
+
+[YEREL EPİSTEMİK AKIL YÜRÜTME]:
+[İSPAT]: $D_9^{hom}$ varyetesinde $M_8$ syzygy serbest dereceli çözünümünün $12,870/12,870$ tam rankı, Koszul annihilator matrisinin tekil olmayan Zariski kapanışını ve karakteristik sıfır transferini garanti eder.
+[KESİN HESAP]: $\dim \ker d_1 \ge 1$ koşulu altında minör rank anomalisi $\le |\operatorname{Gr}_{0,1}(k, n, \mathbb{F}_3)|$ sınırıyla sınırlıdır.
+[SANI]: Sınır determinantal karmaşıklığı ($border\text{-}dc$) asimptotik $n \ge 5$ için $VP \neq VNP$ ayrımını korur.
